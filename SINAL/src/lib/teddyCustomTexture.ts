@@ -1,6 +1,6 @@
 /**
- * SINAL — Personalização 2.0 do Mascote Teddy
- * Gerador de texturas de alta fidelidade em pixel art por paleta e estampas.
+ * SINAL — Personalização 2.0 do Mascote Teddy (Refinamento Artístico Final)
+ * Gerador de texturas de alta fidelidade em pixel art por paleta e estampas integradas.
  * Preserva 100% dos pixels originais de olhos, focinho, pelagem marrom, mochila e contornos.
  */
 
@@ -20,43 +20,43 @@ export const DEFAULT_TEDDY_CUSTOM: TeddyCustomization = {
   corBone: "roxo",
 };
 
-export const TEDDY_SHIRT_COLORS: { id: TeddyShirtColor; nome: string; hex: string }[] = [
-  { id: "roxo", nome: "Roxo Oficial SINAL", hex: "#6D3FC3" },
-  { id: "azul", nome: "Azul Socorrista", hex: "#2563EB" },
-  { id: "vermelho", nome: "Vermelho Emergência", hex: "#DC2626" },
-  { id: "verde", nome: "Verde Socorro", hex: "#16A34A" },
-  { id: "amarelo", nome: "Amarelo Alerta", hex: "#F59E0B" },
+export const TEDDY_SHIRT_COLORS = [
+  { id: "roxo" as const, nome: "Roxo Oficial SINAL", hex: "#6D3FC3" },
+  { id: "azul" as const, nome: "Azul Socorrista", hex: "#2563EB" },
+  { id: "vermelho" as const, nome: "Vermelho Emergência", hex: "#DC2626" },
+  { id: "verde" as const, nome: "Verde Socorro", hex: "#16A34A" },
+  { id: "amarelo" as const, nome: "Amarelo Alerta", hex: "#F59E0B" },
 ];
 
-export const TEDDY_CAP_COLORS: { id: TeddyCapColor; nome: string; hex: string }[] = [
-  { id: "roxo", nome: "Boné Roxo SINAL", hex: "#6D3FC3" },
-  { id: "azul", nome: "Boné Azul", hex: "#2563EB" },
-  { id: "vermelho", nome: "Boné Vermelho", hex: "#DC2626" },
-  { id: "verde", nome: "Boné Verde", hex: "#16A34A" },
-  { id: "amarelo", nome: "Boné Amarelo", hex: "#F59E0B" },
+export const TEDDY_CAP_COLORS = [
+  { id: "roxo" as const, nome: "Boné Roxo SINAL", hex: "#6D3FC3" },
+  { id: "azul" as const, nome: "Boné Azul", hex: "#2563EB" },
+  { id: "vermelho" as const, nome: "Boné Vermelho", hex: "#DC2626" },
+  { id: "verde" as const, nome: "Boné Verde", hex: "#16A34A" },
+  { id: "amarelo" as const, nome: "Boné Amarelo", hex: "#F59E0B" },
 ];
 
-export const TEDDY_DECAL_OPTIONS: { id: TeddyDecal; nome: string; desc: string }[] = [
-  { id: "lisa", nome: "Camiseta Lisa (Original)", desc: "Sem estampa" },
-  { id: "estrela", nome: "Estrela Guia", desc: "Estrela dourada em pixel art" },
-  { id: "coracao", nome: "Coração da Vida", desc: "Coração vermelho de socorrista" },
-  { id: "cruz", nome: "Primeiros Socorros", desc: "Cruz médica de emergência" },
-  { id: "sinal", nome: "Emblema SINAL", desc: "Símbolo oficial do projeto" },
+export const TEDDY_DECAL_OPTIONS = [
+  { id: "lisa" as const, nome: "Camiseta Lisa (Original)", desc: "Sem estampa adicional" },
+  { id: "estrela" as const, nome: "Estrela Guia", desc: "Estrela dourada em pixel art" },
+  { id: "coracao" as const, nome: "Coração da Vida", desc: "Coração vermelho de socorrista" },
+  { id: "cruz" as const, nome: "Primeiros Socorros", desc: "Cruz médica de emergência" },
+  { id: "sinal" as const, nome: "Emblema SINAL", desc: "Símbolo oficial do projeto" },
 ];
 
 /**
  * Coordenadas exatas dos 8 frames canônicos do Teddy na linha 0 de `burns/characters.png`.
- * Extraídas diretamente do atlas oficial characters.json.
+ * Centros do peito calibrados milimetricamente na área livre da camiseta, longe de braços e mochila.
  */
 export const TEDDY_CANONICAL_FRAMES = {
-  "0-0": { x: 45, y: 77, w: 144, h: 233, chestX: 78, chestY: 151, hasChest: true },
-  "0-1": { x: 239, y: 80, w: 140, h: 231, chestX: 77, chestY: 151, hasChest: true },
-  "0-2": { x: 433, y: 81, w: 137, h: 230, chestX: 79, chestY: 153, hasChest: true },
+  "0-0": { x: 45, y: 77, w: 144, h: 233, chestX: 89, chestY: 160, hasChest: true },
+  "0-1": { x: 239, y: 80, w: 140, h: 231, chestX: 82, chestY: 157, hasChest: true },
+  "0-2": { x: 433, y: 81, w: 137, h: 230, chestX: 84, chestY: 162, hasChest: true },
   "0-3": { x: 614, y: 81, w: 139, h: 228, chestX: 0, chestY: 0, hasChest: false },
   "0-4": { x: 801, y: 84, w: 134, h: 226, chestX: 0, chestY: 0, hasChest: false },
   "0-5": { x: 981, y: 83, w: 134, h: 227, chestX: 0, chestY: 0, hasChest: false },
-  "0-6": { x: 1162, y: 84, w: 156, h: 226, chestX: 82, chestY: 150, hasChest: true },
-  "0-7": { x: 1352, y: 70, w: 159, h: 240, chestX: 79, chestY: 152, hasChest: true },
+  "0-6": { x: 1162, y: 84, w: 156, h: 226, chestX: 87, chestY: 162, hasChest: true },
+  "0-7": { x: 1352, y: 70, w: 159, h: 240, chestX: 81, chestY: 160, hasChest: true },
 } as const;
 
 export type TeddyFrameKey = keyof typeof TEDDY_CANONICAL_FRAMES;
@@ -87,7 +87,6 @@ function recolorPixel(
 
   // Luminância perceptual do pixel roxo original
   const lum = 0.299 * origR + 0.587 * origG + 0.114 * origB;
-  // Tom roxo médio de referência no atlas do Teddy ~ 91.8
   const factor = lum / 91.8;
 
   switch (colorId) {
@@ -123,79 +122,72 @@ function recolorPixel(
 }
 
 /**
- * Matrizes em pixel art das estampas (11x11 ou 13x13).
+ * Matrizes refinadas em pixel art das estampas (proporção 7x7 ou 9x8).
+ * Não utilizam contornos pretos artificiais para parecerem serigrafia real no tecido.
  * Códigos:
  * '.' = transparente
- * 'B' = borda/sombra
- * 'W' = branco
- * 'Y' = amarelo ouro
- * 'R' = vermelho
- * 'S' = cor de destaque do SINAL
+ * 'W' = branco puro / ponto de brilho
+ * 'Y' = amarelo ouro vibrante (#FBBF24)
+ * 'O' = ocre dourado (#D97706)
+ * 'R' = vermelho emergência (#EF4444)
+ * 'D' = vermelho escuro (#991B1B)
+ * 'G' = cinza claro de relevo (#E2E8F0)
  */
 const DECAL_MATRICES: Record<TeddyDecal, string[]> = {
   lisa: [],
   estrela: [
-    "....BBB....",
-    "....BYB....",
-    "...BYYYB...",
-    "BBBYYYYYBBB",
-    ".BYYYYYYYB.",
-    "..BYYYYYB..",
-    "...BYYYB...",
-    "..BYB.BYB..",
-    ".BYB...BYB.",
-    ".BB.....BB.",
+    "...Y...",
+    "..WYW..",
+    ".YYYYY.",
+    "YYYYYYY",
+    "..YYY..",
+    ".YY.YY.",
+    "OY...YO",
   ],
   coracao: [
-    ".BBB...BBB.",
-    "BRRRB.BRRRB",
-    "BRRRRBBRRRB",
-    "BRRRRRRRRRB",
-    ".BRRRRRRRB.",
-    "..BRRRRRB..",
-    "...BRRRB...",
-    "....BRB....",
-    ".....B.....",
+    ".W...R.",
+    "RRR.RRR",
+    "RRRRRRR",
+    "RRRRRRR",
+    ".RRRRR.",
+    "..DRD..",
+    "...D...",
   ],
   cruz: [
-    "...BBBB...",
-    "...BWWBB..",
-    "...BWWBB..",
-    "BBBBWWBBBB",
-    "BWWWWWWWWB",
-    "BWWWWWWWWB",
-    "BBBBWWBBBB",
-    "...BWWBB..",
-    "...BWWBB..",
-    "...BBBB...",
+    "..WWW..",
+    "..WWW..",
+    "WWWWWWW",
+    "WWWWWWW",
+    "WWWWWWW",
+    "..WGW..",
+    "..GGG..",
   ],
   sinal: [
-    "..BBBBBB..",
-    ".BSSSSSSB.",
-    "BSSBBBSSSB",
-    "BSSB..BBBB",
-    "BSSSSBBB..",
-    ".BSSSSSSB.",
-    "..BBBSSSSB",
-    "BBBB..BSSB",
-    "BSSSBBBSSB",
-    ".BSSSSSSB.",
-    "..BBBBBB..",
+    ".YYYYY.",
+    "YY...YY",
+    "YY.....",
+    ".YYYY..",
+    "....YY.",
+    "YY...YY",
+    ".YYYYY.",
   ],
 };
 
-function getDecalPixelColor(char: string): [number, number, number, number] | null {
+function getDecalPixelColor(char: string, shadowFactor = 1.0): [number, number, number, number] | null {
+  const clamp = (v: number) => Math.min(255, Math.max(0, Math.round(v * shadowFactor)));
   switch (char) {
-    case "B":
-      return [25, 20, 30, 255]; // borda suave
     case "W":
-      return [255, 255, 255, 255]; // branco puro
+      return [clamp(255), clamp(255), clamp(255), 255]; // realce branco
+    case "G":
+      return [clamp(203), clamp(213), clamp(225), 255]; // cinza suave
     case "Y":
-      return [255, 215, 0, 255]; // amarelo ouro
+      return [clamp(251), clamp(191), clamp(36), 255];  // amarelo ouro vibrante
+    case "O":
+      return [clamp(217), clamp(119), clamp(6), 255];   // ocre dourado
     case "R":
-      return [220, 38, 38, 255]; // vermelho vida
-    case "S":
-      return [255, 210, 60, 255]; // emblema SINAL dourado
+      return [clamp(239), clamp(68), clamp(68), 255];   // vermelho vivo
+    case "D":
+      return [clamp(153), clamp(27), clamp(27), 255];   // vermelho escuro
     default:
       return null;
   }
@@ -221,7 +213,6 @@ export function generateTeddyAtlasCanvas(
   const cached = canvasCache.get(cacheKey);
   if (cached) return cached;
 
-  // Cria canvas offscreen de dimensões idênticas ao atlas original (1536x1024)
   const canvas =
     typeof document !== "undefined" && typeof document.createElement === "function"
       ? document.createElement("canvas")
@@ -242,7 +233,7 @@ export function generateTeddyAtlasCanvas(
   // Desenha a imagem base integralmente
   ctx.drawImage(baseImage, 0, 0);
 
-  // Se for a configuração original, retorna o atlas cópia sem modificações
+  // Se for a configuração original, retorna a cópia sem nenhuma modificação
   const isDefault =
     config.corCamiseta === "roxo" &&
     config.corBone === "roxo" &&
@@ -253,7 +244,6 @@ export function generateTeddyAtlasCanvas(
     return canvas;
   }
 
-  // Processa exclusivamente os 8 frames da linha 0 de Teddy
   const frameKeys = Object.keys(TEDDY_CANONICAL_FRAMES) as TeddyFrameKey[];
 
   for (const fKey of frameKeys) {
@@ -266,7 +256,7 @@ export function generateTeddyAtlasCanvas(
       for (let px = 0; px < frameInfo.w; px++) {
         const idx = (py * frameInfo.w + px) * 4;
         const a = data[idx + 3];
-        if (a < 50) continue; // pixel transparente
+        if (a < 50) continue;
 
         const r = data[idx];
         const g = data[idx + 1];
@@ -312,9 +302,17 @@ export function generateTeddyAtlasCanvas(
               targetY < frameInfo.h
             ) {
               const pIdx = (targetY * frameInfo.w + targetX) * 4;
-              // A estampa só é gravada sobre a camiseta (py > 70 e não-transparente)
+              const origR = data[pIdx];
+              const origG = data[pIdx + 1];
+              const origB = data[pIdx + 2];
+
+              // A estampa só é gravada sobre o tecido da camiseta (py > 70 e dentro do tecido roxo)
               if (targetY > 70 && data[pIdx + 3] > 100) {
-                const color = getDecalPixelColor(char);
+                // Preserva o sombreamento da dobra da camiseta
+                const origLum = 0.299 * origR + 0.587 * origG + 0.114 * origB;
+                const shadowFactor = Math.min(1.1, Math.max(0.7, origLum / 91.8));
+
+                const color = getDecalPixelColor(char, shadowFactor);
                 if (color) {
                   data[pIdx] = color[0];
                   data[pIdx + 1] = color[1];
@@ -328,7 +326,6 @@ export function generateTeddyAtlasCanvas(
       }
     }
 
-    // Escreve de volta no frame do canvas
     ctx.putImageData(imgData, frameInfo.x, frameInfo.y);
   }
 
@@ -336,9 +333,6 @@ export function generateTeddyAtlasCanvas(
   return canvas;
 }
 
-/**
- * Retorna o DataURL em cache para prévia instantânea em elementos <img> ou CSS.
- */
 export function getTeddyAtlasDataUrl(
   baseImage: HTMLImageElement | HTMLCanvasElement,
   config: TeddyCustomization
@@ -348,7 +342,7 @@ export function getTeddyAtlasDataUrl(
   if (cached) return cached;
 
   const canvas = generateTeddyAtlasCanvas(baseImage, config);
-  const url = canvas.toDataURL("image/png");
+  const url = canvas.toDataURL ? canvas.toDataURL("image/png") : "";
   dataUrlCache.set(cacheKey, url);
   return url;
 }
@@ -399,7 +393,6 @@ export function ensureTeddyCustomTexture(
     const customTexture = scene.textures.addCanvas(textureKey, canvas);
 
     if (customTexture) {
-      // Clona as coordenadas dos 8 frames da linha 0 de Teddy
       for (let i = 0; i < 8; i++) {
         const frameName = "0-" + i;
         const origFrame = originalTexture.get(frameName);
@@ -425,4 +418,3 @@ export function ensureTeddyCustomTexture(
 
   return "burns-people";
 }
-

@@ -53,7 +53,8 @@ export function drawTeddyOnCanvas(
   direction: "down" | "up" | "left" | "right",
   frameIndex: number,
   targetWidth: number,
-  targetHeight: number
+  targetHeight: number,
+  pose: "default" | "action" | "celebrate" = "default"
 ) {
   ctx.save();
   ctx.clearRect(0, 0, targetWidth, targetHeight);
@@ -64,7 +65,11 @@ export function drawTeddyOnCanvas(
 
   // Identifica o frame canônico
   let frameKey: keyof typeof TEDDY_CANONICAL_FRAMES;
-  if (isBack) {
+  if (pose === "celebrate") {
+    frameKey = "0-7";
+  } else if (pose === "action") {
+    frameKey = "0-6";
+  } else if (isBack) {
     frameKey = frameIndex === 1 ? "0-4" : frameIndex === 2 ? "0-5" : "0-3";
   } else {
     frameKey = frameIndex === 1 ? "0-1" : frameIndex === 2 ? "0-2" : "0-0";

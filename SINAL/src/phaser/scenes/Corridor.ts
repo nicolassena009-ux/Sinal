@@ -58,7 +58,7 @@ export class Corridor extends Phaser.Scene{
     if(Math.hypot(safeSpot.x-this.teddy.x,safeSpot.y-this.teddy.y)>1){
      this.tweens.add({targets:this.teddy,x:safeSpot.x,y:safeSpot.y,duration:this.config.settings.reducedMotion?100:750,ease:'Sine.easeOut'});
     }
-    this.route.request(this.ana,{x:750,y:632});
+    this.route.request(this.ana,{x:705,y:608});
    }else this.hud.feedback(id==='cabinet'?'O DEA está identificado na parede.':id==='phone'?'Aqui é possível simular a chamada ao 192.':'Rafael organiza a atividade esportiva.');
    return;
   }
@@ -104,11 +104,11 @@ export class Corridor extends Phaser.Scene{
   if(m.carrying)this.device.setPosition(this.teddy.x+28,this.teddy.y-48).setScale(.21);
   if(m.stage==='pads'&&this.safe()&&!walking){this.clear=true;m.advance(true);this.stageAge=0;}
   if(m.stage==='analysis'){this.ana.setFrame('4');this.stageAge+=dt;if(this.stageAge>2){m.analyzed(this.safe());}}
-  if(m.stage==='done'&&this.clear){this.clear=false;this.route.request(this.ana,{x:750,y:632});this.age=0;}
-  if(m.compressing&&!walking&&near(this.ana,places.rafael,65)){const compression=Math.floor(m.elapsed*110/60*2)%2;this.ana.setFrame(compression?'9':'8');}
+  if(m.stage==='done'&&this.clear){this.clear=false;this.route.request(this.ana,{x:705,y:608});this.age=0;}
+  if(m.compressing&&!walking&&near(this.ana,{x:705,y:608},75)){const compression=Math.floor(m.elapsed*110/60*2)%2;this.ana.setFrame(compression?'9':'8');this.rafael.y=644+(compression?2.5:0);}
   if(m.delivered&&m.stage!=='closed')this.device.setFrame('10');
   if(['pads','analysis','shockAdvised','done'].includes(m.stage)){this.pads.clear().fillStyle(0xf5ede1).fillRoundedRect(685,613,13,9,2).fillRoundedRect(716,624,13,9,2);}
-  this.rafael.setDepth(this.rafael.y);this.ana.setDepth(m.recognized?650:this.ana.y);this.device.setDepth(m.carrying?this.teddy.y+1:690);
+  this.rafael.setDepth(644);this.ana.setDepth(m.compressing?643:this.ana.y);this.device.setDepth(m.carrying?this.teddy.y+1:690);
   if(m.stage==='done'&&this.age>5&&!walking&&m.handoff()){this.age=0;this.feedback='A equipe chegou ao ginásio. Ana transmite o atendimento.';}
   if(m.phase==='handoff'&&this.age>2){this.finished=true;m.phase='complete';const result={mode:this.config.mode,objectives:[...m.completed],durationSeconds:Math.round(m.elapsed),corrections:0,clinicalReview:'pending' as const};this.teddy.gesture('celebrating',()=>{});this.hud.conclusion({title:'MISSÃO CONCLUÍDA — VOCÊ AJUDOU A SALVAR TEMPO!',summary:'Ana transferiu o cuidado à equipe especializada.',items:['Reconhecer a emergência e chamar o SAMU 192.','Iniciar compressões e minimizar interrupções.','Providenciar o DEA e seguir suas instruções.'],note:'Demonstração de RCP adulta. Revisão clínica pendente.'});this.send('educational-result',{result});this.send('mission-completed',{result});return;}
   if(this.previousPhase!==m.phase){this.previousPhase=m.phase;this.send('phase-changed',{phase:m.phase});}

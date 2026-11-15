@@ -13,7 +13,7 @@ import type {
   TeddyDecal,
 } from "@/lib/teddyCustomTexture";
 import { loadTeddySprite, drawTeddyOnCanvas } from "./TeddyPixelCanvas";
-import { X, Sparkles, Check, RotateCcw, Play, Pause, Shirt, Crown, Palette } from "lucide-react";
+import { X, Sparkles, Check, RotateCcw, Play, Pause, Shirt, Crown, Palette, FlipHorizontal } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
 interface AvatarCustomizerModalProps {
@@ -25,6 +25,7 @@ export function AvatarCustomizerModal({ isOpen, onClose }: AvatarCustomizerModal
   const [currentAvatar, setSavedAvatar] = usePlayerAvatar();
   const [tempAvatar, setTempAvatar] = useState<AvatarConfig>(currentAvatar);
   const [direction, setDirection] = useState<"down" | "up" | "left" | "right">("down");
+  const [pose, setPose] = useState<"default" | "action" | "celebrate">("default");
   const [isWalking, setIsWalking] = useState(true);
   const [frameIndex, setFrameIndex] = useState(0);
   const [saveWarning, setSaveWarning] = useState(false);
@@ -54,7 +55,7 @@ export function AvatarCustomizerModal({ isOpen, onClose }: AvatarCustomizerModal
 
   // Ciclo de passos da caminhada
   useEffect(() => {
-    if (!isOpen || !isWalking) {
+    if (!isOpen || !isWalking || pose !== "default") {
       setFrameIndex(0);
       return;
     }
@@ -62,7 +63,7 @@ export function AvatarCustomizerModal({ isOpen, onClose }: AvatarCustomizerModal
       setFrameIndex((prev) => (prev === 0 ? 1 : prev === 1 ? 2 : 0));
     }, 220);
     return () => clearInterval(interval);
-  }, [isOpen, isWalking]);
+  }, [isOpen, isWalking, pose]);
 
   // Renderiza prévia 2D em tempo real no canvas
   useEffect(() => {
@@ -78,9 +79,10 @@ export function AvatarCustomizerModal({ isOpen, onClose }: AvatarCustomizerModal
       direction,
       isWalking ? frameIndex : 0,
       canvas.width,
-      canvas.height
+      canvas.height,
+      pose
     );
-  }, [isOpen, tempAvatar, direction, isWalking, frameIndex, canvasElement, spriteImage]);
+  }, [isOpen, tempAvatar, direction, isWalking, frameIndex, canvasElement, spriteImage, pose]);
 
   if (!isOpen) return null;
 
@@ -115,6 +117,8 @@ export function AvatarCustomizerModal({ isOpen, onClose }: AvatarCustomizerModal
 
   const handleReset = () => {
     setTempAvatar(DEFAULT_AVATAR);
+    setPose("default");
+    setDirection("down");
   };
 
   return (
@@ -150,7 +154,7 @@ export function AvatarCustomizerModal({ isOpen, onClose }: AvatarCustomizerModal
                   Personalização 2.0 do Teddy
                 </DialogTitle>
                 <p className="text-xs text-white/70">
-                  Cores e estampas reais em pixel art — integradas nas 5 missões educativas do SINAL.
+                  Cores e estampas em pixel art real — integradas diretamente nas 5 missões educativas do SINAL.
                 </p>
               </div>
             </div>
@@ -184,55 +188,122 @@ export function AvatarCustomizerModal({ isOpen, onClose }: AvatarCustomizerModal
                 />
               </div>
 
-              {/* Controles de Direção */}
+              {/* Controles de Pose Canônica */}
               <div className="w-full">
                 <span className="block text-[10px] font-bold uppercase tracking-wider text-white/50 mb-1.5">
-                  Direção da Câmera
+                  Poses Canônicas
                 </span>
-                <div className="grid grid-cols-4 gap-1">
-                  {(
-                    [
-                      ["down", "Frente"],
-                      ["up", "Costas"],
-                      ["left", "Esquerda"],
-                      ["right", "Direita"],
-                    ] as const
-                  ).map(([value, label]) => (
-                    <button
-                      key={value}
-                      type="button"
-                      aria-pressed={direction === value}
-                      onClick={() => setDirection(value)}
-                      className={`rounded-lg py-1.5 text-[11px] font-bold border transition-all cursor-pointer ${
-                        direction === value
-                          ? "bg-[color:var(--roxo)] border-white text-white shadow-xs"
-                          : "border-white/15 bg-white/5 text-white/70 hover:bg-white/15 hover:text-white"
-                      }`}
-                    >
-                      {label}
-                    </button>
-                  ))}
+                <div className="grid grid-cols-2 gap-1 mb-1">
+                  <button
+                    type="button"
+                    aria-pressed={pose === "default" && direction !== "up"}
+                    onClick={() => {
+                      setPose("default");
+                      setDirection("down");
+                    }}
+                    className={`rounded-lg py-1.5 text-[11px] font-bold border transition-all cursor-pointer ${
+                      pose === "default" && direction !== "up"
+                        ? "bg-[color:var(--roxo)] border-white text-white shadow-xs"
+                        : "border-white/15 bg-white/5 text-white/70 hover:bg-white/15 hover:text-white"
+                    }`}
+                  >
+                    Frente
+                  </button>
+                  <button
+                    type="button"
+                    aria-pressed={pose === "default" && direction === "up"}
+                    onClick={() => {
+                      setPose("default");
+                      setDirection("up");
+                    }}
+                    className={`rounded-lg py-1.5 text-[11px] font-bold border transition-all cursor-pointer ${
+                      pose === "default" && direction === "up"
+                        ? "bg-[color:var(--roxo)] border-white text-white shadow-xs"
+                        : "border-white/15 bg-white/5 text-white/70 hover:bg-white/15 hover:text-white"
+                    }`}
+                  >
+                    Costas (Mochila)
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-2 gap-1">
+                  <button
+                    type="button"
+                    aria-pressed={pose === "action"}
+                    onClick={() => {
+                      setPose("action");
+                      setDirection("down");
+                    }}
+                    className={`rounded-lg py-1 text-[10px] font-bold border transition-all cursor-pointer ${
+                      pose === "action"
+                        ? "bg-[color:var(--roxo)] border-white text-white shadow-xs"
+                        : "border-white/15 bg-white/5 text-white/70 hover:bg-white/15 hover:text-white"
+                    }`}
+                  >
+                    Ação / Socorro
+                  </button>
+                  <button
+                    type="button"
+                    aria-pressed={pose === "celebrate"}
+                    onClick={() => {
+                      setPose("celebrate");
+                      setDirection("down");
+                    }}
+                    className={`rounded-lg py-1 text-[10px] font-bold border transition-all cursor-pointer ${
+                      pose === "celebrate"
+                        ? "bg-[color:var(--roxo)] border-white text-white shadow-xs"
+                        : "border-white/15 bg-white/5 text-white/70 hover:bg-white/15 hover:text-white"
+                    }`}
+                  >
+                    Comemoração
+                  </button>
                 </div>
               </div>
 
-              {/* Toggle de Passos */}
-              <button
-                type="button"
-                onClick={() => setIsWalking(!isWalking)}
-                className="inline-flex w-full items-center justify-center gap-1.5 rounded-xl border border-white/15 bg-white/5 py-1.5 text-xs font-bold text-white/80 hover:bg-white/15 hover:text-white transition-all cursor-pointer"
-              >
-                {isWalking ? (
-                  <>
-                    <Pause className="h-3.5 w-3.5 text-[color:var(--amarelo)]" />
-                    <span>Pausar Passos</span>
-                  </>
-                ) : (
-                  <>
-                    <Play className="h-3.5 w-3.5 text-[color:var(--amarelo)]" />
-                    <span>Ver Caminhando</span>
-                  </>
-                )}
-              </button>
+              {/* Alternância e Espelhamento */}
+              <div className="w-full flex gap-1">
+                <button
+                  type="button"
+                  onClick={() => setIsWalking(!isWalking)}
+                  disabled={pose !== "default"}
+                  className={`inline-flex flex-1 items-center justify-center gap-1 rounded-xl border border-white/15 py-1.5 text-[11px] font-bold transition-all cursor-pointer ${
+                    pose !== "default"
+                      ? "opacity-40 cursor-not-allowed bg-white/5 text-white/40"
+                      : "bg-white/5 text-white/80 hover:bg-white/15 hover:text-white"
+                  }`}
+                >
+                  {isWalking && pose === "default" ? (
+                    <>
+                      <Pause className="h-3 w-3 text-[color:var(--amarelo)]" />
+                      <span>Pausar</span>
+                    </>
+                  ) : (
+                    <>
+                      <Play className="h-3 w-3 text-[color:var(--amarelo)]" />
+                      <span>Andar</span>
+                    </>
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setDirection((d) => (d === "left" ? "down" : "left"))}
+                  className={`inline-flex items-center justify-center gap-1 rounded-xl border px-2 py-1.5 text-[11px] font-bold transition-all cursor-pointer ${
+                    direction === "left"
+                      ? "bg-[color:var(--roxo)] border-white text-white"
+                      : "border-white/15 bg-white/5 text-white/70 hover:bg-white/15 hover:text-white"
+                  }`}
+                  title="Inverter direção horizontalmente (espelhamento nativo de pixel art)"
+                >
+                  <FlipHorizontal className="h-3.5 w-3.5" />
+                  <span>Virar</span>
+                </button>
+              </div>
+
+              {/* Nota Documental sobre as Direções Canônicas */}
+              <p className="text-[10px] text-white/50 text-left leading-relaxed">
+                ℹ️ O Teddy original possui arte dedicada para Frente, Costas, Ação e Comemoração. As direções laterais no jogo utilizam o espelhamento horizontal clássico de pixel art.
+              </p>
 
               {/* Restaurar Padrão */}
               <button
