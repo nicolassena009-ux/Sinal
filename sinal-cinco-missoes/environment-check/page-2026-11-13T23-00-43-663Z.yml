@@ -1,0 +1,41 @@
+- main [ref=e2]:
+  - generic [ref=e3]:
+    - navigation [ref=e4]:
+      - generic [ref=e5]: sinal✦
+      - generic [ref=e6]: APRENDER A CUIDAR
+      - generic [ref=e7]: MISSÃO 01 · ENGASGO
+    - generic [ref=e8]:
+      - generic [ref=e9]:
+        - generic [ref=e10]: UMA AVENTURA SOBRE CUIDADO
+        - heading [level=1] [ref=e12]:
+          - text: Um pequeno sinal.Uma grande
+          - emphasis [ref=e13]: diferença.
+        - paragraph [ref=e14]: Um dia no refeitório. Observe os sinais, encontre apoio e ajude um colega que precisa de cuidado.
+        - generic [ref=e15]:
+          - generic [ref=e16]: 01 Emergência no refeitório
+          - generic [ref=e17]: ⌂ Refeitório
+        - generic "Escolha a missão" [ref=e18]:
+          - button "01 · Engasgo" [pressed] [ref=e19] [cursor=pointer]
+          - button "02 · Queimaduras" [ref=e20] [cursor=pointer]
+        - generic [ref=e21]:
+          - button "Sinal Kids 4–12 anos · chamar e acompanhar ↗" [ref=e22] [cursor=pointer]:
+            - text: Sinal Kids
+            - generic [ref=e23]: 4–12 anos · chamar e acompanhar
+            - generic [ref=e24]: ↗
+          - button "Sinal Teens 13–18 anos · simulação guiada ↗" [ref=e25] [cursor=pointer]:
+            - text: Sinal Teens
+            - generic [ref=e26]: 13–18 anos · simulação guiada
+            - generic [ref=e27]: ↗
+        - paragraph [ref=e28]: Protótipo para revisão acadêmica. A simulação não substitui treinamento supervisionado. Arte de Engasgo preservada.
+      - complementary [ref=e29]:
+        - generic [ref=e30]:
+          - generic [ref=e31]: O CUIDADOCOMEÇA NO OLHAR.
+          - generic [ref=e32]: ✦
+        - generic [ref=e50]:
+          - generic [ref=e51]: RECONHECERé o primeiro passo.
+          - generic [ref=e52]:
+            - text: "01"
+            - generic [ref=e54]: MISSÃO
+    - generic [ref=e55]:
+      - text: UMA EXPERIÊNCIA SINAL
+      - generic [ref=e56]: DESENVOLVIMENTO INDEPENDENTE • VERSÃO 0.1

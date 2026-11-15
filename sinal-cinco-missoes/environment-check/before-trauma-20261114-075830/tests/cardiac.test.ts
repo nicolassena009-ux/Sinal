@@ -1,0 +1,4 @@
+import {it,expect} from 'vitest';
+import {CardiacMission} from '../src/missions/cardiac';
+for(const shockable of [true,false])it('DEA segue indicação e afastamento '+shockable,()=>{const m=new CardiacMission(shockable);m.collapse();m.assess();m.respond();expect(m.compressing).toBe(true);m.call();m.call();m.pickup();m.deliver();for(let i=0;i<3;i++)m.advance(false);expect(m.advance(false)).toBe(false);m.advance(true);m.analyzed(false);expect(m.stage).toBe('analysis');m.analyzed(true);expect(m.shock(false)).toBe(false);expect(m.shock(true)).toBe(shockable);expect(m.compressing).toBe(true);m.observe();expect(m.handoff()).toBe(true);expect(m.completed.filter(x=>x==='dispatch')).toHaveLength(1);});
+it('não premia velocidade excessiva',()=>{const m=new CardiacMission(false);m.compressing=true;for(let i=0;i<12;i++){m.elapsed+=.1;m.tap();}expect(m.rhythm).toBe(false);for(let i=0;i<4;i++){m.elapsed+=.55;m.tap();}expect(m.rhythm).toBe(true);});

@@ -1,0 +1,41 @@
+- main [ref=f3e2]:
+  - generic [ref=f3e57]:
+    - navigation [ref=f3e58]:
+      - generic [ref=f3e59]: sinal✦
+      - generic [ref=f3e60]: APRENDER A CUIDAR
+      - generic [ref=f3e61]: MISSÃO 02 · QUEIMADURAS
+    - generic [ref=f3e62]:
+      - generic [ref=f3e63]:
+        - generic [ref=f3e64]: UMA AVENTURA SOBRE CUIDADO
+        - heading [level=1] [ref=f3e66]:
+          - text: Um pequeno sinal.Uma grande
+          - emphasis [ref=f3e67]: diferença.
+        - paragraph [ref=f3e68]: Uma cozinha em família. Reconheça o perigo e ajude a mãe a cuidar da irmã com segurança.
+        - generic [ref=f3e69]:
+          - generic [ref=f3e70]: "02 Queimaduras: Agir com Segurança"
+          - generic [ref=f3e71]: ⌂ Cozinha residencial
+        - generic "Escolha a missão" [ref=f3e72]:
+          - button "01 · Engasgo" [ref=f3e73] [cursor=pointer]
+          - button "02 · Queimaduras" [pressed] [ref=f3e74] [cursor=pointer]
+        - generic [ref=f3e75]:
+          - button "Sinal Kids 4–12 anos · chamar e acompanhar ↗" [ref=f3e76] [cursor=pointer]:
+            - text: Sinal Kids
+            - generic [ref=f3e77]: 4–12 anos · chamar e acompanhar
+            - generic [ref=f3e78]: ↗
+          - button "Sinal Teens 13–18 anos · simulação guiada ↗" [ref=f3e79] [cursor=pointer]:
+            - text: Sinal Teens
+            - generic [ref=f3e80]: 13–18 anos · simulação guiada
+            - generic [ref=f3e81]: ↗
+        - paragraph [ref=f3e82]: Protótipo para revisão acadêmica. A simulação não substitui treinamento supervisionado. Sprites de Queimaduras produzidos a partir das referências fornecidas.
+      - complementary [ref=f3e83]:
+        - generic [ref=f3e84]:
+          - generic [ref=f3e85]: O CUIDADOCOMEÇA NO OLHAR.
+          - generic [ref=f3e86]: ✦
+        - generic [ref=f3e104]:
+          - generic [ref=f3e105]: RECONHECERé o primeiro passo.
+          - generic [ref=f3e106]:
+            - text: "01"
+            - generic [ref=f3e108]: MISSÃO
+    - generic [ref=f3e109]:
+      - text: UMA EXPERIÊNCIA SINAL
+      - generic [ref=f3e110]: DESENVOLVIMENTO INDEPENDENTE • VERSÃO 0.1

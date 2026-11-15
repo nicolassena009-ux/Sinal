@@ -1,0 +1,5 @@
+import {test,expect} from '@playwright/test';
+test('interface oferece Engasgo, Queimaduras e Convulsão e preserva Missão 01',async({page})=>{const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});await page.goto('/?test=1');await expect(page.getByText('MISSÃO 01 · ENGASGO',{exact:true})).toBeVisible();await expect(page.locator('[data-mission]')).toHaveCount(5);await expect(page.getByText('CINCO MISSÕES',{exact:true})).toHaveCount(0);await page.locator('[data-mode=kids]').click();await page.waitForFunction(()=>!!(window as any).sinalTest?.scene.teddy);expect(await page.evaluate(()=>(window as any).sinalTest.scene.scene.key)).toBe('cafeteria');const x=await page.evaluate(()=>(window as any).sinalTest.scene.teddy.x);await page.keyboard.down('ArrowRight');await page.waitForTimeout(400);await page.keyboard.up('ArrowRight');expect(await page.evaluate(()=>(window as any).sinalTest.scene.teddy.x)).toBeGreaterThan(x);expect(errors).toEqual([]);});
+
+
+

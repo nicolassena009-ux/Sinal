@@ -1,0 +1,131 @@
+{
+  "initialize": {
+    "protocolVersion": "2024-11-05",
+    "capabilities": {
+      "tools": {
+        "listChanged": false
+      },
+      "prompts": {
+        "listChanged": false
+      },
+      "resources": {
+        "listChanged": false,
+        "subscribe": false
+      }
+    },
+    "serverInfo": {
+      "name": "Context7",
+      "title": "Context7",
+      "version": "4.7.0",
+      "websiteUrl": "https://context7.com",
+      "description": "Context7 provides up-to-date documentation and code examples for libraries and frameworks.",
+      "icons": [
+        {
+          "src": "https://context7.com/context7-icon-green.svg",
+          "mimeType": "image/svg+xml",
+          "sizes": [
+            "any"
+          ]
+        },
+        {
+          "src": "https://context7.com/context7-icon-green.png",
+          "mimeType": "image/png",
+          "sizes": [
+            "512x512"
+          ]
+        }
+      ]
+    },
+    "instructions": "Use this server to fetch current documentation whenever the user asks about a library, framework, SDK, API, CLI tool, or cloud service — even well-known ones like React, Next.js, Prisma, Express, Tailwind, Django, or Spring Boot. This includes API syntax, configuration, version migration, porting code between libraries, platforms, or SQL dialects, library-specific debugging, setup instructions, and CLI tool usage. Use even when you think you know the answer — your training data may not reflect recent changes. Prefer this over web search for library docs.\n\nDo not use for: refactoring, debugging, or reviewing code that does not depend on a library or platform API, or general programming concepts."
+  },
+  "tools": {
+    "tools": [
+      {
+        "name": "resolve-library-id",
+        "title": "Resolve Context7 Library ID",
+        "description": "Resolves a package/product name to a Context7-compatible library ID and returns matching libraries.\n\nYou MUST call this function before 'Query Documentation' tool to obtain a valid Context7-compatible library ID UNLESS the user explicitly provides a library ID in the format '/org/project' or '/org/project/version' in their query.\n\nEach result includes:\n- Library ID: Context7-compatible identifier (format: /org/project)\n- Name: Library or package name\n- Description: Short summary\n- Code Snippets: Number of available code examples\n- Source Reputation: Authority indicator (High, Medium, Low, or Unknown)\n- Benchmark Score: Quality indicator (100 is the highest score)\n- Versions: List of versions if available. Use one of those versions if the user provides a version in their query. The format of the version is /org/project/version.\n\nFor best results, select libraries based on name match, source reputation, snippet coverage, benchmark score, and relevance to your use case.\n\nSelection Process:\n1. Analyze the query to understand what library/package the user is looking for\n2. Return the most relevant match based on:\n- Name similarity to the query (exact matches prioritized)\n- Description relevance to the query's intent\n- Documentation coverage (prioritize libraries with higher Code Snippet counts)\n- Source reputation (consider libraries with High or Medium reputation more authoritative)\n- Benchmark Score: Quality indicator (100 is the highest score)\n\nResponse Format:\n- Return the selected library ID in a clearly marked section\n- Provide a brief explanation for why this library was chosen\n- If multiple good matches exist, acknowledge this but proceed with the most relevant one\n- If no good matches exist, clearly state this and suggest query refinements\n\nFor ambiguous queries, request clarification before proceeding with a best-guess match.\n\nIMPORTANT: Do not call this tool more than 3 times per question. If you cannot find what you need after 3 calls, use the best result you have.",
+        "inputSchema": {
+          "type": "object",
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "What to look up in the library's documentation. This is used to rank library results by relevance to what the user is trying to accomplish. The query is sent to the Context7 API for processing. Do not include any sensitive or confidential information such as API keys, passwords, credentials, personal data, or proprietary code in your query."
+            },
+            "libraryName": {
+              "type": "string",
+              "description": "Library name to search for and retrieve a Context7-compatible library ID. Use the official library name with proper punctuation — e.g., 'Next.js' instead of 'nextjs', 'Customer.io' instead of 'customerio', 'Three.js' instead of 'threejs'."
+            }
+          },
+          "required": [
+            "query",
+            "libraryName"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": true,
+          "idempotentHint": true
+        }
+      },
+      {
+        "name": "query-docs",
+        "title": "Query Documentation",
+        "description": "Retrieves and queries up-to-date documentation and code examples from Context7 for any programming library or framework.\n\nYou must call 'Resolve Context7 Library ID' tool first to obtain the exact Context7-compatible library ID required to use this tool, UNLESS the user explicitly provides a library ID in the format '/org/project' or '/org/project/version' in their query.\n\nDo not call this tool more than 3 times per question.\n\nIf you know the programming language the user is working in, pass it as `language` so the results match their setup.",
+        "inputSchema": {
+          "type": "object",
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "libraryId": {
+              "type": "string",
+              "description": "Exact Context7-compatible library ID (e.g., '/mongodb/docs', '/vercel/next.js', '/supabase/supabase', '/vercel/next.js/v16.2.9') retrieved from 'resolve-library-id' or directly from user query in the format '/org/project' or '/org/project/version'."
+            },
+            "query": {
+              "type": "string",
+              "description": "What to look up in the library's documentation, scoped to a single concept. Be specific and include relevant details, but keep each query to one topic — if the user's question spans multiple distinct concepts, make a separate call per concept instead of combining them, unless the question is about how the concepts interact. Good: 'How to set up authentication with JWT in Express.js' or 'React useEffect cleanup function examples'. Bad (too vague): 'auth' or 'hooks'. Bad (too broad): 'routing and auth and caching in Next.js'. The query is sent to the Context7 API for processing. Do not include any sensitive or confidential information such as API keys, passwords, credentials, personal data, or proprietary code in your query."
+            },
+            "language": {
+              "description": "Programming language the user is writing code in, such as 'Python', 'TypeScript', 'Go', or 'C#'. Ranks code examples in that language first. Leave it out when the language is unknown or does not apply.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "libraryId",
+            "query"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": true,
+          "idempotentHint": true
+        }
+      }
+    ]
+  },
+  "Phaser": {
+    "content": [
+      {
+        "type": "text",
+        "text": "Available Libraries:\n\n- Title: Phaser\n- Context7-compatible library ID: /phaserjs/phaser\n- Description: Phaser is a JavaScript and TypeScript framework for 2D HTML5 browser games with WebGL and Canvas rendering, covering scenes, Arcade and Matter.js physics, and the create-phaser-game CLI.\n- Code Snippets: 2229\n- Source Reputation: High\n- Benchmark Score: 66.23\n- Versions: v3_90_0, v4.2.1, v3.60.0\n----------\n- Title: Phaser\n- Context7-compatible library ID: /websites/phaser_io\n- Description: Phaser is a fast, free, and fun open-source HTML5 game framework for creating interactive games and multimedia experiences.\n- Code Snippets: 33706\n- Source Reputation: High\n- Benchmark Score: 68.71\n----------\n- Title: Phaser 3\n- Context7-compatible library ID: /phaserjs/examples\n- Description: Phaser 3 is an HTML5 game framework for JavaScript. These runnable examples cover scenes, arcade physics, sprites, animations, asset loading and a first-game tutorial.\n- Code Snippets: 84\n- Source Reputation: High\n- Benchmark Score: 54.31\n----------\n- Title: Phaser\n- Context7-compatible library ID: /websites/phaser_io_api-documentation\n- Description: Phaser is an HTML5 game framework that provides a comprehensive set of tools and features for creating desktop and mobile web games, including game objects, physics, animations, input, and rendering.\n- Code Snippets: 14050\n- Source Reputation: High\n- Benchmark Score: 68.23\n- Versions: 4.0.0-rc.6\n----------\n- Title: Phaser\n- Context7-compatible library ID: /websites/phaser_io_phaser\n- Description: Phaser is a fast, free, and fun open-source HTML5 game framework for creating 2D games for web browsers, supporting JavaScript and TypeScript development.\n- Code Snippets: 6779\n- Source Reputation: High\n- Benchmark Score: 70.52"
+      }
+    ]
+  },
+  "TypeScript": {
+    "content": [
+      {
+        "type": "text",
+        "text": "Available Libraries:\n\n- Title: TypeScript\n- Context7-compatible library ID: /microsoft/typescript\n- Description: TypeScript is a language for application-scale JavaScript that adds optional types to JavaScript, supporting tools for large-scale JavaScript applications.\n- Code Snippets: 8988\n- Source Reputation: High\n- Benchmark Score: 53.23\n- Versions: v5.8.3, v5.9.3, v6.0.2, v4.7.4, v7.0.2, v5.1.6\n----------\n- Title: TypeScript\n- Context7-compatible library ID: /microsoft/typescript-website\n- Description: TypeScript is a strongly typed programming language that builds on JavaScript, providing better tooling, type safety, and improved developer experience.\n- Code Snippets: 5444\n- Source Reputation: High\n- Benchmark Score: 77.04\n- Versions: _typescript_typescript6_6.0.2\n----------\n- Title: TypeScript\n- Context7-compatible library ID: /websites/typescriptlang\n- Description: TypeScript is a superset of JavaScript that adds static types, enabling developers to build more robust and scalable applications with enhanced tooling and error checking.\n- Code Snippets: 2515\n- Source Reputation: High\n- Benchmark Score: 71.9\n----------\n- Title: TypeScript Go\n- Context7-compatible library ID: /microsoft/typescript-go\n- Description: TypeScript Go is a native port of the TypeScript compiler to Go, aiming to provide a faster and more efficient way to compile TypeScript code.\n- Code Snippets: 13125\n- Source Reputation: High\n- Benchmark Score: 66.06\n----------\n- Title: TypeScript (Deepwiki)\n- Context7-compatible library ID: /websites/deepwiki_microsoft_typescript\n- Description: TypeScript is a strongly typed programming language that builds on JavaScript by adding static type definitions, providing a compiler and developer tooling for large-scale application development.\n- Code Snippets: 685\n- Source Reputation: High\n- Benchmark Score: 36.8"
+      }
+    ]
+  },
+  "docs": {
+    "content": [
+      {
+        "type": "text",
+        "text": "### Arcade Physics Body Set Max Velocity\n\nSource: https://github.com/phaserjs/phaser/blob/v3.90.0/changelog/3.50/CHANGELOG-v3.50.md\n\nNew methods to set the maximum horizontal and vertical velocity for an Arcade Physics Body.\n\n```javascript\n/**\n * Set the maximum horizontal velocity of this Body.\n * @param {number} value - The maximum horizontal velocity.\n * @returns {Phaser.Physics.Arcade.Body} This Body instance.\n */\nbody.setMaxVelocityX(value);\n\n/**\n * Set the maximum vertical velocity of this Body.\n * @param {number} value - The maximum vertical velocity.\n * @returns {Phaser.Physics.Arcade.Body} This Body instance.\n */\nbody.setMaxVelocityY(value);\n```\n\n--------------------------------\n\n### Arcade Physics maxSpeed Property\n\nSource: https://github.com/phaserjs/phaser/blob/v3.90.0/changelog/3.16/CHANGELOG-v3.16.md\n\nThe Arcade Physics Body now has a `maxSpeed` property to limit the velocity vector's length. This can be set using the `setMaxSpeed` method and is applied in the `World.computeVelocity` method.\n\n```javascript\n/**\n * Sets the maximum speed of the Arcade Physics Body.\n * @param {number} value The maximum speed.\n */\nbody.setMaxSpeed(value);\n```\n\n--------------------------------\n\n### Fix: Arcade Physics Body.speed Update\n\nSource: https://github.com/phaserjs/phaser/blob/v3.90.0/changelog/3.12/CHANGELOG-v3.12.md\n\nEnsures the Arcade Physics `Body.speed` property is correctly set whenever velocity is changed via `setVelocity`, `setVelocityX`, or `setVelocityY`. This prevents the body velocity from resetting to zero when `useDamping` is enabled. Fix #3888\n\n```javascript\n/**\n * Fix: The Arcade Physics `Body.speed` property is now set whenever you set the velocity via `setVelocity` or `setVelocityX` or `setVelocityY` which stops the body velocity being reset to zero if `useDamping` is enabled. Fix #3888\n */\n// Conceptual fix:\n// Body.prototype.setVelocity = function(x, y) {\n//   this.velocity.x = x;\n//   this.velocity.y = y;\n//   this.speed = Phaser.Math.Distance.Between(0, 0, x, y);\n// }\n```\n\n--------------------------------\n\n### Arcade Physics Collide/Overlap with Groups\n\nSource: https://github.com/phaserjs/phaser/blob/v3.90.0/changelog/3.2/CHANGELOG-v3.2.md\n\nThe `collide` and `overlap` methods in Arcade Physics now accept normal Phaser Groups in addition to Physics Groups, simplifying collision detection setup.\n\n```javascript\nthis.physics.add.collider(groupA, groupB, hitCallback, null, this);\nthis.physics.add.overlap(groupA, groupB, overlapCallback, null, this);\n```\n\n--------------------------------\n\n### Fix: Arcade Physics `collide` in `update`\n\nSource: https://github.com/phaserjs/phaser/blob/v3.90.0/changelog/3.12/CHANGELOG-v3.12.md\n\nEnsures that calling Arcade Physics `collide` during an `update` method correctly injects results back into the Body parent, allowing bodies to move as expected. Previously, manual checks did not work correctly, although using Colliders did.\n\n```javascript\n/**\n * Calling Arcade Physics `collide` during an `update` method wouldn't inject the results back into the Body parent, causing the bodies to carry on moving. Using Colliders worked, but manually checking did not. Now, both methods work. Fix #3777 (thanks @samme)\n */\n```"
+      }
+    ]
+  }
+}

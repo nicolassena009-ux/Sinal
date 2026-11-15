@@ -1,0 +1,29 @@
+- main [ref=f3e2]:
+  - generic [ref=f3e111]:
+    - generic:
+      - generic:
+        - generic: sinal✦
+        - generic:
+          - generic: MISSÃO 02 • KIDS
+          - strong: "Queimaduras: Agir com Segurança"
+        - button "Pausar" [ref=f3e113] [cursor=pointer]: Ⅱ
+      - generic:
+        - generic:
+          - text: SEU OBJETIVO
+          - paragraph: 1 / 9 · Explore a cozinha e converse com a mãe.
+      - complementary [ref=f3e114]:
+        - heading "Mãe" [level=2] [ref=f3e115]
+        - paragraph [ref=f3e116]: Estou preparando o almoço. Superfícies quentes precisam de cuidado. Venha conversar comigo.
+        - img "Mãe" [ref=f3e117]
+        - button "Explorar a cozinha" [ref=f3e119] [cursor=pointer]
+      - generic: Caminhe até a seta ou clique no objeto
+      - generic:
+        - generic: WASD / ↑↓←→ MOVER E / ESPAÇO INTERAGIR
+        - generic: REVISÃO CLÍNICA PENDENTE
+      - generic [ref=f3e120]:
+        - button "Ler falas" [ref=f3e121] [cursor=pointer]
+        - generic [ref=f3e122]:
+          - text: Volume
+          - slider "Volume" [ref=f3e123]: "0.5"
+        - button "Tela cheia" [ref=f3e124] [cursor=pointer]
+        - button "Recolher diálogo" [ref=f3e125] [cursor=pointer]: Fechar fala

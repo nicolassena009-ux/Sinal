@@ -1,0 +1,15 @@
+import Phaser from 'phaser';
+import {NavigationGrid,RouteFollower} from '../core/navigation';
+import type {Vec} from '../core/movement';
+export class ClassroomActor extends Phaser.GameObjects.Container{
+ sprite:Phaser.GameObjects.Sprite;route:RouteFollower;state='idle';direction='front';grounded=false;private done?:()=>void;private remaining=0;
+ constructor(scene:Phaser.Scene,public role:'lucas'|'helena',p:Vec,grid:NavigationGrid){super(scene,p.x,p.y);scene.add.existing(this);this.route=new RouteFollower(new NavigationGrid([...grid.obstacles],grid.bounds),135);this.add(scene.add.ellipse(0,-2,40,12,0x493149,.16));this.sprite=scene.add.sprite(0,0,'seizure-people',role==='lucas'?'0-0':'2-0').setOrigin(.5,1).setScale(role==='lucas'?.52:.61);this.add(this.sprite);
+ const row=role==='lucas'?0:2;const definitions:Record<string,string[]>={idle:[`${row}-0`,`${row}-0`,`${row}-0`,`${row}-0`],walking:[`${row}-1`,`${row}-0`,`${row}-2`,`${row}-0`],back:[`${row}-4`,`${row}-3`,`${row}-5`,`${row}-3`],talking:[`${row}-0`,`${row}-6`,`${row}-6`,`${row}-0`],warning:[`${row}-7`,`${row}-7`],losingBalance:['1-0','1-0'],assistedFall:['1-0','1-1','1-2'],seizure:['1-2','1-3','1-2','1-2'],postictal:['1-4'],side:['1-5'],awakeSide:['1-6'],recovering:['1-5','1-6','1-6'],alert:['1-7'],notice:['2-7','2-7'],kneel:['3-0','3-0'],protect:['3-0','3-1','3-1'],monitor:['3-2'],breathing:['3-2','3-3','3-3'],callHelp:['3-4','3-4','3-4','3-4'],comfort:['3-5','3-5'],complete:['3-6']};
+ for(const [state,frames]of Object.entries(definitions)){const key=`seizure-${role}-${state}`;if(!scene.anims.exists(key))scene.anims.create({key,frames:frames.map(frame=>({key:'seizure-people',frame})),frameRate:state==='walking'||state==='back'?9:state==='seizure'?3:4,repeat:['idle','walking','back','seizure','postictal','side','monitor','alert','complete'].includes(state)?-1:0});}
+ this.sprite.on('animationcomplete',()=>this.finishAction());this.pose('idle');}
+ private finishAction(){const done=this.done;this.done=undefined;this.remaining=0;done?.();}
+ pose(state:string,done?:()=>void){if(this.state===state&&this.sprite.anims.isPlaying&&!done)return;this.state=state;this.done=done;this.remaining=done?4:0;this.sprite.setScale(this.role==='helena'?.61:['seizure','postictal','side','awakeSide','recovering'].includes(state)?.68:.52);this.sprite.play(`seizure-${this.role}-${state}`,true);}
+ goTo(p:Vec){this.done=undefined;return this.route.request(this,p);}
+ updateActor(dt:number,reduced:boolean){const p=this.route.update(this,dt),dx=p.x-this.x,dy=p.y-this.y;if(Math.hypot(dx,dy)>.01){this.sprite.setFlipX(dx<0);this.direction=dy< -Math.abs(dx)*.7?'back':'front';this.setPosition(p.x,p.y);this.pose(this.direction==='back'?'back':'walking');}else if(['walking','back'].includes(this.state))this.pose('idle');this.setDepth(this.y);if(this.grounded){this.sprite.setFlipX(false);this.sprite.y=0;}if(this.remaining>0){this.remaining-=dt;if(this.remaining<=0)this.finishAction();}if(reduced&&this.state==='seizure'){this.sprite.stop();this.sprite.setFrame('1-2');}}
+}
+

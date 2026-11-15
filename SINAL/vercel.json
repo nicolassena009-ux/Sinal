@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/((?!assets/|audio/|models/|teddy/|favicon.ico|teddy.glb|robots.txt|sinal-bg.jpg).*)",
+      "destination": "/index.html"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+- main [ref=e2]:
+  - generic [ref=e3]:
+    - navigation [ref=e4]:
+      - generic [ref=e5]: sinal✦
+      - generic [ref=e6]: APRENDER A CUIDAR
+      - generic [ref=e7]: MISSÃO 01 · ENGASGO
+    - generic [ref=e8]:
+      - generic [ref=e9]:
+        - generic [ref=e10]: UMA AVENTURA SOBRE CUIDADO
+        - heading [level=1] [ref=e12]:
+          - text: Um pequeno sinal.Uma grande
+          - emphasis [ref=e13]: diferença.
+        - paragraph [ref=e14]: Um dia no refeitório. Observe os sinais, encontre apoio e ajude um colega que precisa de cuidado.
+        - generic [ref=e15]:
+          - generic [ref=e16]: 01 Emergência no refeitório
+          - generic [ref=e17]: ⌂ Refeitório
+        - generic "Escolha a missão" [ref=e18]:
+          - button "01 · Engasgo" [pressed] [ref=e19] [cursor=pointer]
+          - button "02 · Queimaduras" [ref=e20] [cursor=pointer]
+          - button "03 · Convulsão" [ref=e21] [cursor=pointer]
+        - generic [ref=e22]:
+          - button "Sinal Kids 4–12 anos · chamar e acompanhar ↗" [ref=e23] [cursor=pointer]:
+            - text: Sinal Kids
+            - generic [ref=e24]: 4–12 anos · chamar e acompanhar
+            - generic [ref=e25]: ↗
+          - button "Sinal Teens 13–18 anos · simulação guiada ↗" [ref=e26] [cursor=pointer]:
+            - text: Sinal Teens
+            - generic [ref=e27]: 13–18 anos · simulação guiada
+            - generic [ref=e28]: ↗
+        - paragraph [ref=e29]: Protótipo para revisão acadêmica. A simulação não substitui treinamento supervisionado. Arte de Engasgo preservada.
+      - complementary [ref=e30]:
+        - generic [ref=e31]:
+          - generic [ref=e32]: O CUIDADOCOMEÇA NO OLHAR.
+          - generic [ref=e33]: ✦
+        - generic [ref=e51]:
+          - generic [ref=e52]: RECONHECERé o primeiro passo.
+          - generic [ref=e53]:
+            - text: "01"
+            - generic [ref=e55]: MISSÃO
+    - generic [ref=e56]:
+      - text: UMA EXPERIÊNCIA SINAL
+      - generic [ref=e57]: DESENVOLVIMENTO INDEPENDENTE • VERSÃO 0.1

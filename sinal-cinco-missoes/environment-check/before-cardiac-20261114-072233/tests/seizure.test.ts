@@ -1,0 +1,12 @@
+import {describe,it,expect} from 'vitest';
+import {SeizureMission} from '../src/missions/seizure';
+import {NavigationGrid} from '../src/core/navigation';
+import {CLASSROOM,bagFootprint,lucasFootprint} from '../src/world/classroomMap';
+describe('Convulsão',()=>{
+ it('socorro é independente das tarefas secundárias e não duplica',()=>{const ids:string[]=[];const m=new SeizureMission('kids',id=>ids.push(id));m.begin();expect(m.act('requestHelp')).toBe(true);expect(m.act('requestHelp')).toBe(false);expect(m.act('helpCalled')).toBe(true);expect(m.act('helpCalled')).toBe(false);expect(ids).toEqual(['help']);expect(m.bagMoved).toBe(false);});
+ it('proteção exige área segura e conclusão exige todos os cuidados',()=>{const m=new SeizureMission('teens');expect(()=>m.result()).toThrow();m.begin();m.landed();expect(m.act('head')).toBe(false);m.act('bag');m.act('materials');m.act('head');m.act('timer');m.tick(18);expect(m.lucas).toBe('postictal');expect(m.act('recovery')).toBe(false);m.act('requestHelp');m.act('helpCalled');m.lucas='alert';expect(m.act('recovery')).toBe(true);expect(m.result().clinicalReview).toBe('pending');expect(m.result().objectives).toHaveLength(6);expect(m.act('recovery')).toBe(false);});
+ it('cronômetro mede apenas o período observado da simulação',()=>{const m=new SeizureMission('kids');m.begin();m.landed();m.tick(4);m.act('timer');m.tick(3);expect(m.observedSeconds).toBe(3);m.tick(NaN);expect(m.observedSeconds).toBe(3);m.tick(11);expect(m.crisisSeconds).toBe(18);expect(m.lucas).toBe('postictal');m.tick(10);expect(m.observedSeconds).toBe(14);});
+ it('bloqueia mitos sem alterar cuidados ou causar dano',()=>{const m=new SeizureMission('kids');m.begin();m.landed();for(const a of ['mouth','drink','restrain','medication'])expect(m.act(a)).toBe(false);expect(m.completed).toEqual([]);expect(m.corrections).toBe(4);});
+ it('corredores e todas as posições de atendimento são alcançáveis',()=>{const grid=new NavigationGrid([...CLASSROOM.obstacles,bagFootprint(CLASSROOM.points.bag)],CLASSROOM.bounds);for(const p of [CLASSROOM.spawn,CLASSROOM.lucas,CLASSROOM.helena,CLASSROOM.points.care,{x:385,y:530},{x:610,y:535}])expect(grid.findPath(CLASSROOM.spawn,p)).not.toBeNull();expect(grid.findPath(CLASSROOM.spawn,{x:865,y:450})).toBeNull();});
+ it('pose horizontal e mochila movida atualizam footprints',()=>{expect(lucasFootprint(CLASSROOM.lucas,true).w).toBeGreaterThan(lucasFootprint(CLASSROOM.lucas,false).w);expect(bagFootprint({x:100,y:780})).not.toEqual(bagFootprint(CLASSROOM.points.bag));});
+});
