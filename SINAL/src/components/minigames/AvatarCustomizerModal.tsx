@@ -2,16 +2,18 @@ import { useEffect, useRef, useState } from "react";
 import {
   usePlayerAvatar,
   DEFAULT_AVATAR,
-  BONES_TEDDY,
-  MODELOS_ROUPA,
-  CORES_ROUPA,
-  MOCHILAS_TEDDY,
-  ACESSORIOS_TEDDY,
-  PELAGEM_TEDDY,
+  TEDDY_SHIRT_COLORS,
+  TEDDY_CAP_COLORS,
+  TEDDY_DECAL_OPTIONS,
 } from "@/lib/avatarStore";
 import type { AvatarConfig } from "@/types/minigame";
+import type {
+  TeddyShirtColor,
+  TeddyCapColor,
+  TeddyDecal,
+} from "@/lib/teddyCustomTexture";
 import { loadTeddySprite, drawTeddyOnCanvas } from "./TeddyPixelCanvas";
-import { X, Sparkles, Check, RotateCcw, Play, Pause } from "lucide-react";
+import { X, Sparkles, Check, RotateCcw, Play, Pause, Shirt, Crown, Palette } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
 interface AvatarCustomizerModalProps {
@@ -29,9 +31,8 @@ export function AvatarCustomizerModal({ isOpen, onClose }: AvatarCustomizerModal
   const returnFocus = useRef<HTMLElement | null>(null);
   const [canvasElement, setCanvasElement] = useState<HTMLCanvasElement | null>(null);
   const [spriteImage, setSpriteImage] = useState<HTMLImageElement | null>(null);
-  const [activeCategory, setActiveCategory] = useState<"bone" | "roupa" | "mochila" | "acessorio" | "pelagem">("bone");
 
-  // Carrega sprite do Teddy
+  // Carrega o sprite canônico do Teddy
   useEffect(() => {
     let active = true;
     loadTeddySprite()
@@ -44,22 +45,22 @@ export function AvatarCustomizerModal({ isOpen, onClose }: AvatarCustomizerModal
     };
   }, []);
 
-  // Sincroniza estado ao abrir
+  // Sincroniza estado ao abrir modal
   useEffect(() => {
     if (isOpen) {
       setTempAvatar(currentAvatar);
     }
   }, [isOpen, currentAvatar]);
 
-  // Ciclo de animação de caminhada
+  // Ciclo de passos da caminhada
   useEffect(() => {
     if (!isOpen || !isWalking) {
       setFrameIndex(0);
       return;
     }
     const interval = setInterval(() => {
-      setFrameIndex((prev) => (prev === 0 ? 1 : prev === 1 ? 0 : 2));
-    }, 240);
+      setFrameIndex((prev) => (prev === 0 ? 1 : prev === 1 ? 2 : 0));
+    }, 220);
     return () => clearInterval(interval);
   }, [isOpen, isWalking]);
 
@@ -82,6 +83,29 @@ export function AvatarCustomizerModal({ isOpen, onClose }: AvatarCustomizerModal
   }, [isOpen, tempAvatar, direction, isWalking, frameIndex, canvasElement, spriteImage]);
 
   if (!isOpen) return null;
+
+  const handleSelectShirtColor = (corId: TeddyShirtColor) => {
+    setTempAvatar((prev) => ({
+      ...prev,
+      corCamiseta: corId,
+      roupaCor: corId as any,
+    }));
+  };
+
+  const handleSelectDecal = (decalId: TeddyDecal) => {
+    setTempAvatar((prev) => ({
+      ...prev,
+      estampa: decalId,
+    }));
+  };
+
+  const handleSelectCapColor = (corId: TeddyCapColor) => {
+    setTempAvatar((prev) => ({
+      ...prev,
+      corBone: corId,
+      boneModelo: ("bone_" + corId) as any,
+    }));
+  };
 
   const handleSave = () => {
     const saved = setSavedAvatar(tempAvatar);
@@ -123,10 +147,10 @@ export function AvatarCustomizerModal({ isOpen, onClose }: AvatarCustomizerModal
                   id="modal-avatar-title"
                   className="font-display text-lg sm:text-xl font-extrabold text-white"
                 >
-                  Personalizar o Mascote Teddy
+                  Personalização 2.0 do Teddy
                 </DialogTitle>
                 <p className="text-xs text-white/70">
-                  Teddy em pixel art real — mesma aparência exibida nas 5 missões educativas do SINAL.
+                  Cores e estampas reais em pixel art — integradas nas 5 missões educativas do SINAL.
                 </p>
               </div>
             </div>
@@ -141,12 +165,12 @@ export function AvatarCustomizerModal({ isOpen, onClose }: AvatarCustomizerModal
             </button>
           </div>
 
-          {/* Corpo com Grid: Prévia na esquerda e Opções na direita */}
+          {/* Corpo: Prévia à esquerda, 3 Seções Principais à direita */}
           <div className="grid flex-1 gap-6 overflow-y-auto p-6 md:grid-cols-[220px_1fr]">
-            {/* Coluna da Esquerda: Prévia do Teddy */}
+            {/* Coluna da Esquerda: Prévia em Pixel Art */}
             <div className="flex flex-col items-center gap-3 rounded-2xl border border-white/10 bg-white/5 p-4 text-center">
               <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-white/60">
-                Prévia Oficial do Jogo
+                Prévia em Tempo Real
               </span>
 
               {/* Caixa do Canvas com moldura */}
@@ -191,7 +215,7 @@ export function AvatarCustomizerModal({ isOpen, onClose }: AvatarCustomizerModal
                 </div>
               </div>
 
-              {/* Botão de Toggle Parado / Caminhando */}
+              {/* Toggle de Passos */}
               <button
                 type="button"
                 onClick={() => setIsWalking(!isWalking)}
@@ -210,238 +234,118 @@ export function AvatarCustomizerModal({ isOpen, onClose }: AvatarCustomizerModal
                 )}
               </button>
 
+              {/* Restaurar Padrão */}
               <button
                 type="button"
                 onClick={handleReset}
                 className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-transparent px-3 py-1 text-[11px] font-semibold text-white/60 hover:bg-white/10 hover:text-white transition-all cursor-pointer"
-                title="Restaura Teddy clássico com boné roxo, camiseta roxa e mochila amarela"
+                title="Restaura Teddy clássico com boné roxo, camiseta roxa e sem estampa"
               >
                 <RotateCcw className="h-3 w-3" />
                 Restaurar Padrão
               </button>
             </div>
 
-            {/* Coluna da Direita: Abas e Seletores */}
-            <div className="flex flex-col space-y-5">
-              {/* Navegação por Abas de Categoria */}
-              <div className="flex flex-wrap gap-1.5 border-b border-white/10 pb-3">
-                {(
-                  [
-                    ["bone", "🧢 Boné & Cabeça"],
-                    ["roupa", "👕 Roupas & Coletes"],
-                    ["mochila", "🎒 Mochilas"],
-                    ["acessorio", "🏷️ Acessórios"],
-                    ["pelagem", "🐻 Pelagem"],
-                  ] as const
-                ).map(([id, label]) => (
-                  <button
-                    key={id}
-                    type="button"
-                    onClick={() => setActiveCategory(id)}
-                    className={`rounded-xl px-3 py-1.5 text-xs font-bold transition-all cursor-pointer ${
-                      activeCategory === id
-                        ? "bg-[color:var(--roxo)] text-white shadow-sm"
-                        : "bg-white/5 text-white/60 hover:bg-white/15 hover:text-white"
-                    }`}
-                  >
-                    {label}
-                  </button>
-                ))}
+            {/* Coluna da Direita: As 3 Seções de Personalização 2.0 */}
+            <div className="flex flex-col space-y-6">
+              {/* SEÇÃO 1: COR DA CAMISETA */}
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-4 space-y-3">
+                <div className="flex items-center gap-2">
+                  <Shirt className="h-4 w-4 text-[color:var(--amarelo)]" />
+                  <label className="text-xs font-bold uppercase tracking-wider text-white">
+                    1. Cor da Camiseta
+                  </label>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                  {TEDDY_SHIRT_COLORS.map((c) => {
+                    const isSelected = (tempAvatar.corCamiseta ?? "roxo") === c.id;
+                    return (
+                      <button
+                        key={c.id}
+                        type="button"
+                        aria-pressed={isSelected}
+                        onClick={() => handleSelectShirtColor(c.id)}
+                        className={`flex items-center gap-2.5 rounded-xl border px-3 py-2 text-left text-xs font-semibold transition-all cursor-pointer ${
+                          isSelected
+                            ? "border-white bg-white/20 text-white shadow-md ring-2 ring-[color:var(--amarelo)]/60"
+                            : "border-white/10 bg-white/5 text-white/80 hover:bg-white/15 hover:text-white"
+                        }`}
+                      >
+                        <span
+                          className="h-4 w-4 rounded-full border-2 border-white/60 shrink-0 shadow-inner"
+                          style={{ backgroundColor: c.hex }}
+                        />
+                        <span className="truncate">{c.nome}</span>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
 
-              {/* CONTEÚDO DA ABA SELECIONADA */}
-
-              {/* 1. ABA BONÉ & CABEÇA */}
-              {activeCategory === "bone" && (
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-white/80 mb-2">
-                      Escolha o Boné ou Item de Cabeça
-                    </label>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      {BONES_TEDDY.map((b) => (
-                        <button
-                          key={b.id}
-                          type="button"
-                          aria-pressed={tempAvatar.boneModelo === b.id}
-                          onClick={() => setTempAvatar({ ...tempAvatar, boneModelo: b.id as any })}
-                          className={`flex items-center gap-2.5 rounded-xl border px-3 py-2 text-left text-xs font-semibold transition-all cursor-pointer ${
-                            tempAvatar.boneModelo === b.id
-                              ? "border-[color:var(--roxo)] bg-[color:var(--roxo)] text-white shadow-md ring-2 ring-white/50"
-                              : "border-white/10 bg-white/5 text-white/80 hover:bg-white/15 hover:text-white"
-                          }`}
-                        >
-                          <span
-                            className="h-3.5 w-3.5 rounded-full border border-white/40 shrink-0"
-                            style={{ backgroundColor: b.cor }}
-                          />
-                          <span>{b.nome}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                  <p className="text-xs text-white/60 leading-relaxed bg-white/5 p-3 rounded-xl border border-white/10">
-                    💡 O <strong>Boné Roxo SINAL</strong> é o modelo oficial do mascote. Você também pode equipar a <strong>Faixa de Socorrista</strong> ou deixar o Teddy sem boné para exibir suas orelhas redondas.
-                  </p>
+              {/* SEÇÃO 2: ESTAMPA NA CAMISETA */}
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-4 space-y-3">
+                <div className="flex items-center gap-2">
+                  <Palette className="h-4 w-4 text-[color:var(--amarelo)]" />
+                  <label className="text-xs font-bold uppercase tracking-wider text-white">
+                    2. Estampa em Pixel Art
+                  </label>
                 </div>
-              )}
-
-              {/* 2. ABA ROUPAS & COLETES */}
-              {activeCategory === "roupa" && (
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-white/80 mb-2">
-                      Modelo do Uniforme
-                    </label>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
-                      {MODELOS_ROUPA.map((r) => (
-                        <button
-                          key={r.id}
-                          type="button"
-                          aria-pressed={tempAvatar.roupaModelo === r.id}
-                          onClick={() => setTempAvatar({ ...tempAvatar, roupaModelo: r.id as any })}
-                          className={`rounded-xl border px-3 py-2 text-left text-xs font-semibold transition-all cursor-pointer ${
-                            tempAvatar.roupaModelo === r.id
-                              ? "border-[color:var(--roxo)] bg-[color:var(--roxo)] text-white shadow-md ring-2 ring-white/50"
-                              : "border-white/10 bg-white/5 text-white/80 hover:bg-white/15 hover:text-white"
-                          }`}
-                        >
-                          {r.nome}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Seletor de Cores da Roupa */}
-                  <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-white/80 mb-2">
-                      Cor do Tecido
-                    </label>
-                    <div className="flex flex-wrap gap-2">
-                      {CORES_ROUPA.map((cor) => (
-                        <button
-                          key={cor.id}
-                          type="button"
-                          aria-pressed={tempAvatar.roupaCor === cor.id}
-                          onClick={() => setTempAvatar({ ...tempAvatar, roupaCor: cor.id as any })}
-                          className={`flex items-center gap-1.5 rounded-full border-2 px-3 py-1 text-xs font-semibold transition-transform hover:scale-105 cursor-pointer ${
-                            tempAvatar.roupaCor === cor.id
-                              ? "border-white ring-2 ring-[color:var(--amarelo)] bg-white/20 text-white"
-                              : "border-transparent bg-white/5 text-white/70 hover:text-white"
-                          }`}
-                        >
-                          <span
-                            className="h-3 w-3 rounded-full border border-white/50"
-                            style={{ backgroundColor: cor.hex }}
-                          />
-                          <span>{cor.nome}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {TEDDY_DECAL_OPTIONS.map((d) => {
+                    const isSelected = (tempAvatar.estampa ?? "lisa") === d.id;
+                    return (
+                      <button
+                        key={d.id}
+                        type="button"
+                        aria-pressed={isSelected}
+                        onClick={() => handleSelectDecal(d.id)}
+                        className={`flex flex-col items-start rounded-xl border px-3 py-2 text-left transition-all cursor-pointer ${
+                          isSelected
+                            ? "border-white bg-white/20 text-white shadow-md ring-2 ring-[color:var(--amarelo)]/60"
+                            : "border-white/10 bg-white/5 text-white/80 hover:bg-white/15 hover:text-white"
+                        }`}
+                      >
+                        <span className="text-xs font-bold">{d.nome}</span>
+                        <span className="text-[10px] text-white/60">{d.desc}</span>
+                      </button>
+                    );
+                  })}
                 </div>
-              )}
+              </div>
 
-              {/* 3. ABA MOCHILAS */}
-              {activeCategory === "mochila" && (
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-white/80 mb-2">
-                      Mochila de Equipamentos
-                    </label>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      {MOCHILAS_TEDDY.map((m) => (
-                        <button
-                          key={m.id}
-                          type="button"
-                          aria-pressed={tempAvatar.mochilaModelo === m.id}
-                          onClick={() => setTempAvatar({ ...tempAvatar, mochilaModelo: m.id as any })}
-                          className={`flex items-center gap-2.5 rounded-xl border px-3 py-2 text-left text-xs font-semibold transition-all cursor-pointer ${
-                            tempAvatar.mochilaModelo === m.id
-                              ? "border-[color:var(--roxo)] bg-[color:var(--roxo)] text-white shadow-md ring-2 ring-white/50"
-                              : "border-white/10 bg-white/5 text-white/80 hover:bg-white/15 hover:text-white"
-                          }`}
-                        >
-                          <span
-                            className="h-3.5 w-3.5 rounded-full border border-white/40 shrink-0"
-                            style={{ backgroundColor: m.cor }}
-                          />
-                          <span>{m.nome}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                  <p className="text-xs text-white/60 leading-relaxed bg-white/5 p-3 rounded-xl border border-white/10">
-                    💡 A <strong>Mochila Amarela SINAL</strong> é o modelo clássico do Teddy. Ao olhar o Teddy de costas, a mochila fica visível com todos os detalhes e zíperes; de frente, as alças passam sobre os ombros.
-                  </p>
+              {/* SEÇÃO 3: COR DO BONÉ */}
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-4 space-y-3">
+                <div className="flex items-center gap-2">
+                  <Crown className="h-4 w-4 text-[color:var(--amarelo)]" />
+                  <label className="text-xs font-bold uppercase tracking-wider text-white">
+                    3. Cor do Boné
+                  </label>
                 </div>
-              )}
-
-              {/* 4. ABA ACESSÓRIOS EXTRAS */}
-              {activeCategory === "acessorio" && (
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-white/80 mb-2">
-                      Acessórios de Socorrista
-                    </label>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                      {ACESSORIOS_TEDDY.map((a) => (
-                        <button
-                          key={a.id}
-                          type="button"
-                          aria-pressed={tempAvatar.acessorio === a.id}
-                          onClick={() => setTempAvatar({ ...tempAvatar, acessorio: a.id as any })}
-                          className={`rounded-xl border px-3 py-2.5 text-center text-xs font-semibold transition-all cursor-pointer ${
-                            tempAvatar.acessorio === a.id
-                              ? "border-[color:var(--roxo)] bg-[color:var(--roxo)] text-white shadow-md ring-2 ring-white/50"
-                              : "border-white/10 bg-white/5 text-white/80 hover:bg-white/15 hover:text-white"
-                          }`}
-                        >
-                          {a.nome}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                  <p className="text-xs text-white/60 leading-relaxed bg-white/5 p-3 rounded-xl border border-white/10">
-                    💡 O <strong>Crachá Oficial SINAL</strong> identifica o Teddy como socorristamirim capacitado em suporte inicial e emergência 192.
-                  </p>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                  {TEDDY_CAP_COLORS.map((c) => {
+                    const isSelected = (tempAvatar.corBone ?? "roxo") === c.id;
+                    return (
+                      <button
+                        key={c.id}
+                        type="button"
+                        aria-pressed={isSelected}
+                        onClick={() => handleSelectCapColor(c.id)}
+                        className={`flex items-center gap-2.5 rounded-xl border px-3 py-2 text-left text-xs font-semibold transition-all cursor-pointer ${
+                          isSelected
+                            ? "border-white bg-white/20 text-white shadow-md ring-2 ring-[color:var(--amarelo)]/60"
+                            : "border-white/10 bg-white/5 text-white/80 hover:bg-white/15 hover:text-white"
+                        }`}
+                      >
+                        <span
+                          className="h-4 w-4 rounded-full border-2 border-white/60 shrink-0 shadow-inner"
+                          style={{ backgroundColor: c.hex }}
+                        />
+                        <span className="truncate">{c.nome}</span>
+                      </button>
+                    );
+                  })}
                 </div>
-              )}
-
-              {/* 5. ABA PELAGEM DO URSO */}
-              {activeCategory === "pelagem" && (
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-white/80 mb-2">
-                      Tonalidade da Pelagem do Teddy
-                    </label>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      {PELAGEM_TEDDY.map((p) => (
-                        <button
-                          key={p.id}
-                          type="button"
-                          aria-pressed={tempAvatar.pelagemCor === p.id}
-                          onClick={() => setTempAvatar({ ...tempAvatar, pelagemCor: p.id as any })}
-                          className={`flex items-center gap-2.5 rounded-xl border px-3 py-2 text-left text-xs font-semibold transition-all cursor-pointer ${
-                            tempAvatar.pelagemCor === p.id
-                              ? "border-[color:var(--roxo)] bg-[color:var(--roxo)] text-white shadow-md ring-2 ring-white/50"
-                              : "border-white/10 bg-white/5 text-white/80 hover:bg-white/15 hover:text-white"
-                          }`}
-                        >
-                          <span
-                            className="h-4 w-4 rounded-full border-2 border-white/60 shrink-0"
-                            style={{ backgroundColor: p.hex }}
-                          />
-                          <span>{p.nome}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                  <p className="text-xs text-white/60 leading-relaxed bg-white/5 p-3 rounded-xl border border-white/10">
-                    🐻 A cor <strong>Caramelo SINAL</strong> é a pelagem canônica original criada para o mascote Teddy.
-                  </p>
-                </div>
-              )}
+              </div>
             </div>
           </div>
 

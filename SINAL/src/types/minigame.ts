@@ -17,6 +17,10 @@ export interface AvatarConfig {
   mochilaModelo?: ("mochila_amarela" | "mochila_vermelha" | "mochila_azul" | "nenhuma") | undefined;
   acessorio?: ("nenhum" | "oculos" | "bone" | "cracha") | undefined;
   pelagemCor?: ("caramelo" | "mel" | "cacau" | "creme") | undefined;
+  // Personalização 2.0 do Teddy (Cores independentes e estampas reais)
+  corCamiseta?: ("roxo" | "azul" | "vermelho" | "verde" | "amarelo") | undefined;
+  estampa?: ("lisa" | "estrela" | "coracao" | "cruz" | "sinal") | undefined;
+  corBone?: ("roxo" | "azul" | "vermelho" | "verde" | "amarelo") | undefined;
 }
 
 export interface ObjetoInterativo {

@@ -4,6 +4,7 @@ import {AnimationController,type AnimationState} from './animation';
 import {NavigationGrid,RouteFollower} from '../core/navigation';
 import type {Vec} from '../core/movement';
 import {TeddyLayers, type TeddyCustomConfig} from './TeddyLayers';
+import {ensureTeddyCustomTexture} from './teddyCustomTexture';
 export type {AnimationState} from './animation';
 export type Behavior='normal'|'cough'|'distress'|'help'|'recover';
 /** World feet are never displaced by animation; all poses use a local rig. */
@@ -23,7 +24,7 @@ export class Actor extends Phaser.GameObjects.Container{
   this.official=proxy&&scene.textures.exists('teddy-official');
   this.isTeddyCanonical=proxy&&scene.textures.exists('burns-people')&&!this.official;
   if(this.isTeddyCanonical){
-   this.sprite=scene.add.sprite(0,0,'burns-people','0-0').setOrigin(.5,1);
+   this.sprite=scene.add.sprite(0,0,ensureTeddyCustomTexture(scene,customConfig),'0-0').setOrigin(.5,1);
    this.sprite.setScale(125/233);
    this.teddyLayers=new TeddyLayers(scene,this.rigBody,this.sprite,{color:undefined,accessories:equipped,custom:customConfig});
   }else{

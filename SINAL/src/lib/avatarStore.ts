@@ -1,6 +1,34 @@
 import { useEffect, useState } from "react";
 import type { AvatarConfig } from "@/types/minigame";
 
+export type TeddyShirtColor = "roxo" | "azul" | "vermelho" | "verde" | "amarelo";
+export type TeddyCapColor = "roxo" | "azul" | "vermelho" | "verde" | "amarelo";
+export type TeddyDecal = "lisa" | "estrela" | "coracao" | "cruz" | "sinal";
+
+export const TEDDY_SHIRT_COLORS = [
+  { id: "roxo" as const, nome: "Roxo Oficial SINAL", hex: "#6D3FC3" },
+  { id: "azul" as const, nome: "Azul Socorrista", hex: "#2563EB" },
+  { id: "vermelho" as const, nome: "Vermelho Emergência", hex: "#DC2626" },
+  { id: "verde" as const, nome: "Verde Socorro", hex: "#16A34A" },
+  { id: "amarelo" as const, nome: "Amarelo Alerta", hex: "#F59E0B" },
+];
+
+export const TEDDY_CAP_COLORS = [
+  { id: "roxo" as const, nome: "Boné Roxo SINAL", hex: "#6D3FC3" },
+  { id: "azul" as const, nome: "Boné Azul", hex: "#2563EB" },
+  { id: "vermelho" as const, nome: "Boné Vermelho", hex: "#DC2626" },
+  { id: "verde" as const, nome: "Boné Verde", hex: "#16A34A" },
+  { id: "amarelo" as const, nome: "Boné Amarelo", hex: "#F59E0B" },
+];
+
+export const TEDDY_DECAL_OPTIONS = [
+  { id: "lisa" as const, nome: "Camiseta Lisa (Original)", desc: "Sem estampa" },
+  { id: "estrela" as const, nome: "Estrela Guia", desc: "Estrela dourada em pixel art" },
+  { id: "coracao" as const, nome: "Coração da Vida", desc: "Coração vermelho de socorrista" },
+  { id: "cruz" as const, nome: "Primeiros Socorros", desc: "Cruz médica de emergência" },
+  { id: "sinal" as const, nome: "Emblema SINAL", desc: "Símbolo oficial do projeto" },
+];
+
 export const DEFAULT_AVATAR: AvatarConfig = {
   tomPele: 1,
   cabeloEstilo: "curto",
@@ -13,6 +41,9 @@ export const DEFAULT_AVATAR: AvatarConfig = {
   mochilaModelo: "mochila_amarela",
   acessorio: "cracha",
   pelagemCor: "caramelo",
+  corCamiseta: "roxo",
+  estampa: "lisa",
+  corBone: "roxo",
 };
 
 export const BONES_TEDDY = [
@@ -101,8 +132,18 @@ export const AVATAR_STORAGE_KEY = "sinal_avatar_custom_v3";
 let sessionAvatar: AvatarConfig | null = null;
 
 export function validateAvatar(value: unknown): AvatarConfig {
-  if (!value || typeof value !== "object") return { ...DEFAULT_AVATAR };
+  if (!value || typeof value !== "object" || Array.isArray(value)) return { ...DEFAULT_AVATAR };
   const v = value as Record<string, unknown>;
+
+  // Checagem de integridade dos campos legados fundamentais
+  const hasTomPele = typeof v.tomPele === "number" && Number.isInteger(v.tomPele) && TONS_PELE.some((t) => t.id === v.tomPele);
+  const hasCabeloEstilo = typeof v.cabeloEstilo === "string" && ESTILOS_CABELO.some((e) => e.id === v.cabeloEstilo);
+  const hasCabeloCor = typeof v.cabeloCor === "string" && CORES_CABELO.some((c) => c.id === v.cabeloCor);
+  const hasCalcadoCor = typeof v.calcadoCor === "string" && CORES_CALCADO.some((c) => c.id === v.calcadoCor);
+
+  if (!hasTomPele || !hasCabeloEstilo || !hasCabeloCor || !hasCalcadoCor) {
+    return { ...DEFAULT_AVATAR };
+  }
 
   // Validação dos novos campos do Teddy
   const boneValido = BONES_TEDDY.some((b) => b.id === v.boneModelo)
@@ -133,33 +174,39 @@ export function validateAvatar(value: unknown): AvatarConfig {
     ? (v.pelagemCor as AvatarConfig["pelagemCor"])
     : DEFAULT_AVATAR.pelagemCor;
 
-  const tomPeleValido = Number.isInteger(v.tomPele) && TONS_PELE.some((t) => t.id === v.tomPele)
-    ? (v.tomPele as number)
-    : DEFAULT_AVATAR.tomPele;
+  // Personalização 2.0
+  const corCamisetaValida: TeddyShirtColor = TEDDY_SHIRT_COLORS.some((c) => c.id === v.corCamiseta)
+    ? (v.corCamiseta as TeddyShirtColor)
+    : TEDDY_SHIRT_COLORS.some((c) => c.id === v.roupaCor)
+    ? (v.roupaCor as TeddyShirtColor)
+    : "roxo";
 
-  const cabeloEstiloValido = ESTILOS_CABELO.some((e) => e.id === v.cabeloEstilo)
-    ? (v.cabeloEstilo as AvatarConfig["cabeloEstilo"])
-    : DEFAULT_AVATAR.cabeloEstilo;
+  const corBoneValida: TeddyCapColor = TEDDY_CAP_COLORS.some((c) => c.id === v.corBone)
+    ? (v.corBone as TeddyCapColor)
+    : v.boneModelo === "bone_azul"
+    ? "azul"
+    : v.boneModelo === "bone_vermelho"
+    ? "vermelho"
+    : "roxo";
 
-  const cabeloCorValida = CORES_CABELO.some((c) => c.id === v.cabeloCor)
-    ? (v.cabeloCor as AvatarConfig["cabeloCor"])
-    : DEFAULT_AVATAR.cabeloCor;
-
-  const calcadoCorValida = CORES_CALCADO.some((c) => c.id === v.calcadoCor)
-    ? (v.calcadoCor as AvatarConfig["calcadoCor"])
-    : DEFAULT_AVATAR.calcadoCor;
+  const estampaValida: TeddyDecal = TEDDY_DECAL_OPTIONS.some((d) => d.id === v.estampa)
+    ? (v.estampa as TeddyDecal)
+    : "lisa";
 
   return {
-    tomPele: tomPeleValido,
-    cabeloEstilo: cabeloEstiloValido,
-    cabeloCor: cabeloCorValida,
-    calcadoCor: calcadoCorValida,
+    tomPele: v.tomPele as number,
+    cabeloEstilo: v.cabeloEstilo as AvatarConfig["cabeloEstilo"],
+    cabeloCor: v.cabeloCor as AvatarConfig["cabeloCor"],
+    calcadoCor: v.calcadoCor as AvatarConfig["calcadoCor"],
     boneModelo: boneValido,
     roupaModelo: roupaModeloValido,
     roupaCor: roupaCorValida,
     mochilaModelo: mochilaValida,
     acessorio: acessorioValido,
     pelagemCor: pelagemValida,
+    corCamiseta: corCamisetaValida,
+    estampa: estampaValida,
+    corBone: corBoneValida,
   };
 }
 
@@ -181,7 +228,13 @@ export function saveStoredAvatar(avatar: AvatarConfig): boolean {
   } catch {
     saved = false;
   }
-  window.dispatchEvent(new CustomEvent("sinal-avatar-change"));
+  if (typeof window !== "undefined" && typeof window.dispatchEvent === "function") {
+    try {
+      window.dispatchEvent(new CustomEvent("sinal-avatar-change"));
+    } catch {
+      // fallback
+    }
+  }
   return saved;
 }
 

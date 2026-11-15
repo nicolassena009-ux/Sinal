@@ -52,6 +52,9 @@ export function PhaserGameShell({ missionId, onReturn }: PhaserGameShellProps) {
         mochilaModelo: avatar.mochilaModelo ?? "mochila_amarela",
         acessorio: avatar.acessorio ?? "cracha",
         pelagemCor: avatar.pelagemCor ?? "caramelo",
+        corCamiseta: avatar.corCamiseta ?? (avatar.roupaCor as any) ?? "roxo",
+        estampa: avatar.estampa ?? "lisa",
+        corBone: avatar.corBone ?? "roxo",
       },
     };
     input.settings = {
