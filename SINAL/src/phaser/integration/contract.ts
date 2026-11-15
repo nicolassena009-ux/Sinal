@@ -4,7 +4,7 @@ export type MissionId=keyof typeof PHASES;
 export type Accessory = 'cap' | 'vest' | 'badge' | 'glasses' | 'cape';
 export interface GameInput {
   version: 1; missionId: MissionId; phaseId: typeof PHASES[MissionId]; mode: Mode;
-  avatar: { color?: string; accessories: Accessory[]; atlas?: { image: string; data: string; height?:number }; accessoryImages?:Partial<Record<Accessory,string>> };
+  avatar: { color?: string; accessories: Accessory[]; atlas?: { image: string; data: string; height?:number }; accessoryImages?:Partial<Record<Accessory,string>>; custom?: { boneModelo?: string; roupaModelo?: string; roupaCor?: string; mochilaModelo?: string; acessorio?: string; pelagemCor?: string; } };
   progress: { completedObjectives: string[] };
   settings: { music: boolean; effects: boolean; reducedMotion: boolean; textScale: number };
 }

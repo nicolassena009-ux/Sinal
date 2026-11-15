@@ -6,13 +6,17 @@ export type ThemeSlug =
   | "trauma";
 
 export interface AvatarConfig {
-  tomPele: number; // 0 a 4 (tons do mais claro ao mais retinto)
-  cabeloEstilo: "curto" | "cacheado" | "liso" | "trancas" | "black_power";
-  cabeloCor: "castanho" | "preto" | "loiro" | "ruivo" | "cinza";
-  roupaModelo: "camiseta_sinal" | "moletom" | "colete_socorrista" | "jaqueta";
-  roupaCor: "roxo" | "azul" | "rosa" | "amarelo" | "aqua" | "branco";
-  calcadoCor: "branco" | "preto" | "azul" | "vermelho";
-  acessorio?: "nenhum" | "oculos" | "bone" | "cracha";
+  tomPele?: number | undefined; // compatibilidade
+  cabeloEstilo?: ("curto" | "cacheado" | "liso" | "trancas" | "black_power") | undefined;
+  cabeloCor?: ("castanho" | "preto" | "loiro" | "ruivo" | "cinza") | undefined;
+  calcadoCor?: ("branco" | "preto" | "azul" | "vermelho") | undefined;
+  // Campos oficiais do mascote Teddy em pixel art
+  boneModelo?: ("bone_roxo" | "bone_azul" | "bone_vermelho" | "faixa" | "nenhum") | undefined;
+  roupaModelo: "camiseta_sinal" | "moletom" | "colete_socorrista" | "jaqueta" | "camiseta_branca";
+  roupaCor: "roxo" | "azul" | "rosa" | "amarelo" | "aqua" | "branco" | "vermelho";
+  mochilaModelo?: ("mochila_amarela" | "mochila_vermelha" | "mochila_azul" | "nenhuma") | undefined;
+  acessorio?: ("nenhum" | "oculos" | "bone" | "cracha") | undefined;
+  pelagemCor?: ("caramelo" | "mel" | "cacau" | "creme") | undefined;
 }
 
 export interface ObjetoInterativo {

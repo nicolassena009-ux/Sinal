@@ -187,7 +187,7 @@ export class PixelRenderer {
     ctx.ellipse(px, py + 12, 10, 4, 0, 0, Math.PI * 2);
     ctx.fill();
 
-    const tomPele = TONS_PELE[avatar.tomPele] || TONS_PELE[1];
+    const tomPele = TONS_PELE[avatar.tomPele ?? 1] || TONS_PELE[1];
     const corCabelo = CORES_CABELO.find((c) => c.id === avatar.cabeloCor)?.hex || "#4E3120";
     const corRoupa = CORES_ROUPA.find((r) => r.id === avatar.roupaCor)?.hex || "#53C6B6";
 

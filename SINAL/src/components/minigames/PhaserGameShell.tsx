@@ -37,13 +37,22 @@ export function PhaserGameShell({ missionId, onReturn }: PhaserGameShellProps) {
     const accessories: Accessory[] = [];
     if (avatar.acessorio === "cracha") accessories.push("badge");
     else if (avatar.acessorio === "oculos") accessories.push("glasses");
-    else if (avatar.acessorio === "bone") accessories.push("cap");
+    if (avatar.boneModelo && avatar.boneModelo !== "nenhum") accessories.push("cap");
+    if (avatar.roupaModelo === "colete_socorrista") accessories.push("vest");
 
     const input = defaults("teens", missionId);
     input.avatar = {
       ...input.avatar,
       color: roupaHex,
       accessories,
+      custom: {
+        boneModelo: avatar.boneModelo ?? "bone_roxo",
+        roupaModelo: avatar.roupaModelo ?? "camiseta_sinal",
+        roupaCor: avatar.roupaCor ?? "roxo",
+        mochilaModelo: avatar.mochilaModelo ?? "mochila_amarela",
+        acessorio: avatar.acessorio ?? "cracha",
+        pelagemCor: avatar.pelagemCor ?? "caramelo",
+      },
     };
     input.settings = {
       ...input.settings,
