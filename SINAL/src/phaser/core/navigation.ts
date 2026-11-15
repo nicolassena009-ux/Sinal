@@ -1,0 +1,165 @@
+import { blocked, segmentBlocked, moveBy, type Bounds, type Rect, type Vec } from './movement';
+
+const distance = (a: Vec, b: Vec) => Math.hypot(a.x - b.x, a.y - b.y);
+
+/** World-space A*: the same foot clearance and solids used by player movement. */
+export class NavigationGrid {
+  readonly cell = 20;
+  constructor(public obstacles: Rect[], public bounds:Bounds, public radius = 14) {}
+
+  walkable(p: Vec) {
+    return p.x >= this.bounds.left && p.x <= this.bounds.right &&
+      p.y >= this.bounds.top && p.y <= this.bounds.bottom && !blocked(p, this.obstacles, this.radius);
+  }
+
+  segmentClear(a: Vec, b: Vec) {
+    return this.walkable(a)&&this.walkable(b)&&!segmentBlocked(a,b,this.obstacles,this.radius);
+  }
+
+  findClosestWalkable(p: Vec, maxDistance = 160): Vec | null {
+    if (this.walkable(p)) return p;
+    const step = 8;
+    const maxR = Math.ceil(maxDistance / step);
+    for (let r = 1; r <= maxR; r++) {
+      const dist = r * step;
+      const samples = Math.max(8, r * 8);
+      for (let i = 0; i < samples; i++) {
+        const angle = (i / samples) * Math.PI * 2;
+        const cand = {
+          x: Math.max(this.bounds.left, Math.min(this.bounds.right, p.x + Math.cos(angle) * dist)),
+          y: Math.max(this.bounds.top, Math.min(this.bounds.bottom, p.y + Math.sin(angle) * dist))
+        };
+        if (this.walkable(cand)) return cand;
+      }
+    }
+    return null;
+  }
+
+  findPath(start: Vec, goal: Vec): Vec[] | null {
+    if (!this.walkable(goal)) return null;
+    let actualStart = start;
+    let escapePoint: Vec | null = null;
+    if (!this.walkable(start)) {
+      escapePoint = this.findClosestWalkable(start);
+      if (!escapePoint) return null;
+      actualStart = escapePoint;
+    }
+    if (this.segmentClear(actualStart, goal)) {
+      return escapePoint ? [{ ...escapePoint }, { ...goal }] : [{ ...goal }];
+    }
+    const cols = Math.floor((this.bounds.right - this.bounds.left) / this.cell) + 1;
+    const rows = Math.floor((this.bounds.bottom - this.bounds.top) / this.cell) + 1;
+    const point = (id: number): Vec => ({ x: this.bounds.left + id % cols * this.cell, y: this.bounds.top + Math.floor(id / cols) * this.cell });
+    const cache = new Map<number, boolean>();
+    const free = (id: number) => { if (!cache.has(id)) cache.set(id, this.walkable(point(id))); return cache.get(id)!; };
+    // Endpoints connect only through verified free segments, never by snapping through furniture.
+    const connect = (p: Vec) => {
+      const candidates: number[] = [];
+      const cx = Math.round((p.x - this.bounds.left) / this.cell), cy = Math.round((p.y - this.bounds.top) / this.cell);
+      for (let y = Math.max(0, cy - 3); y <= Math.min(rows - 1, cy + 3); y++) {
+        for (let x = Math.max(0, cx - 3); x <= Math.min(cols - 1, cx + 3); x++) {
+          const id = y * cols + x;
+          if (free(id) && this.segmentClear(p, point(id))) candidates.push(id);
+        }
+      }
+      return candidates.sort((a, b) => distance(p, point(a)) - distance(p, point(b)))[0];
+    };
+    const first = connect(actualStart), last = connect(goal);
+    if (first === undefined || last === undefined) return escapePoint ? [{ ...escapePoint }] : null;
+    const open = new Set([first]), closed = new Set<number>(), previous = new Map<number, number>();
+    const costs = new Map([[first, 0]]), scores = new Map([[first, distance(point(first), point(last))]]);
+    while (open.size) {
+      let current = -1, best = Infinity;
+      for (const id of open) if (scores.get(id)! < best) { best = scores.get(id)!; current = id; }
+      if (current === last) {
+        const route: Vec[] = [goal, point(current)];
+        while (previous.has(current)) { current = previous.get(current)!; route.push(point(current)); }
+        if (escapePoint) route.push(actualStart);
+        route.push(start); route.reverse();
+        const smooth: Vec[] = []; let anchor = 0;
+        while (anchor < route.length - 1) {
+          let next = route.length - 1;
+          while (next > anchor + 1 && !this.segmentClear(route[anchor], route[next])) next--;
+          smooth.push(route[next]); anchor = next;
+        }
+        return smooth;
+      }
+      open.delete(current); closed.add(current);
+      const cx = current % cols, cy = Math.floor(current / cols);
+      for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+        if (!dx && !dy) continue;
+        const x = cx + dx, y = cy + dy;
+        if (x < 0 || y < 0 || x >= cols || y >= rows) continue;
+        const id = y * cols + x;
+        if (closed.has(id) || !free(id)) continue;
+        if (dx && dy && (!free(cy * cols + x) || !free(y * cols + cx))) continue;
+        if (!this.segmentClear(point(current), point(id))) continue;
+        const cost = costs.get(current)! + this.cell * Math.hypot(dx, dy);
+        if (cost >= (costs.get(id) ?? Infinity)) continue;
+        previous.set(id, current); costs.set(id, cost); scores.set(id, cost + distance(point(id), point(last))); open.add(id);
+      }
+    }
+    return escapePoint ? [{ ...escapePoint }] : null;
+  }
+}
+
+export class RouteFollower {
+  path: Vec[] = []; goal?: Vec | undefined; status: 'idle'|'moving'|'arrived'|'blocked' = 'idle';
+  private retry = 0;
+  private blockedTries = 0;
+  constructor(public grid: NavigationGrid, public speed = 125) {}
+  request(from: Vec, goal: Vec) {
+    const path = this.grid.findPath(from, goal);
+    if (!path) {
+      this.path = [];
+      this.goal = { ...goal };
+      this.status = 'blocked';
+      this.retry = .35;
+      this.blockedTries++;
+      if (this.blockedTries > 4) {
+        this.cancel();
+      }
+      return false;
+    }
+    this.blockedTries = 0;
+    this.path = path;
+    this.goal = { ...goal };
+    this.status = 'moving';
+    return true;
+  }
+  cancel() { this.path = []; this.goal = undefined; this.status = 'idle'; this.blockedTries = 0; }
+  update(from: Vec, delta: number): Vec {
+    let p = { x: from.x, y: from.y };
+    if (this.status === 'blocked' && this.goal) {
+      this.retry -= delta;
+      if (this.retry <= 0) {
+        this.retry = .35;
+        this.blockedTries++;
+        if (this.blockedTries > 4) {
+          this.cancel();
+          return p;
+        }
+        this.request(p, this.goal);
+      }
+    }
+    if (this.status !== 'moving') return p;
+    let budget = this.speed * Math.min(delta, .1);
+    while (budget > 0 && this.path.length) {
+      const target = this.path[0], d = distance(p, target);
+      if (d < .01) { this.path.shift(); continue; }
+      if (this.grid.walkable(p) && !this.grid.segmentClear(p, target)) {
+        this.status = 'blocked'; this.path = []; this.retry = .1; break;
+      }
+      const step = Math.min(d, budget);
+      const next = moveBy(p, { x: (target.x - p.x) / d * step, y: (target.y - p.y) / d * step }, this.grid.obstacles, this.grid.bounds, this.grid.radius, false);
+      if (distance(p, next) < 0.001) { this.status = 'blocked'; this.path = []; this.retry = .1; break; }
+      p = next; budget -= step;
+      if (step >= d) this.path.shift();
+    }
+    if (this.status === 'moving' && !this.path.length) {
+      this.status = 'arrived';
+      this.blockedTries = 0;
+    }
+    return p;
+  }
+}
