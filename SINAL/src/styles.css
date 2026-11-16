@@ -117,7 +117,9 @@
   html {
     background-color: var(--background);
     -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: rgba(109, 63, 195, 0.15);
   }
+  a, button, [role="button"], summary { touch-action: manipulation; }
 
   body {
     background-color: transparent;
@@ -288,7 +290,7 @@ input[type="range"].volume-slider::-moz-range-thumb {
   .home-teddy > div { width: 180px !important; height: 225px !important; }
   .teddy-global > div { bottom: 8px !important; }
   .teddy-global [role="status"] { max-width: min(260px, calc(100vw - 32px)); }
-  #conteudo-principal:has(.teddy-global) { padding-bottom: 155px; }
+  #conteudo-principal:has(.teddy-global:not([hidden])) { padding-bottom: 155px; }
 }
 
 @media print {
@@ -575,7 +577,7 @@ html { scroll-behavior: smooth; }
   .tema-cinema header h1.tema-hero-title { font-size: clamp(3rem, 15vw, 4.25rem) !important; overflow-wrap: normal; }
   .tema-cinema header h1.tema-hero-title[data-long] { font-size: clamp(1.9rem, 8.4vw, 3rem) !important; overflow-wrap: normal; hyphens: auto; }
   /* o espaço reservado ao Teddy flutuante segue o fundo escuro da página */
-  #conteudo-principal:has(.teddy-global) .cinema-page { margin-bottom: -155px; padding-bottom: 155px; }
+  #conteudo-principal:has(.teddy-global:not([hidden])) .cinema-page { margin-bottom: -155px; padding-bottom: 155px; }
 }
 
 /* Emergência: ondas de "sinal" saindo do centro do hero e barras de voz da chamada ilustrativa */
@@ -597,20 +599,7 @@ html { scroll-behavior: smooth; }
 .conversa-bolha { animation: conversa-in 0.6s var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1)) both; }
 @keyframes conversa-in { from { opacity: 0; transform: translate3d(0, 14px, 0) scale(0.97); } to { opacity: 1; transform: none; } }
 
-/* ---------- Cursor de anel (decorativo, só mouse) ---------- */
-.cursor-ring {
-  position: fixed; left: 0; top: 0; z-index: 9999; pointer-events: none;
-  width: 34px; height: 34px; margin: -17px 0 0 -17px; border-radius: 9999px;
-  border: 1.5px solid rgba(255, 255, 255, 0.9); mix-blend-mode: difference;
-  opacity: 0; transition: width 0.35s var(--ease-out-expo), height 0.35s var(--ease-out-expo), margin 0.35s var(--ease-out-expo), opacity 0.3s, background-color 0.3s, border-radius 0.3s;
-}
-.cursor-ring.is-on { opacity: 1; }
-.cursor-ring.is-hover { width: 64px; height: 64px; margin: -32px 0 0 -32px; background: rgba(255, 255, 255, 1); border-color: transparent; }
-.cursor-ring.is-down { width: 24px; height: 24px; margin: -12px 0 0 -12px; }
-.cursor-ring.is-text { width: 4px; height: 30px; margin: -15px 0 0 -2px; border-radius: 2px; background: #fff; }
 .btn-shine, .magnetic { transition-property: transform, translate, box-shadow, background-color, border-color, color; transition-duration: 0.35s; transition-timing-function: var(--ease-out-expo); }
-@media (hover: none), (pointer: coarse) { .cursor-ring { display: none; } }
-html.contrast .cursor-ring { display: none; }
 
 /* ---------- Faixa de palavras do rodapé ---------- */
 .marquee-word { font-size: clamp(48px, 9vw, 140px); }
@@ -619,3 +608,111 @@ html.contrast .cursor-ring { display: none; }
 /* ---------- Títulos entram "de baixo da linha" ao aparecer ---------- */
 .reveal-on-scroll h2 { transition: clip-path 0.9s var(--ease-out-expo) 0.08s, transform 0.9s var(--ease-out-expo) 0.08s; }
 .motion-ready .reveal-on-scroll:not(.is-visible) h2 { clip-path: inset(0 0 100% 0); transform: translate3d(0, 0.45em, 0); }
+
+/* ---------- Teddy oficial (3D com imagem do próprio modelo enquanto carrega) ---------- */
+.teddy-oficial { cursor: default; }
+.teddy-oficial[role="button"] { cursor: pointer; }
+.teddy-oficial[role="button"]:focus-visible { outline: 3px solid var(--roxo); outline-offset: 4px; border-radius: 24px; }
+.teddy-oficial-img, .teddy-oficial-3d { position: absolute; inset: 0; width: 100%; height: 100%; }
+.teddy-oficial-img { object-fit: contain; object-position: 50% 100%; transition: opacity 0.5s ease; }
+.teddy-oficial-img[data-oculta] { opacity: 0; }
+.teddy-oficial-3d { transition: opacity 0.6s ease; }
+.teddy-oficial-sombra {
+  position: absolute; left: 26%; right: 26%; bottom: 0.5%; height: 6%; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(27, 20, 66, 0.3), transparent);
+}
+
+/* ==========================================================================
+ * Home v3 — identidade lilás original, nível de apresentação
+ * ========================================================================== */
+.home-v3 { --papel: #f4f0ff; background: var(--papel); }
+.home-v3 footer { margin-top: 0; }
+.home-hero { background:
+  radial-gradient(60% 70% at 85% 30%, rgba(109, 63, 195, 0.12), transparent 70%),
+  radial-gradient(40% 50% at 10% 90%, rgba(255, 192, 68, 0.14), transparent 70%); }
+.home-titulo { font-size: clamp(2.9rem, 6.4vw, 5.6rem); line-height: 0.95; letter-spacing: -0.025em; text-wrap: balance; }
+.home-h2 { font-size: clamp(2rem, 4vw, 3.25rem); line-height: 1.02; letter-spacing: -0.02em; text-wrap: balance; }
+
+.home-palco-disco {
+  position: absolute; left: 50%; top: 46%; width: min(92%, 470px); aspect-ratio: 1; translate: -50% -50%;
+  border-radius: 9999px; background: radial-gradient(circle at 35% 30%, #8a5fe0, #6d3fc3 55%, #5527a8);
+  box-shadow: 0 40px 80px -40px rgba(85, 39, 168, 0.8), inset 0 -20px 60px rgba(27, 20, 66, 0.25);
+  display: grid; place-items: center; overflow: hidden;
+}
+@media (min-width: 1024px) { .home-palco-disco { left: 60%; top: 50%; width: 440px; } }
+.home-palco-emblema { width: 58%; color: rgba(255, 255, 255, 0.14); translate: 0 4%; }
+.emblema-coracao { fill: #6d3fc3; }
+.home-palco-disco .emblema-coracao { fill: #7448cc; }
+
+.desafio {
+  border-radius: 1.5rem; background: #fff; padding: 1.25rem 1.25rem 1rem;
+  box-shadow: 0 30px 60px -30px rgba(27, 20, 66, 0.45), 0 0 0 1px rgba(27, 20, 66, 0.06);
+}
+.desafio-sinal { animation: desafio-in 0.5s var(--ease-out-expo) both; text-wrap: pretty; }
+@keyframes desafio-in { from { opacity: 0; translate: 0 8px; } to { opacity: 1; translate: 0 0; } }
+.desafio-opcao {
+  display: inline-flex; align-items: center; gap: 0.35rem; min-height: 40px; padding: 0 0.9rem; border-radius: 9999px;
+  font-family: var(--font-display); font-weight: 700; font-size: 0.9rem; color: var(--tinta);
+  background: color-mix(in oklab, var(--c) 10%, white); box-shadow: inset 0 0 0 1.5px color-mix(in oklab, var(--c) 35%, transparent);
+  transition: background-color 0.2s, box-shadow 0.2s, opacity 0.2s, transform 0.15s;
+}
+.desafio-opcao:hover:not(:disabled) { background: color-mix(in oklab, var(--c) 20%, white); }
+.desafio-opcao:active:not(:disabled) { transform: scale(0.97); }
+.desafio-opcao:disabled { opacity: 0.4; }
+.desafio-opcao[data-estado="certo"] { background: #d9f5f0; box-shadow: inset 0 0 0 2px #2a9d8f; color: #1b5e55; opacity: 1; }
+.desafio-opcao[data-estado="errado"] { background: #ffe3ee; box-shadow: inset 0 0 0 2px #e0457f; color: #9b1f4f; }
+.desafio-opcao:focus-visible { outline: 3px solid var(--roxo); outline-offset: 2px; }
+.desafio-feedback { animation: desafio-in 0.4s var(--ease-out-expo) both; }
+
+.tema-card {
+  display: flex; flex-direction: column; overflow: hidden; border-radius: 1.75rem; background: #fff;
+  box-shadow: 0 1px 0 rgba(27, 20, 66, 0.06), 0 24px 50px -36px rgba(27, 20, 66, 0.55);
+  transition: transform 0.4s var(--ease-out-expo), box-shadow 0.4s var(--ease-out-expo);
+  border-top: 5px solid var(--c);
+}
+.tema-card:hover { transform: translateY(-4px); box-shadow: 0 1px 0 rgba(27, 20, 66, 0.06), 0 34px 60px -34px rgba(27, 20, 66, 0.6); }
+.tema-card:focus-visible { outline: 3px solid var(--roxo); outline-offset: 3px; }
+.tema-card-img { position: relative; overflow: hidden; background: #f7f3ff; min-height: 0; }
+.tema-card-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s var(--ease-out-expo); }
+.tema-card:hover .tema-card-img img { transform: scale(1.04); }
+.tema-card-cta { display: inline-flex; align-items: center; gap: 0.4rem; font-family: var(--font-display); font-weight: 800; color: var(--roxo); }
+.tema-card:hover .tema-card-cta svg { translate: 3px 0; }
+.tema-card-cta svg { transition: translate 0.3s var(--ease-out-expo); }
+
+.home-metodo { background: #2a1a63; }
+.home-metodo-emblema { position: absolute; right: -6%; top: -10%; width: min(46vw, 560px); color: rgba(255, 255, 255, 0.05); }
+.home-metodo-emblema .emblema-coracao { fill: #2a1a63; }
+.home-passos { counter-reset: passo; }
+.home-passos li + li::before { content: none; }
+@media (min-width: 1024px) {
+  .home-passos li:not(:last-child)::after {
+    content: ""; position: absolute; top: 28px; left: 72px; right: -8px; height: 2px;
+    background: repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.35) 0 6px, transparent 6px 12px);
+  }
+}
+.home-passo-num {
+  display: grid; place-items: center; width: 56px; height: 56px; border-radius: 9999px;
+  font-size: 1.6rem; font-weight: 800; color: #1b1442; background: var(--c);
+}
+
+.pratica-cena {
+  position: relative; border-radius: 1.75rem; background: #fff; padding: 1.5rem; margin-right: 22%;
+  box-shadow: 0 30px 60px -36px rgba(27, 20, 66, 0.6), 0 0 0 1px rgba(27, 20, 66, 0.05);
+  rotate: -2deg;
+}
+.pratica-op { display: flex; align-items: center; gap: 0.5rem; border-radius: 0.9rem; padding: 0.7rem 0.9rem; background: #f4f0ff; font-weight: 600; font-size: 0.95rem; color: var(--tinta); }
+.pratica-op.is-certo { background: #d9f5f0; color: #1b5e55; box-shadow: inset 0 0 0 2px #2a9d8f; }
+.pratica-teddy { position: absolute; right: -4%; bottom: -12%; width: 44%; filter: drop-shadow(0 20px 24px rgba(27, 20, 66, 0.25)); }
+
+.home-sos { background: linear-gradient(120deg, #e8457f, #ff60a7 60%, #ff7fb7); box-shadow: 0 30px 60px -30px rgba(232, 69, 127, 0.7); }
+.sos-btn {
+  display: inline-flex; align-items: center; gap: 0.6rem; min-height: 64px; padding: 0 1.4rem; border-radius: 1.25rem;
+  background: #fff; color: #b0215a; box-shadow: 0 14px 30px -16px rgba(27, 20, 66, 0.6);
+  transition: transform 0.2s var(--ease-out-expo);
+}
+.sos-btn:hover { transform: translateY(-2px); }
+.sos-btn:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+
+@media (max-width: 1023px) {
+  .home-palco-disco { top: 40%; }
+}

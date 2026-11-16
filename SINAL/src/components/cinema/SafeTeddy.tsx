@@ -1,87 +1,146 @@
-import { Component, useEffect, useState, type ReactNode } from "react";
-import { useProgress } from "@react-three/drei";
-import { Teddy, type TeddyProps } from "@/components/Teddy";
-
-const POSTER = "/teddy/teddy-3d-poster.webp";
-
-function hasWebGL() {
-  if (typeof document === "undefined") return true;
-  try {
-    const c = document.createElement("canvas");
-    return !!(c.getContext("webgl2") || c.getContext("webgl"));
-  } catch {
-    return false;
-  }
-}
-
-class Boundary extends Component<
-  { fallback: ReactNode; children: ReactNode },
-  { failed: boolean }
-> {
-  override state = { failed: false };
-  static getDerivedStateFromError() {
-    return { failed: true };
-  }
-  override componentDidCatch(error: unknown) {
-    console.warn("[Sinal] Teddy 3D indisponível, exibindo imagem.", error);
-  }
-  override render() {
-    return this.state.failed ? this.props.fallback : this.props.children;
-  }
-}
+import {
+  Component,
+  lazy,
+  Suspense,
+  useEffect,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+} from "react";
+import type { TeddyEstado } from "@/components/Teddy";
 
 /**
- * Teddy 3D com rede de segurança:
- * - Pôster (render do próprio teddy.glb) aparece enquanto o modelo carrega e some quando ele está pronto.
- * - Sem WebGL, ou se o 3D falhar, o pôster fica no lugar (com leve flutuação).
+ * Teddy oficial (moletom roxo com a mão e o coração).
+ *
+ * - Mostra na hora uma imagem do próprio modelo 3D na pose do estado (sem salto de layout).
+ * - Em seguida carrega o Teddy 3D animado e troca com um fade quando o primeiro quadro fica pronto.
+ * - Sem WebGL, com "reduzir movimento" ou economia de dados, fica só a imagem.
  */
-export function SafeTeddy(props: TeddyProps & { tamanho: number }) {
-  const { tamanho, onClick } = props;
-  const [webgl] = useState(hasWebGL);
-  const { active, total, loaded } = useProgress();
-  const [ready, setReady] = useState(false);
+export type TeddyPose = "frente" | "tres-quartos" | "acenando" | "joinha" | "oi" | "preocupado";
+
+const ESTADO_DA_POSE: Record<TeddyPose, TeddyEstado> = {
+  frente: "idle",
+  "tres-quartos": "pensando",
+  acenando: "acenando",
+  joinha: "incentivando",
+  oi: "feliz",
+  preocupado: "preocupado",
+};
+
+export const teddyImagem = (e: TeddyEstado) => `/teddy/3d/${e}.webp`;
+export const poseSrc = (p: TeddyPose) => teddyImagem(ESTADO_DA_POSE[p]);
+
+const Teddy3DReal = lazy(() => import("@/components/Teddy").then((m) => ({ default: m.Teddy })));
+
+let suporte3D: boolean | null = null;
+function pode3D() {
+  if (suporte3D !== null) return suporte3D;
+  if (typeof window === "undefined") return false;
+  const nav = navigator as Navigator & { connection?: { saveData?: boolean } };
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || nav.connection?.saveData) {
+    return (suporte3D = false);
+  }
+  try {
+    const c = document.createElement("canvas");
+    suporte3D = !!(c.getContext("webgl2") || c.getContext("webgl"));
+  } catch {
+    suporte3D = false;
+  }
+  return suporte3D;
+}
+
+class Protecao extends Component<{ children: ReactNode; onErro: () => void }, { erro: boolean }> {
+  override state = { erro: false };
+  static getDerivedStateFromError() {
+    return { erro: true };
+  }
+  override componentDidCatch() {
+    this.props.onErro();
+  }
+  override render() {
+    return this.state.erro ? null : this.props.children;
+  }
+}
+
+export interface SafeTeddyProps {
+  estado?: TeddyEstado | undefined;
+  pose?: TeddyPose | undefined;
+  tamanho: number;
+  seguirCursor?: boolean | undefined;
+  onClick?: (() => void) | undefined;
+  className?: string | undefined;
+  style?: CSSProperties | undefined;
+  modeloUrl?: string | undefined;
+  /** Ignorados (compatibilidade). */
+  enquadramento?: string | undefined;
+  sombra?: boolean | undefined;
+}
+
+export function SafeTeddy({
+  estado = "idle",
+  pose,
+  tamanho,
+  seguirCursor = true,
+  onClick,
+  className = "",
+  style,
+  modeloUrl,
+}: SafeTeddyProps) {
+  const atual: TeddyEstado = pose ? ESTADO_DA_POSE[pose] : estado;
+  const [usar3D, setUsar3D] = useState(false);
+  const [pronto, setPronto] = useState(false);
+  const [pulo, setPulo] = useState(0);
 
   useEffect(() => {
-    if (!active && total > 0 && loaded >= total) {
-      const t = setTimeout(() => setReady(true), 250);
-      return () => clearTimeout(t);
-    }
-    return undefined;
-  }, [active, total, loaded]);
+    setUsar3D(pode3D());
+  }, []);
 
-  const poster = (still: boolean) => (
-    <img
-      src={POSTER}
-      alt={still ? "Teddy, o mascote do Sinal" : ""}
-      aria-hidden={still ? undefined : true}
-      width={tamanho}
-      height={Math.round(tamanho * 1.25)}
-      className={`pointer-events-none absolute inset-0 h-full w-full object-contain transition-opacity duration-700 ${
-        still ? "teddy-poster-float" : ""
-      }`}
-      style={{ opacity: still || !ready ? 1 : 0 }}
-      draggable={false}
-    />
-  );
+  const clicar = () => {
+    setPulo((n) => n + 1);
+    onClick?.();
+  };
 
   return (
     <div
-      className="relative"
-      style={{ width: tamanho, height: Math.round(tamanho * 1.25) }}
-      onClick={!webgl ? onClick : undefined}
+      className={`teddy-oficial relative select-none ${className}`}
+      style={{ width: tamanho, height: Math.round(tamanho * 1.25), ...style }}
+      role={onClick ? "button" : "img"}
+      tabIndex={onClick ? 0 : undefined}
+      aria-label="Teddy, o mascote do Sinal"
+      onClick={onClick ? clicar : undefined}
+      onKeyDown={(e) => {
+        if (onClick && (e.key === "Enter" || e.key === " ")) {
+          e.preventDefault();
+          clicar();
+        }
+      }}
     >
-      {webgl ? (
-        <Boundary fallback={poster(true)}>
-          {poster(false)}
-          <div
-            className="relative h-full w-full transition-opacity duration-700"
-            style={{ opacity: ready ? 1 : 0 }}
-          >
-            <Teddy {...props} style={{ ...props.style, width: "100%", height: "100%" }} />
-          </div>
-        </Boundary>
-      ) : (
-        poster(true)
+      <span aria-hidden="true" className="teddy-oficial-sombra" />
+      <img
+        src={teddyImagem(atual)}
+        alt=""
+        draggable={false}
+        decoding="async"
+        width={tamanho}
+        height={Math.round(tamanho * 1.25)}
+        className="teddy-oficial-img"
+        data-oculta={pronto || undefined}
+      />
+      {usar3D && (
+        <Protecao onErro={() => setUsar3D(false)}>
+          <Suspense fallback={null}>
+            <Teddy3DReal
+              estado={atual}
+              tamanho={tamanho}
+              seguirCursor={seguirCursor}
+              modeloUrl={modeloUrl}
+              pulo={pulo}
+              onPronto={() => setPronto(true)}
+              className="teddy-oficial-3d"
+              style={{ opacity: pronto ? 1 : 0 }}
+            />
+          </Suspense>
+        </Protecao>
       )}
     </div>
   );

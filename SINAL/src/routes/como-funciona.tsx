@@ -361,7 +361,7 @@ function ComoFunciona() {
                 </Link>
               </div>
               <img
-                src="/teddy/teddy-3d-poster.webp"
+                src="/teddy/3d/incentivando.webp"
                 alt=""
                 loading="lazy"
                 className="teddy-poster-float mx-auto hidden w-48 drop-shadow-[0_30px_40px_rgba(0,0,0,0.45)] md:block lg:w-60"

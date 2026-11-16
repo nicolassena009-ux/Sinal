@@ -1,7 +1,7 @@
 {
   "rewrites": [
     {
-      "source": "/((?!assets/|audio/|models/|teddy/|favicon.ico|teddy.glb|robots.txt|sinal-bg.jpg).*)",
+      "source": "/((?!assets/|audio/|models/|teddy/|favicon.ico|teddy.glb|teddy-oficial.glb|robots.txt|sinal-bg.jpg).*)",
       "destination": "/index.html"
     }
   ]

@@ -151,7 +151,7 @@ function ConversasPorIdade() {
         className="relative rounded-[2rem] border border-white/10 bg-[#150e33] p-5 sm:p-8"
       >
         <div className="flex items-center gap-3 border-b border-white/10 pb-4">
-          <img src="/teddy/teddy-3d-poster.webp" alt="" className="h-12 w-10 object-contain" />
+          <img src="/teddy/3d/feliz.webp" alt="" className="h-12 w-10 object-contain" />
           <div>
             <p className="font-display font-extrabold">Teddy</p>
             <p className="text-xs text-[color:var(--aqua)]">
@@ -210,7 +210,7 @@ function FamiliaEscolaPage() {
           <div aria-hidden="true" className="relative mx-auto hidden max-w-sm lg:block">
             <span className="home-teddy-halo" />
             <img
-              src="/teddy/teddy-3d-poster.webp"
+              src="/teddy/3d/acenando.webp"
               alt=""
               className="teddy-poster-float relative w-full drop-shadow-[0_40px_60px_rgba(0,0,0,0.5)]"
             />
