@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { Teddy, type TeddyEstado } from "./Teddy";
+import { type TeddyEstado } from "./Teddy";
+import { SafeTeddy } from "./cinema/SafeTeddy";
 import { Volume2, VolumeX, Sparkles, Play, Pause, X } from "lucide-react";
 
 /* ------------------------------------------------------------------ */
@@ -392,7 +393,7 @@ export function TeddyMascote({
 
       {/* Mascote Teddy 3D interativo */}
       <div style={{ pointerEvents: "auto", position: "relative" }}>
-        <Teddy
+        <SafeTeddy
           estado={estado}
           tamanho={size}
           onClick={handleClickTeddy}

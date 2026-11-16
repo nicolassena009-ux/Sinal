@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode } from "react";
+import { useEffect, useRef, type CSSProperties, type ReactNode } from "react";
 import { ArrowDown } from "lucide-react";
 import { ParticleField } from "@/components/home/ParticleField";
 
@@ -66,6 +66,34 @@ export function Eyebrow({
   );
 }
 
+/** Ao rolar para fora do hero, o conteúdo sobe mais devagar, encolhe e esmaece (profundidade). */
+export function useHeroExit() {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const el = ref.current;
+      if (!el) return;
+      const p = Math.min(1, Math.max(0, window.scrollY / (window.innerHeight * 0.9)));
+      el.style.transform =
+        p > 0
+          ? `translate3d(0, ${(p * 90).toFixed(1)}px, 0) scale(${(1 - p * 0.06).toFixed(3)})`
+          : "";
+      el.style.opacity = p > 0 ? String(1 - p * 0.85) : "";
+    };
+    const on = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    window.addEventListener("scroll", on, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", on);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
+  return ref;
+}
+
 /** Versões claras das cores do método, legíveis sobre o fundo escuro. */
 const COR_LEGIVEL: Record<string, string> = {
   "#2E7DD1": "#7fb6ff",
@@ -128,6 +156,7 @@ export function CinemaHero({
   scrollLabel?: string;
   full?: boolean;
 }) {
+  const conteudoRef = useHeroExit();
   const ir = (e: React.MouseEvent) => {
     if (!scrollTo) return;
     e.preventDefault();
@@ -147,6 +176,7 @@ export function CinemaHero({
         </div>
       )}
       <div
+        ref={conteudoRef}
         className={`hero-stagger relative mx-auto grid w-full max-w-6xl items-center gap-12 px-5 sm:px-10 ${aside ? "lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]" : ""}`}
       >
         <div className="max-w-2xl">

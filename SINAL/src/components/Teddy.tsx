@@ -313,6 +313,15 @@ const ARM_AXIS = {
   ],
 };
 
+/**
+ * Pesos de pele gerados proceduralmente (o .glb vem sem esqueleto).
+ *
+ * 1. Peso "cru" do braço pela distância ao eixo do braço.
+ * 2. Suavização laplaciana desse peso sobre a malha (vértices soldados por posição):
+ *    sem ela, vértices vizinhos na axila recebiam pesos muito diferentes e, com o braço
+ *    levantado, os triângulos esticavam em "espinhos" na manga.
+ * 3. Guardas rígidas reaplicadas depois: cabeça, laterais do tronco e mochila não seguem o braço.
+ */
 function skinGeometry(geo: THREE.BufferGeometry) {
   const pos = geo.attributes.position as THREE.BufferAttribute;
   const n = pos.count;
@@ -321,10 +330,42 @@ function skinGeometry(geo: THREE.BufferGeometry) {
   const w = new Float32Array(7);
   const p = new THREE.Vector3(),
     tmp = new THREE.Vector3();
-  const R0 = 0.074,
-    R1 = 0.102;
+  const R0 = 0.07,
+    R1 = 0.115;
 
+  // Solda por posição: vértices duplicados (costuras de UV) compartilham o mesmo nó.
+  const keyOf = new Int32Array(n);
+  const ids = new Map<string, number>();
   for (let i = 0; i < n; i++) {
+    const k = `${Math.round(pos.getX(i) * 1e4)}_${Math.round(pos.getY(i) * 1e4)}_${Math.round(pos.getZ(i) * 1e4)}`;
+    let id = ids.get(k);
+    if (id === undefined) {
+      id = ids.size;
+      ids.set(k, id);
+    }
+    keyOf[i] = id;
+  }
+  const m = ids.size;
+  const vizinhos: Set<number>[] = Array.from({ length: m }, () => new Set<number>());
+  const idx = geo.index ? geo.index.array : null;
+  const tris = idx ? idx.length / 3 : n / 3;
+  for (let t = 0; t < tris; t++) {
+    const a = keyOf[idx ? idx[t * 3] : t * 3];
+    const b = keyOf[idx ? idx[t * 3 + 1] : t * 3 + 1];
+    const c = keyOf[idx ? idx[t * 3 + 2] : t * 3 + 2];
+    vizinhos[a].add(b).add(c);
+    vizinhos[b].add(a).add(c);
+    vizinhos[c].add(a).add(b);
+  }
+
+  // 1) peso cru por nó + guardas
+  const cru = new Float32Array(m);
+  const guarda = new Float32Array(m);
+  const tEn = new Float32Array(m);
+  const lado = new Int8Array(m);
+  for (let i = 0; i < n; i++) {
+    const k = keyOf[i];
+    if (lado[k] !== 0) continue;
     p.fromBufferAttribute(pos, i);
     const y = p.y;
     const head = ss(0.075, 0.15, y);
@@ -334,15 +375,45 @@ function skinGeometry(geo: THREE.BufferGeometry) {
     const d = Math.min(s1.d, s2.d);
     const torsoGuard =
       1 - ss(0.0, -0.04, y) * (1 - ss(-0.17, -0.12, y)) * (1 - ss(0.14, 0.245, Math.abs(p.x)));
-    const armRaw = (1 - ss(R0, R1, d)) * (1 - head) * torsoGuard;
-    const tE = ss(-0.035, -0.125, y);
-    const rest = 1 - head - armRaw;
-    const chestShare = ss(-0.26, -0.08, y);
+    // A mochila fica atrás do tronco e nunca acompanha o braço.
+    const backGuard = ss(-0.02, -0.075, p.z) * (1 - ss(0.175, 0.215, Math.abs(p.x)));
+    cru[k] = 1 - ss(R0, R1, d);
+    guarda[k] = (1 - head) * torsoGuard * (1 - backGuard);
+    tEn[k] = ss(-0.035, -0.125, y);
+    lado[k] = p.x < 0 ? -1 : 1;
+  }
+
+  // 2) suavização laplaciana (mantém regiões, elimina degraus entre vizinhos)
+  let cur = Float32Array.from(cru, (v, k) => v * guarda[k]);
+  let nxt = new Float32Array(m);
+  for (let it = 0; it < 10; it++) {
+    for (let k = 0; k < m; k++) {
+      const vs = vizinhos[k];
+      if (vs.size === 0) {
+        nxt[k] = cur[k];
+        continue;
+      }
+      let soma = 0;
+      for (const v of vs) soma += cur[v];
+      nxt[k] = cur[k] * 0.4 + (soma / vs.size) * 0.6;
+    }
+    [cur, nxt] = [nxt, cur];
+  }
+
+  // 3) pesos finais por vértice
+  for (let i = 0; i < n; i++) {
+    const k = keyOf[i];
+    p.fromBufferAttribute(pos, i);
+    const head = ss(0.075, 0.15, p.y);
+    const armRaw = Math.min(1, cur[k] * guarda[k]);
+    const tE = tEn[k];
+    const rest = Math.max(0, 1 - head - armRaw);
+    const chestShare = ss(-0.26, -0.08, p.y);
     w.fill(0);
     w[2] = head;
     w[1] = rest * chestShare;
     w[0] = rest * (1 - chestShare);
-    if (p.x < 0) {
+    if (lado[k] < 0) {
       w[3] = armRaw * (1 - tE);
       w[4] = armRaw * tE;
     } else {
@@ -352,9 +423,9 @@ function skinGeometry(geo: THREE.BufferGeometry) {
     const order = [0, 1, 2, 3, 4, 5, 6].sort((a, b) => w[b] - w[a]).slice(0, 4);
     let sum = 0;
     for (const o of order) sum += w[o];
-    for (let k = 0; k < 4; k++) {
-      skinIndex[i * 4 + k] = order[k];
-      skinWeight[i * 4 + k] = sum > 0 ? w[order[k]] / sum : k === 0 ? 1 : 0;
+    for (let j = 0; j < 4; j++) {
+      skinIndex[i * 4 + j] = order[j];
+      skinWeight[i * 4 + j] = sum > 0 ? w[order[j]] / sum : j === 0 ? 1 : 0;
     }
   }
   geo.setAttribute("skinIndex", new THREE.Uint16BufferAttribute(skinIndex, 4));
@@ -445,24 +516,13 @@ function getSoftShadowTexture(): THREE.CanvasTexture {
   return cachedShadowTexture;
 }
 
-function StylizedGroundShadow({ hopOffset }: { hopOffset: number }) {
+/** Sombra de contato: escala e opacidade atualizadas direto no useFrame (sem re-render do React). */
+function StylizedGroundShadow({ shadowRef }: { shadowRef: React.RefObject<THREE.Mesh | null> }) {
   const shadowTex = useMemo(() => getSoftShadowTexture(), []);
-  const scale = Math.max(0.7, 1 - hopOffset * 2.2);
-  const opacity = Math.max(0.2, 0.7 - hopOffset * 3.5);
-
   return (
-    <mesh
-      position={[0, 0.002, 0]}
-      rotation={[-Math.PI / 2, 0, 0]}
-      scale={[0.55 * scale, 0.42 * scale, 1]}
-    >
+    <mesh ref={shadowRef} position={[0, 0.002, 0]} rotation={[-Math.PI / 2, 0, 0]} scale={[0.55, 0.42, 1]}>
       <planeGeometry args={[1, 1]} />
-      <meshBasicMaterial
-        map={shadowTex}
-        transparent
-        opacity={opacity}
-        depthWrite={false}
-      />
+      <meshBasicMaterial map={shadowTex} transparent opacity={0.7} depthWrite={false} />
     </mesh>
   );
 }
@@ -482,7 +542,7 @@ function TeddyModel({
   cursor,
   pulse,
   reduzido,
-  onHopChange,
+  shadowRef,
 }: {
   estado: TeddyEstado;
   seguirCursor: boolean;
@@ -490,7 +550,7 @@ function TeddyModel({
   cursor: React.MutableRefObject<CursorState>;
   pulse: React.MutableRefObject<number>;
   reduzido: boolean;
-  onHopChange?: (h: number) => void;
+  shadowRef: React.RefObject<THREE.Mesh | null>;
 }) {
   const gltf = useGLTF(modeloUrl);
   const rig = useMemo(() => {
@@ -510,7 +570,8 @@ function TeddyModel({
   }, [rig]);
 
   const group = useRef<THREE.Group>(null!);
-  const cur = useRef<Pose>({ ...POSES.idle });
+  // Começa menor e "abaixado": a interpolação de pose faz uma entrada suave ao aparecer.
+  const cur = useRef<Pose>({ ...POSES.idle, scale: 0.82, rootY: -0.04 });
   const stateStart = useRef(0);
   const last = useRef<TeddyEstado>(estado);
   const gaze = useRef({ x: 0, y: 0 });
@@ -620,11 +681,23 @@ function TeddyModel({
       squash += (hopPhase < 0.2 ? -0.03 : hopPhase > 0.7 ? 0.02 : 0) * amp;
     }
 
-    onHopChange?.(hop);
+    const sh = shadowRef.current;
+    if (sh) {
+      const k2 = Math.max(0.7, 1 - hop * 2.2);
+      sh.scale.set(0.55 * k2, 0.42 * k2, 1);
+      (sh.material as THREE.MeshBasicMaterial).opacity = Math.max(0.2, 0.7 - hop * 3.5);
+    }
 
     // Olhar em direção ao cursor (suavizado e com amplitude limitada para naturalidade)
-    const targetGx = seguirCursor && cursor.current.active ? Math.max(-0.6, Math.min(0.6, cursor.current.x)) : 0;
-    const targetGy = seguirCursor && cursor.current.active ? Math.max(-0.4, Math.min(0.4, cursor.current.y)) : 0;
+    // Sem cursor por perto, o Teddy olha em volta devagar (curiosidade em vez de estátua).
+    const olharLivre = !(seguirCursor && cursor.current.active);
+    const passeio = olharLivre && !reduzido ? 1 : 0;
+    const targetGx = olharLivre
+      ? (Math.sin(t * 0.31) * 0.6 + Math.sin(t * 0.13 + 1.7) * 0.4) * 0.32 * passeio
+      : Math.max(-0.6, Math.min(0.6, cursor.current.x));
+    const targetGy = olharLivre
+      ? Math.sin(t * 0.23 + 0.6) * 0.12 * passeio
+      : Math.max(-0.4, Math.min(0.4, cursor.current.y));
 
     gaze.current.x += (targetGx - gaze.current.x) * (1 - Math.exp(-dt * 5.0));
     gaze.current.y += (targetGy - gaze.current.y) * (1 - Math.exp(-dt * 5.0));
@@ -734,7 +807,7 @@ export function Teddy({
   const cursor = useRef<CursorState>({ x: 0, y: 0, active: false });
   const pulse = useRef(-10);
   const trigger = useRef(false);
-  const [hopOffset, setHopOffset] = useState(0);
+  const shadowRef = useRef<THREE.Mesh>(null);
   const [isVisible, setIsVisible] = useState(true);
 
   const reduzido = useMemo(
@@ -839,9 +912,9 @@ export function Teddy({
             cursor={cursor}
             pulse={pulse}
             reduzido={reduzido}
-            onHopChange={setHopOffset}
+            shadowRef={shadowRef}
           />
-          {sombra && !busto && <StylizedGroundShadow hopOffset={hopOffset} />}
+          {sombra && !busto && <StylizedGroundShadow shadowRef={shadowRef} />}
         </Suspense>
 
         {seguirCursor && <CursorTracker cursor={cursor} />}
