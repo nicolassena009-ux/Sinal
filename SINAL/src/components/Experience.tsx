@@ -1,567 +1,442 @@
 import { Link } from "@tanstack/react-router";
-import { useEffect, useRef, useState, type ReactNode } from "react";
-import { ArrowRight, BookOpen, Gamepad2, Headphones, Phone, Sparkles } from "lucide-react";
+import { useEffect, useId, useState } from "react";
+import {
+  ArrowRight,
+  Check,
+  Gamepad2,
+  Headphones,
+  Phone,
+  ShieldCheck,
+  Users,
+  X,
+} from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Footer } from "@/components/Footer";
-import { type TeddyEstado } from "@/components/Teddy";
 import { SafeTeddy } from "@/components/cinema/SafeTeddy";
-import { ParticleField } from "@/components/home/ParticleField";
-import { GiantWord } from "@/components/cinema/Cinema";
+import type { TeddyEstado } from "@/components/Teddy";
 import { METODO, temas } from "@/data/temas";
 import { vars } from "@/lib/motion";
 
 /* ==========================================================================
- * Home do Sinal: narrativa guiada pelo scroll.
- * Capítulos: 01 Sinal (hero) · 02 Situações (temas orbitando o Teddy) · 03 Método.
- * Um único palco "sticky" é animado por um progresso 0..1 suavizado (lerp),
- * aplicado direto nos estilos via refs: nenhum re-render por frame.
+ * Home do Sinal (identidade lilás original, nível de apresentação).
+ * Um momento marcante: o Teddy oficial sobre o emblema da mão com coração e o
+ * desafio "Qual é o sinal?", que ensina reconhecendo. O resto é calmo e legível.
  * ========================================================================== */
 
-const clamp01 = (v: number) => (v < 0 ? 0 : v > 1 ? 1 : v);
-const seg = (p: number, a: number, b: number) => clamp01((p - a) / (b - a));
-const ease = (t: number) => 1 - Math.pow(1 - t, 3);
+const SINAIS = temas.map((t) => ({
+  slug: t.slug,
+  nome: t.nome,
+  cor: t.color,
+  sinal: t.reconhecer[0],
+}));
 
-/** Tons claros do método para leitura sobre o fundo escuro. */
-const COR_LEGIVEL: Record<string, string> = {
-  "#2E7DD1": "#7fb6ff",
-  "#6D3FC3": "#b99bff",
-  "#FFC044": "#ffc044",
-  "#53C6B6": "#6fe0cf",
-};
-const ESTADO_METODO: TeddyEstado[] = ["pensando", "explicando", "incentivando", "comemorando"];
-
-/** Posições dos cards ao redor do Teddy (desktop): x em unidades do raio, y em fração da altura. */
-const ORBITA = [
-  { x: -1, y: -0.17 },
-  { x: 1, y: -0.24 },
-  { x: -1, y: 0.15 },
-  { x: 1.04, y: 0.05 },
-  { x: 1, y: 0.33 },
-];
-
-const DESTAQUES = [
-  { icon: BookOpen, label: "5 temas guiados" },
-  { icon: Gamepad2, label: "Missões jogáveis" },
-  { icon: Headphones, label: "Narração em áudio" },
-];
-
-function useViewport() {
-  const [vp, setVp] = useState(() => ({
-    w: typeof window === "undefined" ? 1440 : window.innerWidth,
-    h: typeof window === "undefined" ? 900 : window.innerHeight,
-  }));
-  useEffect(() => {
-    let raf = 0;
-    const on = () => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => setVp({ w: window.innerWidth, h: window.innerHeight }));
-    };
-    window.addEventListener("resize", on, { passive: true });
-    return () => {
-      window.removeEventListener("resize", on);
-      cancelAnimationFrame(raf);
-    };
-  }, []);
-  return vp;
-}
-
-/* ------------------------------ Peças ------------------------------ */
-
-function HeroCopy() {
+/** Emblema do moletom do Teddy: mão aberta com coração. */
+function Emblema({ className = "" }: { className?: string }) {
   return (
-    <>
-      <p className="font-display text-lg font-bold text-[color:var(--amarelo)] sm:text-2xl">
-        Reconhecer também é proteger
-      </p>
-      <p className="mx-auto mt-2 max-w-lg text-sm leading-relaxed text-[color:var(--lilas)]/80 sm:text-base">
-        Aprenda a reconhecer situações de emergência, entenda o que fazer e descubra como agir
-        quando cada segundo importa.
-      </p>
-      <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
-        <Link
-          to="/temas"
-          className="btn-shine press group inline-flex min-h-12 items-center gap-2 rounded-full bg-[color:var(--amarelo)] px-7 font-display font-bold text-[color:var(--tinta)] shadow-[0_14px_40px_-14px_rgba(255,192,68,0.8)] hover:-translate-y-0.5"
-        >
-          Explorar os Temas
-          <ArrowRight
-            className="h-4 w-4 transition-transform group-hover:translate-x-1"
-            aria-hidden="true"
-          />
-        </Link>
-        <Link
-          to="/jogos"
-          className="btn-shine press inline-flex min-h-12 items-center gap-2 rounded-full bg-[color:var(--rosa)] px-6 font-display font-bold text-white shadow-[0_14px_40px_-14px_rgba(255,96,167,0.8)] hover:-translate-y-0.5"
-        >
-          <Gamepad2 className="h-4 w-4" aria-hidden="true" />
-          Praticar com o Teddy
-        </Link>
-      </div>
-      <ul
-        aria-label="Destaques do Sinal"
-        className="mt-5 flex flex-wrap items-center justify-center gap-x-5 gap-y-1.5 text-xs font-semibold text-[color:var(--lilas)]/70 sm:text-sm"
-      >
-        {DESTAQUES.map(({ icon: Icon, label }) => (
-          <li key={label} className="inline-flex items-center gap-1.5">
-            <Icon className="h-4 w-4 text-[color:var(--amarelo)]" aria-hidden="true" />
-            {label}
-          </li>
-        ))}
-      </ul>
-    </>
-  );
-}
-
-function TemaCard({ tema, compact = false }: { tema: (typeof temas)[number]; compact?: boolean }) {
-  return (
-    <Link
-      to="/tema/$slug"
-      params={{ slug: tema.slug }}
-      className={`home-tema-card spotlight spotlight-light group flex items-center gap-3 rounded-3xl border border-white/12 bg-white/[0.07] p-2.5 pr-4 text-left text-[color:var(--lilas)] shadow-[0_24px_60px_-30px_rgba(0,0,0,0.9)] backdrop-blur-xl transition-colors hover:border-white/30 hover:bg-white/[0.12] ${
-        compact ? "w-full" : "w-[290px]"
-      }`}
-    >
-      <img
-        src={tema.cardImage}
-        alt=""
-        width={84}
-        height={64}
-        loading="lazy"
-        className="h-16 w-[84px] shrink-0 rounded-2xl object-cover ring-1 ring-white/15"
+    <svg viewBox="0 0 200 240" aria-hidden="true" className={className}>
+      <g fill="currentColor">
+        <rect x="36" y="58" width="26" height="92" rx="13" transform="rotate(-8 49 104)" />
+        <rect x="70" y="22" width="27" height="118" rx="13.5" transform="rotate(-3 83 81)" />
+        <rect x="104" y="18" width="27" height="122" rx="13.5" transform="rotate(3 117 79)" />
+        <rect x="137" y="44" width="26" height="104" rx="13" transform="rotate(9 150 96)" />
+        <rect x="6" y="122" width="28" height="74" rx="14" transform="rotate(-38 20 159)" />
+        <path d="M38 118 Q36 210 100 226 Q164 210 162 118 Z" />
+      </g>
+      <path
+        d="M100 196 C70 176 62 160 66 146 C70 132 88 128 100 142 C112 128 130 132 134 146 C138 160 130 176 100 196 Z"
+        className="emblema-coracao"
       />
-      <span className="min-w-0">
-        <span className="flex items-center gap-2 font-display text-base font-extrabold leading-tight">
-          <span className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: tema.color }} />
-          {tema.title}
-        </span>
-        <span className="mt-0.5 line-clamp-2 block text-xs leading-snug text-[color:var(--lilas)]/70">
-          {tema.resumo}
-        </span>
-      </span>
-      <ArrowRight
-        className="ml-auto h-4 w-4 shrink-0 opacity-50 transition-[opacity,transform] group-hover:translate-x-0.5 group-hover:opacity-100"
-        aria-hidden="true"
-      />
-    </Link>
+    </svg>
   );
 }
 
-function ScrollHint() {
-  return (
-    <div className="home-scroll-hint flex flex-col items-center gap-2 text-[11px] font-bold uppercase tracking-[0.25em] text-[color:var(--lilas)]/60">
-      <span className="relative block h-9 w-[22px] rounded-full border-2 border-current">
-        <span className="absolute left-1/2 top-1.5 h-2 w-1 -translate-x-1/2 rounded-full bg-[color:var(--amarelo)]" />
-      </span>
-      Role para descobrir
-    </div>
-  );
-}
+/* ----------------------------- Hero + desafio ----------------------------- */
 
-/* --------------------------- Narrativa animada --------------------------- */
+type Resposta = { escolhido: string; certo: boolean } | null;
 
-function ScrollStory() {
-  const { w, h } = useViewport();
-  const mobile = w < 768;
-  const teddySize = Math.round(mobile ? Math.min(h * 0.4, 290) : Math.min(h * 0.5, 470));
-  const radius = Math.min(w * 0.31, teddySize * 0.5 + 250);
+function DesafioSinal({ onPose }: { onPose: (e: TeddyEstado) => void }) {
+  const [i, setI] = useState(0);
+  const [resposta, setResposta] = useState<Resposta>(null);
+  const id = useId();
+  const atual = SINAIS[i];
 
-  const wrapRef = useRef<HTMLDivElement>(null);
-  const heroWordRef = useRef<HTMLDivElement>(null);
-  const heroCopyRef = useRef<HTMLDivElement>(null);
-  const teddyRef = useRef<HTMLDivElement>(null);
-  const temasHeadRef = useRef<HTMLDivElement>(null);
-  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const metodoRef = useRef<HTMLDivElement>(null);
-  const railRef = useRef<HTMLDivElement>(null);
-
-  const [chapter, setChapter] = useState(0);
-  const [active, setActive] = useState(0);
-  const [step, setStep] = useState(0);
-
-  useEffect(() => {
-    let raf = 0;
-    let cur = 0;
-    let first = true;
-
-    const frame = () => {
-      raf = requestAnimationFrame(frame);
-      const wrap = wrapRef.current;
-      if (!wrap) return;
-      const r = wrap.getBoundingClientRect();
-      const span = r.height - window.innerHeight;
-      if (r.bottom < -50 || r.top > window.innerHeight + 50) return; // fora da tela
-      const target = clamp01(-r.top / (span || 1));
-      cur = first ? target : cur + (target - cur) * 0.14;
-      first = false;
-      if (Math.abs(target - cur) < 0.0002) cur = target;
-      const p = cur;
-
-      // 01 · Hero sai de cena
-      const out = ease(seg(p, 0.02, 0.16));
-      if (heroWordRef.current) {
-        const s = heroWordRef.current.style;
-        s.opacity = String(1 - out);
-        s.transform = `translate3d(-50%, calc(-50% - ${out * 10}vh), 0) scale(${1 + out * 0.45})`;
-        s.filter = out > 0.01 ? `blur(${out * 14}px)` : "none";
-      }
-      if (heroCopyRef.current) {
-        const s = heroCopyRef.current.style;
-        const o = clamp01(1 - out * 1.8);
-        s.opacity = String(o);
-        s.transform = `translate3d(0, ${-out * 50}px, 0)`;
-        heroCopyRef.current.inert = o < 0.4;
-      }
-
-      // 02 · Situações
-      const tIn = ease(seg(p, 0.15, 0.22));
-      const tOut = ease(seg(p, 0.66, 0.71));
-      if (temasHeadRef.current) {
-        const s = temasHeadRef.current.style;
-        s.opacity = String(tIn * (1 - tOut));
-        s.transform = `translate3d(-50%, ${(1 - tIn) * 30 - tOut * 30}px, 0)`;
-      }
-      const act = Math.min(4, Math.max(0, Math.floor((p - 0.19) / 0.095)));
-      cardRefs.current.forEach((el, i) => {
-        if (!el) return;
-        const s = el.style;
-        if (mobile) {
-          const vis = (act === i ? 1 : 0) * tIn * (1 - tOut);
-          s.opacity = String(vis);
-          s.transform = `translate3d(-50%, ${act === i ? 0 : act > i ? -24 : 24}px, 0) scale(${0.96 + vis * 0.04})`;
-          el.inert = vis < 0.5;
-        } else {
-          const t = ease(seg(p, 0.2 + i * 0.085, 0.27 + i * 0.085));
-          const vis = t * (1 - tOut);
-          const o = ORBITA[i];
-          const dx = -o.x * radius * (1 - t) * 0.85 - o.x * tOut * 120;
-          const dy = -o.y * h * (1 - t) * 0.6;
-          s.opacity = String(vis);
-          s.transform = `translate3d(calc(-50% + ${dx}px), calc(-50% + ${dy}px), 0) scale(${0.55 + 0.45 * t - tOut * 0.1})`;
-          el.inert = vis < 0.5;
-        }
-      });
-
-      // 03 · Método
-      const mIn = ease(seg(p, 0.7, 0.76));
-      if (metodoRef.current) {
-        const s = metodoRef.current.style;
-        s.opacity = String(mIn);
-        s.transform = `translate3d(${mobile ? 0 : (1 - mIn) * -60}px, ${mobile ? (1 - mIn) * 40 : 0}px, 0)`;
-        metodoRef.current.inert = mIn < 0.5;
-      }
-      const st = Math.min(3, Math.max(0, Math.floor((p - 0.74) / 0.06)));
-
-      // Teddy: protagonista que atravessa os capítulos
-      if (teddyRef.current) {
-        const enter = ease(seg(p, 0, 0.16));
-        const x = mobile ? 0 : mIn * w * 0.2;
-        // No hero o Teddy sobe para abrir espaço ao texto; depois centraliza.
-        const y = mobile
-          ? -(1 - enter) * h * 0.115 - enter * h * 0.04 - mIn * h * 0.14
-          : -(1 - enter) * h * 0.1 - enter * h * 0.01;
-        const sc =
-          (mobile ? 0.86 + enter * 0.1 : 0.92 - enter * 0.06) * (1 - mIn * (mobile ? 0.22 : 0.02));
-        teddyRef.current.style.transform = `translate3d(calc(-50% + ${x}px), calc(-50% + ${y}px), 0) scale(${sc})`;
-      }
-      if (railRef.current) railRef.current.style.transform = `scaleY(${p})`;
-
-      const ch = p < 0.15 ? 0 : p < 0.7 ? 1 : 2;
-      setChapter(ch);
-      setActive(act);
-      setStep(st);
-    };
-    raf = requestAnimationFrame(frame);
-    return () => cancelAnimationFrame(raf);
-  }, [mobile, radius, w, h]);
-
-  const estado: TeddyEstado =
-    chapter === 0 ? "acenando" : chapter === 1 ? "explicando" : ESTADO_METODO[step];
-  const etapa = METODO[step];
-  const cor = COR_LEGIVEL[etapa.cor] ?? etapa.cor;
-  const capitulos = ["Sinal", "Situações", "Método"];
+  const responder = (slug: string) => {
+    if (resposta) return;
+    const certo = slug === atual.slug;
+    setResposta({ escolhido: slug, certo });
+    onPose(certo ? "comemorando" : "preocupado");
+  };
+  const proximo = () => {
+    setResposta(null);
+    setI((v) => (v + 1) % SINAIS.length);
+    onPose("pensando");
+  };
 
   return (
-    <div ref={wrapRef} className="relative" style={{ height: mobile ? "620svh" : "600vh" }}>
-      <div className="sticky top-0 h-[100svh] overflow-hidden">
-        {/* Atmosfera */}
-        <div aria-hidden="true" className="absolute inset-0">
-          <div className="absolute inset-0 bg-[radial-gradient(120%_85%_at_50%_0%,#2a1a63_0%,#150e33_55%,#0d0922_100%)]" />
-          <span className="glow-orb left-[8%] top-[18%] h-80 w-80 bg-[color:var(--roxo)] opacity-60" />
-          <span className="glow-orb right-[6%] top-[38%] h-72 w-72 bg-[color:var(--azul)] opacity-40 [animation-delay:-6s]" />
-          <span className="glow-orb bottom-[-10%] left-[35%] h-96 w-96 bg-[color:var(--rosa)] opacity-20 [animation-delay:-11s]" />
-          <ParticleField className="absolute inset-0" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_45%,rgba(13,9,34,0.7)_100%)]" />
-        </div>
-
-        {/* 01 · Palavra gigante atrás do Teddy */}
-        <div
-          ref={heroWordRef}
-          className="absolute left-1/2 top-[36%] will-change-transform md:top-[38%]"
-          style={{ transform: "translate3d(-50%, -50%, 0)" }}
+    <section aria-labelledby={`${id}-t`} className="desafio">
+      <div className="flex items-center justify-between gap-3">
+        <h2
+          id={`${id}-t`}
+          className="font-display text-lg font-extrabold text-[color:var(--tinta)]"
         >
-          <GiantWord>SINAL</GiantWord>
-        </div>
-        <h1 className="sr-only">Sinal — Reconhecer também é proteger</h1>
-
-        {/* 03 · Método (atrás do Teddy no celular, à esquerda no desktop) */}
-        <div
-          ref={metodoRef}
-          className="absolute inset-x-5 bottom-[7svh] opacity-0 md:inset-x-auto md:bottom-auto md:left-[7vw] md:top-1/2 md:w-[50vw] md:max-w-[700px] md:-translate-y-1/2"
+          Qual é o sinal?
+        </h2>
+        <span
+          className="text-sm font-semibold text-[color:var(--muted-foreground)]"
           aria-live="polite"
         >
-          <p className="flex items-center gap-3 font-display text-xs font-bold uppercase tracking-[0.3em] text-[color:var(--lilas)]/60">
-            <Sparkles className="h-4 w-4 text-[color:var(--amarelo)]" aria-hidden="true" />O método
-            Sinal · {String(step + 1).padStart(2, "0")} / 04
+          {i + 1} de {SINAIS.length}
+        </span>
+      </div>
+      <p
+        key={atual.slug}
+        className="desafio-sinal mt-2 text-[17px] leading-snug text-[color:var(--tinta)]"
+      >
+        “{atual.sinal}”
+      </p>
+      <div role="group" aria-label="Escolha a situação" className="mt-4 flex flex-wrap gap-2">
+        {SINAIS.map((s) => {
+          const marcado = resposta?.escolhido === s.slug;
+          const correto = resposta && s.slug === atual.slug;
+          return (
+            <button
+              key={s.slug}
+              type="button"
+              onClick={() => responder(s.slug)}
+              aria-pressed={marcado}
+              disabled={!!resposta && !marcado && !correto}
+              className="desafio-opcao"
+              data-estado={correto ? "certo" : marcado ? "errado" : undefined}
+              style={vars({ "--c": s.cor })}
+            >
+              {correto ? (
+                <Check className="h-4 w-4" aria-hidden="true" />
+              ) : marcado ? (
+                <X className="h-4 w-4" aria-hidden="true" />
+              ) : null}
+              {s.nome}
+            </button>
+          );
+        })}
+      </div>
+      <div className="mt-4 min-h-[44px]" aria-live="polite">
+        {!resposta && (
+          <p className="pt-2.5 text-sm text-[color:var(--muted-foreground)]">
+            Toque na situação que combina com o sinal.
           </p>
-          <h2
-            key={etapa.titulo}
-            className="home-metodo-word mt-2 font-display font-extrabold leading-[0.9] tracking-tight"
-            style={{ color: cor }}
-          >
-            {etapa.titulo}
-          </h2>
-          <p
-            key={`t-${step}`}
-            className="home-metodo-text mt-3 max-w-md text-base text-[color:var(--lilas)]/85 sm:text-lg"
-          >
-            {etapa.texto}
-          </p>
-          <ol className="mt-6 flex gap-2" aria-label="Etapas do método">
-            {METODO.map((m, i) => (
-              <li key={m.titulo} className="flex-1">
-                <span
-                  className="block h-1.5 rounded-full transition-[background-color,opacity] duration-500"
-                  style={{
-                    backgroundColor:
-                      i <= step ? (COR_LEGIVEL[m.cor] ?? m.cor) : "rgba(255,255,255,0.15)",
-                  }}
-                />
-                <span
-                  className={`mt-2 block font-display text-[11px] font-bold uppercase tracking-wider transition-opacity sm:text-xs ${
-                    i === step ? "opacity-100" : "opacity-45"
-                  }`}
-                >
-                  {m.titulo}
-                </span>
-              </li>
-            ))}
-          </ol>
-        </div>
-
-        {/* Teddy 3D: protagonista */}
-        <div
-          ref={teddyRef}
-          className="absolute left-1/2 top-[50%] will-change-transform md:top-[52%]"
-          style={{ transform: "translate3d(-50%, -50%, 0)" }}
-        >
-          <div className="home-teddy-halo" aria-hidden="true" />
-          <SafeTeddy estado={estado} tamanho={teddySize} />
-        </div>
-
-        {/* 01 · Texto do hero */}
-        <div
-          ref={heroCopyRef}
-          className="absolute inset-x-0 bottom-[5svh] z-10 px-5 text-center md:bottom-[6vh]"
-        >
-          <HeroCopy />
-          <div className="mt-6 hidden justify-center md:flex">
-            <ScrollHint />
-          </div>
-        </div>
-
-        {/* 02 · Situações */}
-        <div
-          ref={temasHeadRef}
-          className="absolute left-1/2 top-[11svh] w-[min(92vw,720px)] text-center opacity-0 md:top-[13vh]"
-        >
-          <p className="font-display text-xs font-bold uppercase tracking-[0.3em] text-[color:var(--amarelo)]">
-            Cinco situações
-          </p>
-          <h2 className="mt-2 font-display text-3xl font-extrabold leading-tight text-[color:var(--lilas)] sm:text-5xl">
-            Saber agir começa por <span className="text-[color:var(--amarelo)]">reconhecer</span>.
-          </h2>
-        </div>
-        {temas.map((tema, i) => (
-          <div
-            key={tema.slug}
-            ref={(el) => {
-              cardRefs.current[i] = el;
-            }}
-            className="absolute opacity-0 will-change-transform"
-            style={
-              mobile
-                ? { left: "50%", bottom: "6svh", width: "min(92vw, 420px)" }
-                : {
-                    left: `calc(50% + ${ORBITA[i].x * radius}px)`,
-                    top: `calc(52% + ${ORBITA[i].y * 100}%)`,
-                  }
-            }
-          >
-            <TemaCard tema={tema} compact={mobile} />
-          </div>
-        ))}
-        {mobile && chapter === 1 && (
-          <div
-            className="absolute inset-x-0 bottom-[2.2svh] flex justify-center gap-1.5"
-            aria-hidden="true"
-          >
-            {temas.map((t, i) => (
-              <span
-                key={t.slug}
-                className="h-1.5 rounded-full transition-all duration-300"
-                style={{
-                  width: i === active ? 18 : 6,
-                  backgroundColor: i === active ? t.color : "rgba(255,255,255,0.3)",
-                }}
-              />
-            ))}
+        )}
+        {resposta && (
+          <div className="desafio-feedback flex flex-wrap items-center justify-between gap-3">
+            <p className="text-[15px] font-semibold text-[color:var(--tinta)]">
+              {resposta.certo
+                ? "Isso! Você reconheceu o sinal."
+                : `Quase. Esse é um sinal de ${atual.nome.toLowerCase()}.`}
+            </p>
+            <div className="flex gap-2">
+              <Link
+                to="/tema/$slug"
+                params={{ slug: atual.slug }}
+                className="press inline-flex min-h-10 items-center rounded-full px-4 font-display text-sm font-bold text-[color:var(--roxo)] underline-offset-4 hover:underline"
+              >
+                Ver o guia
+              </Link>
+              <button
+                type="button"
+                onClick={proximo}
+                className="press inline-flex min-h-10 items-center gap-1.5 rounded-full bg-[color:var(--tinta)] px-4 font-display text-sm font-bold text-white"
+              >
+                Próximo sinal
+              </button>
+            </div>
           </div>
         )}
-
-        {/* Indicador de capítulos */}
-        <div
-          className="absolute bottom-8 left-6 hidden items-end gap-4 md:flex lg:left-10"
-          aria-hidden="true"
-        >
-          <div className="relative h-24 w-[2px] overflow-hidden rounded-full bg-white/15">
-            <div
-              ref={railRef}
-              className="absolute inset-0 origin-top bg-[color:var(--amarelo)]"
-              style={{ transform: "scaleY(0)" }}
-            />
-          </div>
-          <div className="font-display">
-            <p className="text-3xl font-extrabold leading-none text-[color:var(--lilas)]">
-              {String(chapter + 1).padStart(2, "0")}
-            </p>
-            <p className="mt-1 text-xs font-bold uppercase tracking-[0.25em] text-[color:var(--lilas)]/60">
-              {capitulos[chapter]}
-            </p>
-          </div>
-        </div>
-        <p className="absolute bottom-8 right-6 hidden max-w-[220px] text-right text-[11px] leading-snug text-[color:var(--lilas)]/55 lg:right-10 lg:block">
-          Conteúdo educativo. Em emergências reais, acione o SAMU (192) ou Bombeiros (193).
-        </p>
       </div>
-    </div>
+    </section>
   );
 }
 
-/* ------------------------------ Fechamento ------------------------------ */
+function Hero() {
+  const [pose, setPose] = useState<TeddyEstado>("acenando");
+  const [tamanho, setTamanho] = useState(360);
 
-const CAMINHOS = [
-  {
-    to: "/temas" as const,
-    titulo: "Galeria 3D dos temas",
-    texto: "Arraste pelos cinco guias e abra o que quiser estudar.",
-    img: "/teddy/teddy-wave.webp",
-    cor: "var(--amarelo)",
-  },
-  {
-    to: "/jogos" as const,
-    titulo: "Jogos & Missões",
-    texto: "Pratique em cenários interativos, no seu ritmo.",
-    img: "/teddy/teddy-thumbs.webp",
-    cor: "var(--rosa)",
-  },
-  {
-    to: "/familia-escola" as const,
-    titulo: "Família & Escola",
-    texto: "Como conversar sobre segurança sem assustar.",
-    img: "/teddy/teddy-tres-quartos.webp",
-    cor: "var(--aqua)",
-  },
-];
+  useEffect(() => {
+    const on = () =>
+      setTamanho(window.innerWidth < 640 ? 250 : window.innerWidth < 1024 ? 320 : 400);
+    on();
+    window.addEventListener("resize", on);
+    return () => window.removeEventListener("resize", on);
+  }, []);
 
-function Fechamento() {
+  // Depois do aceno de boas-vindas, o Teddy fica de frente, atento.
+  useEffect(() => {
+    const t = setTimeout(() => setPose((p) => (p === "acenando" ? "idle" : p)), 3200);
+    return () => clearTimeout(t);
+  }, []);
+
   return (
-    <section className="relative mx-auto max-w-6xl px-5 py-24 sm:px-10" aria-labelledby="comecar">
-      <p className="reveal-on-scroll font-display text-xs font-bold uppercase tracking-[0.3em] text-[color:var(--amarelo)]">
-        Por onde começar
-      </p>
-      <h2
-        id="comecar"
-        className="reveal-on-scroll mt-2 max-w-2xl font-display text-4xl font-extrabold leading-tight text-[color:var(--lilas)] sm:text-6xl"
-        style={vars({ "--reveal-delay": "80ms" })}
-      >
-        Pronto para fazer a diferença?
-      </h2>
-      <ul className="mt-10 grid gap-5 md:grid-cols-3">
-        {CAMINHOS.map((c, i) => (
-          <li
-            key={c.to}
-            className="reveal-on-scroll"
-            style={vars({ "--reveal-delay": `${120 + i * 90}ms` })}
+    <header className="home-hero relative overflow-hidden">
+      <div className="mx-auto grid max-w-6xl items-center gap-10 px-5 pb-16 pt-28 sm:px-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.08fr)] lg:gap-4 lg:pb-24 lg:pt-32">
+        <div className="hero-stagger relative z-10">
+          <h1
+            style={vars({ "--i": 0 })}
+            className="home-titulo font-display font-extrabold text-[color:var(--tinta)]"
           >
-            <Link
-              to={c.to}
-              className="spotlight tilt group flex h-full flex-col overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.04] text-[color:var(--lilas)] transition-[border-color,background-color] hover:border-white/25 hover:bg-white/[0.07]"
-              style={vars({ "--spot": "rgba(255,255,255,0.12)" })}
-            >
-              <span className="relative block aspect-[16/10] overflow-hidden bg-[#ecebf3] md:aspect-[4/3]">
-                <img
-                  src={c.img}
-                  alt=""
-                  loading="lazy"
-                  width={1024}
-                  height={1024}
-                  className="h-full w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
-                />
-                <span
-                  className="absolute inset-x-0 bottom-0 h-1.5"
-                  style={{ backgroundColor: c.cor }}
-                />
-              </span>
-              <span className="flex flex-1 flex-col p-6">
-                <span className="font-display text-2xl font-extrabold">{c.titulo}</span>
-                <span className="mt-1 text-sm opacity-75">{c.texto}</span>
-                <span
-                  className="mt-5 inline-flex items-center gap-1.5 font-display text-sm font-bold transition-[gap] group-hover:gap-2.5"
-                  style={{ color: c.cor }}
-                >
-                  Começar <ArrowRight className="h-4 w-4" aria-hidden="true" />
-                </span>
-              </span>
-            </Link>
-          </li>
-        ))}
-      </ul>
-
-      <div className="reveal-on-scroll mt-16 flex flex-col items-start justify-between gap-6 rounded-[28px] border border-[color:var(--rosa)]/30 bg-[linear-gradient(120deg,rgba(255,96,167,0.16),rgba(109,63,195,0.12))] p-7 sm:flex-row sm:items-center sm:p-10">
-        <div>
-          <p className="font-display text-xs font-bold uppercase tracking-[0.3em] text-[color:var(--rosa)]">
-            Emergência real?
+            Reconhecer também é proteger.
+          </h1>
+          <p
+            style={vars({ "--i": 1 })}
+            className="mt-6 max-w-[34ch] text-lg leading-relaxed text-[color:var(--muted-foreground)] sm:text-xl"
+          >
+            O Sinal ensina crianças e adolescentes a perceber uma emergência, entender o que está
+            acontecendo e saber o que fazer até a ajuda chegar.
           </p>
-          <p className="mt-1 font-display text-2xl font-extrabold text-[color:var(--lilas)] sm:text-3xl">
-            Ligue agora. Fale com calma e informe o endereço.
+          <div style={vars({ "--i": 2 })} className="mt-8 flex flex-wrap gap-3">
+            <Link
+              to="/temas"
+              className="btn-shine press inline-flex min-h-12 items-center gap-2 rounded-full bg-[color:var(--roxo)] px-7 font-display text-base font-extrabold text-white shadow-[0_14px_30px_-14px_rgba(109,63,195,0.9)]"
+            >
+              Conhecer os 5 temas
+            </Link>
+            <Link
+              to="/jogos"
+              className="press inline-flex min-h-12 items-center gap-2 rounded-full border-2 border-[color:var(--tinta)]/15 bg-white px-6 font-display text-base font-bold text-[color:var(--tinta)] transition-colors hover:border-[color:var(--roxo)]"
+            >
+              <Gamepad2 className="h-5 w-5 text-[color:var(--roxo)]" aria-hidden="true" />
+              Praticar com o Teddy
+            </Link>
+          </div>
+          <ul
+            style={vars({ "--i": 3 })}
+            className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-[15px] font-semibold text-[color:var(--muted-foreground)]"
+          >
+            <li className="flex items-center gap-2">
+              <ShieldCheck className="h-4 w-4 text-[color:var(--aqua)]" aria-hidden="true" />
+              Conteúdo revisado pela Enfermagem
+            </li>
+            <li className="flex items-center gap-2">
+              <Headphones className="h-4 w-4 text-[color:var(--aqua)]" aria-hidden="true" />
+              Narração em áudio
+            </li>
+          </ul>
+        </div>
+
+        <div className="home-palco relative mx-auto w-full max-w-[540px]">
+          <div aria-hidden="true" className="home-palco-disco">
+            <Emblema className="home-palco-emblema" />
+          </div>
+          <div className="home-palco-teddy relative flex justify-center pt-4 lg:justify-end lg:pr-2">
+            <SafeTeddy estado={pose} tamanho={tamanho} onClick={() => setPose("feliz")} />
+          </div>
+          <div className="relative z-10 -mt-10 sm:-mt-14 lg:absolute lg:-left-24 lg:bottom-10 lg:mt-0 lg:w-[310px]">
+            <DesafioSinal onPose={setPose} />
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+}
+
+/* ------------------------------- Situações -------------------------------- */
+
+function Situacoes() {
+  const [destaque, ...resto] = temas;
+  return (
+    <section aria-labelledby="situacoes-t" className="relative py-20 sm:py-28">
+      <div className="mx-auto max-w-6xl px-5 sm:px-10">
+        <div className="max-w-2xl">
+          <h2
+            id="situacoes-t"
+            className="home-h2 font-display font-extrabold text-[color:var(--tinta)]"
+          >
+            Cinco situações que todo mundo deveria saber reconhecer
+          </h2>
+          <p className="mt-4 max-w-[52ch] text-lg text-[color:var(--muted-foreground)]">
+            Cada guia explica o que é, como perceber, o que fazer e o que evitar, com narração e
+            prática no final.
           </p>
         </div>
-        <div className="flex flex-wrap gap-3">
-          {[
-            { n: "192", nome: "SAMU", cor: "var(--rosa)" },
-            { n: "193", nome: "Bombeiros", cor: "var(--amarelo)" },
-          ].map((c) => (
-            <a
-              key={c.n}
-              href={`tel:${c.n}`}
-              className="press group inline-flex items-center gap-3 rounded-2xl bg-white/10 px-5 py-3 text-[color:var(--lilas)] transition-colors hover:bg-white/20"
-            >
-              <span
-                className="call-pulse inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10"
-                style={{ color: c.cor }}
+
+        <div className="mt-12 grid gap-5 lg:grid-cols-2">
+          <Link
+            to="/tema/$slug"
+            params={{ slug: destaque.slug }}
+            className="tema-card group lg:row-span-2"
+            style={vars({ "--c": destaque.color })}
+          >
+            <div className="tema-card-img aspect-[16/10] lg:aspect-auto lg:flex-1">
+              <img src={destaque.cardImage} alt="" width={1024} height={636} loading="lazy" />
+            </div>
+            <div className="p-6 sm:p-8">
+              <h3 className="font-display text-3xl font-extrabold text-[color:var(--tinta)]">
+                {destaque.nome}
+              </h3>
+              <p className="mt-2 max-w-[44ch] text-[color:var(--muted-foreground)]">
+                {destaque.resumo}
+              </p>
+              <span className="tema-card-cta mt-5">
+                Abrir o guia <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </span>
+            </div>
+          </Link>
+          <div className="grid gap-5 sm:grid-cols-2">
+            {resto.map((t) => (
+              <Link
+                key={t.slug}
+                to="/tema/$slug"
+                params={{ slug: t.slug }}
+                className="tema-card group"
+                style={vars({ "--c": t.color })}
               >
-                <Phone className="h-5 w-5" aria-hidden="true" />
+                <div className="tema-card-img aspect-[16/10]">
+                  <img src={t.cardImage} alt="" width={1024} height={636} loading="lazy" />
+                </div>
+                <div className="p-5">
+                  <h3 className="font-display text-xl font-extrabold leading-tight text-[color:var(--tinta)]">
+                    {t.nome}
+                  </h3>
+                  <p className="mt-1.5 text-[15px] leading-snug text-[color:var(--muted-foreground)]">
+                    {t.resumo}
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* --------------------------------- Método --------------------------------- */
+
+function Metodo() {
+  return (
+    <section
+      aria-labelledby="metodo-t"
+      className="home-metodo relative overflow-hidden py-20 text-white sm:py-28"
+    >
+      <div aria-hidden="true" className="home-metodo-emblema">
+        <Emblema />
+      </div>
+      <div className="relative mx-auto max-w-6xl px-5 sm:px-10">
+        <div className="grid items-end gap-6 lg:grid-cols-[minmax(0,1fr)_auto]">
+          <h2 id="metodo-t" className="home-h2 max-w-[18ch] font-display font-extrabold">
+            Em todo tema, o mesmo caminho em quatro passos
+          </h2>
+          <Link
+            to="/como-funciona"
+            className="press inline-flex min-h-11 items-center gap-2 self-start rounded-full bg-white/10 px-5 font-display font-bold ring-1 ring-white/25 hover:bg-white/20 lg:self-end"
+          >
+            Como o método funciona
+          </Link>
+        </div>
+        <ol className="home-passos mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+          {METODO.map((m, i) => (
+            <li key={m.titulo} className="relative">
+              <span
+                className="home-passo-num font-display"
+                style={vars({ "--c": i === 0 ? "#9cc6ff" : i === 1 ? "#c9b2ff" : m.cor })}
+              >
+                {i + 1}
               </span>
-              <span>
-                <span
-                  className="block font-display text-2xl font-extrabold leading-none"
-                  style={{ color: c.cor }}
-                >
-                  {c.n}
-                </span>
-                <span className="text-xs font-semibold opacity-75">{c.nome}</span>
-              </span>
-            </a>
+              <h3 className="mt-4 font-display text-2xl font-extrabold">{m.titulo}</h3>
+              <p className="mt-2 max-w-[28ch] text-white/80">{m.texto}</p>
+            </li>
           ))}
+        </ol>
+      </div>
+    </section>
+  );
+}
+
+/* --------------------------------- Prática -------------------------------- */
+
+function Pratica() {
+  return (
+    <section aria-labelledby="pratica-t" className="relative py-20 sm:py-28">
+      <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 sm:px-10 lg:grid-cols-2">
+        <div>
+          <h2
+            id="pratica-t"
+            className="home-h2 font-display font-extrabold text-[color:var(--tinta)]"
+          >
+            Aprender fazendo, no ritmo de cada um
+          </h2>
+          <p className="mt-4 max-w-[46ch] text-lg text-[color:var(--muted-foreground)]">
+            Nas missões, o Teddy apresenta uma cena e você decide o que fazer. Cada escolha mostra o
+            porquê, e no fim vem o certificado.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link
+              to="/jogos"
+              className="btn-shine press inline-flex min-h-12 items-center gap-2 rounded-full bg-[color:var(--amarelo)] px-7 font-display font-extrabold text-[color:var(--tinta)]"
+            >
+              <Gamepad2 className="h-5 w-5" aria-hidden="true" />
+              Começar uma missão
+            </Link>
+            <Link
+              to="/familia-escola"
+              className="press inline-flex min-h-12 items-center gap-2 rounded-full px-5 font-display font-bold text-[color:var(--roxo)] hover:bg-[color:var(--roxo)]/10"
+            >
+              <Users className="h-5 w-5" aria-hidden="true" />
+              Para famílias e escolas
+            </Link>
+          </div>
+        </div>
+
+        <div className="relative mx-auto w-full max-w-md" aria-hidden="true">
+          <div className="pratica-cena">
+            <p className="text-sm font-bold text-[color:var(--roxo)]">Missão · Engasgo</p>
+            <p className="mt-2 font-display text-xl font-extrabold leading-snug text-[color:var(--tinta)]">
+              No lanche, seu colega leva as mãos ao pescoço e não consegue falar. O que você faz
+              primeiro?
+            </p>
+            <div className="mt-4 grid gap-2">
+              <span className="pratica-op">Dar água para ajudar a descer</span>
+              <span className="pratica-op is-certo">
+                <Check className="h-4 w-4" /> Chamar um adulto e pedir para ligar 192
+              </span>
+              <span className="pratica-op">Esperar para ver se passa</span>
+            </div>
+          </div>
+          <img src="/teddy/3d/incentivando.webp" alt="" width={720} height={900} className="pratica-teddy" loading="lazy" />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------- Emergência ------------------------------- */
+
+function Emergencia() {
+  return (
+    <section aria-labelledby="emergencia-t" className="pb-20 sm:pb-28">
+      <div className="mx-auto max-w-6xl px-5 sm:px-10">
+        <div className="home-sos grid items-center gap-8 rounded-[2rem] p-8 sm:p-12 lg:grid-cols-[minmax(0,1fr)_auto]">
+          <div>
+            <h2
+              id="emergencia-t"
+              className="font-display text-3xl font-extrabold leading-tight text-white sm:text-4xl"
+            >
+              Numa emergência de verdade, ligue antes de tudo.
+            </h2>
+            <p className="mt-3 max-w-[48ch] text-white/85">
+              Fale com calma, diga o endereço e o que aconteceu. O atendente orienta você até a
+              equipe chegar.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <a href="tel:192" className="sos-btn press">
+              <Phone className="h-5 w-5" aria-hidden="true" />
+              <span className="font-display text-3xl font-extrabold leading-none">192</span>
+              <span className="text-sm font-bold opacity-80">SAMU</span>
+            </a>
+            <a href="tel:193" className="sos-btn press">
+              <Phone className="h-5 w-5" aria-hidden="true" />
+              <span className="font-display text-3xl font-extrabold leading-none">193</span>
+              <span className="text-sm font-bold opacity-80">Bombeiros</span>
+            </a>
+          </div>
         </div>
       </div>
     </section>
@@ -570,13 +445,14 @@ function Fechamento() {
 
 export function Experience() {
   return (
-    <div className="sinal-home relative bg-[#150e33]">
-      <SiteHeader />
+    <div className="home-v3 relative bg-[color:var(--background)]">
+      <SiteHeader tone="light" />
       <main>
-        <ScrollStory />
-        <div className="relative bg-[linear-gradient(180deg,#0d0922_0%,#150e33_100%)]">
-          <Fechamento />
-        </div>
+        <Hero />
+        <Situacoes />
+        <Metodo />
+        <Pratica />
+        <Emergencia />
       </main>
       <Footer />
     </div>

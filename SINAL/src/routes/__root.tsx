@@ -128,9 +128,12 @@ function RootComponent() {
       <div className="relative z-10">
         <Outlet />
       </div>
-      <div className="teddy-global print:hidden" hidden={hideTeddy}>
-        <TeddyMascote tamanho={140} mensagemInicial={null} />
-      </div>
+      {/* Fora das páginas que já têm o Teddy em destaque, para não carregar dois modelos 3D. */}
+      {!hideTeddy && (
+        <div className="teddy-global print:hidden">
+          <TeddyMascote tamanho={140} mensagemInicial={null} />
+        </div>
+      )}
       </TeddyProvider>
       </div>
     </QueryClientProvider>

@@ -102,35 +102,17 @@ export function useSiteInteractions() {
       current = null;
     };
 
-    /* ---------- Cursor de anel + botões magnéticos (só mouse) ---------- */
-    let ring: HTMLDivElement | null = null;
-    let cursorRaf = 0;
-    const alvo = { x: -100, y: -100 };
-    const pos = { x: -100, y: -100 };
+    /* ---------- Botões magnéticos (só mouse) ---------- */
     let magnet: HTMLElement | null = null;
-    const INTERATIVO = "a, button, [role='button'], [role='tab'], label, select, summary, .tilt";
     const MAGNETICO = ".btn-shine, .magnetic";
 
     const soltarIma = () => {
       if (magnet) magnet.style.transform = "";
       magnet = null;
     };
-    const cursorLoop = () => {
-      pos.x += (alvo.x - pos.x) * 0.2;
-      pos.y += (alvo.y - pos.y) * 0.2;
-      if (ring) ring.style.transform = `translate3d(${pos.x}px, ${pos.y}px, 0)`;
-      cursorRaf = requestAnimationFrame(cursorLoop);
-    };
     const onCursorMove = (e: PointerEvent) => {
       if (e.pointerType !== "mouse") return;
-      alvo.x = e.clientX;
-      alvo.y = e.clientY;
       const t = e.target as Element | null;
-      const sobre = t?.closest?.(INTERATIVO);
-      const texto = t?.closest?.("input, textarea, [contenteditable='true']");
-      ring?.classList.toggle("is-hover", !!sobre && !texto);
-      ring?.classList.toggle("is-text", !!texto);
-      ring?.classList.add("is-on");
       const m = t?.closest?.<HTMLElement>(MAGNETICO) ?? null;
       if (m !== magnet) soltarIma();
       if (m) {
@@ -141,23 +123,11 @@ export function useSiteInteractions() {
         m.style.transform = `translate(${(dx * 10).toFixed(1)}px, ${(dy * 8).toFixed(1)}px)`;
       }
     };
-    const onCursorDown = () => ring?.classList.add("is-down");
-    const onCursorUp = () => ring?.classList.remove("is-down");
-    const onCursorLeave = () => {
-      ring?.classList.remove("is-on");
-      soltarIma();
-    };
+    const onCursorLeave = () => soltarIma();
 
     const pointerEnabled = finePointer.matches;
     if (pointerEnabled) {
-      ring = document.createElement("div");
-      ring.className = "cursor-ring";
-      ring.setAttribute("aria-hidden", "true");
-      document.body.appendChild(ring);
-      cursorRaf = requestAnimationFrame(cursorLoop);
       document.addEventListener("pointermove", onCursorMove, { passive: true });
-      document.addEventListener("pointerdown", onCursorDown, { passive: true });
-      document.addEventListener("pointerup", onCursorUp, { passive: true });
       document.documentElement.addEventListener("pointerleave", onCursorLeave);
       document.addEventListener("pointermove", onMove, { passive: true });
       document.documentElement.addEventListener("pointerleave", onLeave);
@@ -170,12 +140,8 @@ export function useSiteInteractions() {
       root.classList.remove("motion-ready");
       cancelAnimationFrame(raf);
       if (pointerEnabled) {
-        cancelAnimationFrame(cursorRaf);
-        ring?.remove();
         soltarIma();
         document.removeEventListener("pointermove", onCursorMove);
-        document.removeEventListener("pointerdown", onCursorDown);
-        document.removeEventListener("pointerup", onCursorUp);
         document.documentElement.removeEventListener("pointerleave", onCursorLeave);
         document.removeEventListener("pointermove", onMove);
         document.documentElement.removeEventListener("pointerleave", onLeave);
