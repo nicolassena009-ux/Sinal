@@ -250,13 +250,8 @@ input[type="range"].volume-slider::-moz-range-thumb {
 }
 
 
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
+/* Movimento reduzido: só laços contínuos (ambiente) são desligados nas regras específicas
+   abaixo; transições curtas e a narrativa guiada pelo scroll (controlada pelo usuário) permanecem. */
 
 /* Modo Alto Contraste para máxima acessibilidade */
 .contrast {
@@ -382,6 +377,7 @@ html { scroll-behavior: smooth; }
 
 /* Revelar ao rolar — só oculta quando o JS está pronto (sem JS, tudo visível). */
 .motion-ready .reveal-on-scroll:not(.is-visible) { opacity: 0; transform: translate3d(0, 22px, 0); }
+@media (prefers-reduced-motion: reduce) { .motion-ready .reveal-on-scroll:not(.is-visible) { transform: none; } }
 /* Não combine com .tilt no mesmo elemento: o atraso da revelação atrasaria a inclinação. */
 .motion-ready .reveal-on-scroll {
   transition: opacity 0.8s var(--ease-out-expo), transform 0.8s var(--ease-out-expo), translate 0.45s var(--ease-out-expo), box-shadow 0.45s var(--ease-out-expo);
@@ -507,7 +503,7 @@ html { scroll-behavior: smooth; }
 @keyframes vt-in { from { opacity: 0; transform: translateY(10px); } }
 
 @media (prefers-reduced-motion: reduce) {
-  .parallax-layer, .tilt { transform: none !important; }
+  .parallax-layer { transform: none !important; }
   .glow-orb, .hero-title-shine, .call-pulse::before { animation: none !important; }
   .hero-title-shine { color: var(--lilas); background: none; }
   ::view-transition-old(root), ::view-transition-new(root) { animation: none !important; }
@@ -564,3 +560,39 @@ html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) {
   .home-teddy-halo::after, .home-scroll-hint span span { animation: none; }
 }
+
+.teddy-poster-float { animation: poster-float 4.5s ease-in-out infinite; }
+@keyframes poster-float { 50% { transform: translateY(-10px); } }
+@media (prefers-reduced-motion: reduce) { .teddy-poster-float { animation: none; } }
+
+/* Página de tema cinematográfica */
+.tema-numeral { color: transparent; -webkit-text-stroke: 2px var(--c); background: linear-gradient(180deg, color-mix(in oklab, var(--c) 55%, transparent), transparent 80%); -webkit-background-clip: text; background-clip: text; }
+.tema-cinema .tema-giant .home-giant, .cinema-giant .home-giant { line-height: 0.85; }
+.cinema-giant .home-giant { font-size: clamp(110px, 20vw, 340px); }
+.cinema-page footer { margin-top: 0; }
+@media (max-width: 767px) {
+  .cinema-page header h1.cinema-title { font-size: clamp(2.6rem, 11.5vw, 3.6rem) !important; overflow-wrap: normal; }
+  .tema-cinema header h1.tema-hero-title { font-size: clamp(3rem, 15vw, 4.25rem) !important; overflow-wrap: normal; }
+  .tema-cinema header h1.tema-hero-title[data-long] { font-size: clamp(1.9rem, 8.4vw, 3rem) !important; overflow-wrap: normal; hyphens: auto; }
+  /* o espaço reservado ao Teddy flutuante segue o fundo escuro da página */
+  #conteudo-principal:has(.teddy-global) .cinema-page { margin-bottom: -155px; padding-bottom: 155px; }
+}
+
+/* Emergência: ondas de "sinal" saindo do centro do hero e barras de voz da chamada ilustrativa */
+.emerg-radar { width: min(120vw, 1100px); aspect-ratio: 1; }
+.emerg-radar span {
+  position: absolute; inset: 0; border-radius: 9999px; border: 1px solid rgba(255, 96, 167, 0.35);
+  animation: emerg-radar 6s var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1)) infinite; opacity: 0;
+}
+.emerg-radar span:nth-child(2) { animation-delay: 2s; }
+.emerg-radar span:nth-child(3) { animation-delay: 4s; }
+@keyframes emerg-radar { 0% { transform: scale(0.15); opacity: 0.9; } 100% { transform: scale(1); opacity: 0; } }
+.emerg-onda { height: 20%; animation: emerg-onda 0.9s ease-in-out var(--d, 0ms) infinite alternate; }
+@keyframes emerg-onda { from { height: 15%; } to { height: 100%; } }
+@media (prefers-reduced-motion: reduce) {
+  .emerg-radar span, .emerg-onda { animation: none; }
+}
+
+/* Família & Escola: bolhas de conversa entram em sequência ao trocar de aba */
+.conversa-bolha { animation: conversa-in 0.6s var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1)) both; }
+@keyframes conversa-in { from { opacity: 0; transform: translate3d(0, 14px, 0) scale(0.97); } to { opacity: 1; transform: none; } }

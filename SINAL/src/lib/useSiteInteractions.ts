@@ -9,7 +9,7 @@ import { useEffect } from "react";
  * - `.spotlight`: brilho que segue o ponteiro (variáveis --mx/--my).
  * - `.tilt`: inclinação 3D leve seguindo o ponteiro (só mouse/caneta).
  *
- * Tudo é desativado com `prefers-reduced-motion`; sem JS o conteúdo fica visível,
+ * Com `prefers-reduced-motion` a revelação vira só um fade (sem deslocamento); sem JS o conteúdo fica visível,
  * pois o estado oculto só vale com a classe `motion-ready` no <html>.
  */
 export function useSiteInteractions() {
@@ -31,7 +31,7 @@ export function useSiteInteractions() {
       });
     };
 
-    if (!reduce.matches && typeof IntersectionObserver !== "undefined") {
+    if (typeof IntersectionObserver !== "undefined") {
       root.classList.add("motion-ready");
       io = new IntersectionObserver(
         (entries) => {
@@ -102,7 +102,7 @@ export function useSiteInteractions() {
       current = null;
     };
 
-    const pointerEnabled = finePointer.matches && !reduce.matches;
+    const pointerEnabled = finePointer.matches;
     if (pointerEnabled) {
       document.addEventListener("pointermove", onMove, { passive: true });
       document.documentElement.addEventListener("pointerleave", onLeave);

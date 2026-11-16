@@ -3,8 +3,10 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { ArrowRight, BookOpen, Gamepad2, Headphones, Phone, Sparkles } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Footer } from "@/components/Footer";
-import { Teddy, type TeddyEstado } from "@/components/Teddy";
+import { type TeddyEstado } from "@/components/Teddy";
+import { SafeTeddy } from "@/components/cinema/SafeTeddy";
 import { ParticleField } from "@/components/home/ParticleField";
+import { GiantWord } from "@/components/cinema/Cinema";
 import { METODO, temas } from "@/data/temas";
 import { vars } from "@/lib/motion";
 
@@ -63,31 +65,7 @@ function useViewport() {
   return vp;
 }
 
-function usePrefersReducedMotion() {
-  const [reduce, setReduce] = useState(
-    () =>
-      typeof window !== "undefined" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches,
-  );
-  useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const on = () => setReduce(mq.matches);
-    mq.addEventListener("change", on);
-    return () => mq.removeEventListener("change", on);
-  }, []);
-  return reduce;
-}
-
 /* ------------------------------ Peças ------------------------------ */
-
-function GiantWord({ children, className = "" }: { children: ReactNode; className?: string }) {
-  return (
-    <span aria-hidden="true" className={`home-giant select-none ${className}`}>
-      <span className="home-giant-fill">{children}</span>
-      <span className="home-giant-stroke">{children}</span>
-    </span>
-  );
-}
 
 function HeroCopy() {
   return (
@@ -376,7 +354,7 @@ function ScrollStory() {
           style={{ transform: "translate3d(-50%, -50%, 0)" }}
         >
           <div className="home-teddy-halo" aria-hidden="true" />
-          <Teddy estado={estado} tamanho={teddySize} seguirCursor />
+          <SafeTeddy estado={estado} tamanho={teddySize} />
         </div>
 
         {/* 01 · Texto do hero */}
@@ -465,69 +443,6 @@ function ScrollStory() {
         </p>
       </div>
     </div>
-  );
-}
-
-/* ---------------------- Versão sem animação (acessível) ---------------------- */
-
-function StaticStory() {
-  return (
-    <>
-      <section className="relative overflow-hidden px-5 pb-16 pt-28 text-center">
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 bg-[radial-gradient(120%_85%_at_50%_0%,#2a1a63_0%,#150e33_55%,#0d0922_100%)]"
-        />
-        <div className="relative">
-          <h1 className="font-display text-7xl font-extrabold text-[color:var(--lilas)] sm:text-8xl">
-            Sinal
-          </h1>
-          <div className="mx-auto my-4 flex justify-center">
-            <Teddy estado="acenando" tamanho={240} seguirCursor={false} />
-          </div>
-          <HeroCopy />
-        </div>
-      </section>
-      <section className="mx-auto max-w-6xl px-5 py-12" aria-labelledby="situacoes">
-        <h2
-          id="situacoes"
-          className="font-display text-3xl font-extrabold text-[color:var(--lilas)] sm:text-4xl"
-        >
-          Saber agir começa por reconhecer.
-        </h2>
-        <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {temas.map((t) => (
-            <li key={t.slug}>
-              <TemaCard tema={t} compact />
-            </li>
-          ))}
-        </ul>
-      </section>
-      <section className="mx-auto max-w-6xl px-5 pb-12" aria-labelledby="metodo">
-        <h2 id="metodo" className="font-display text-3xl font-extrabold text-[color:var(--lilas)]">
-          O método Sinal
-        </h2>
-        <ol className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {METODO.map((m, i) => (
-            <li
-              key={m.titulo}
-              className="rounded-3xl border border-white/10 bg-white/5 p-6 text-[color:var(--lilas)]"
-            >
-              <span className="font-display text-sm font-bold opacity-60">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <h3
-                className="mt-1 font-display text-2xl font-extrabold"
-                style={{ color: COR_LEGIVEL[m.cor] }}
-              >
-                {m.titulo}
-              </h3>
-              <p className="mt-2 text-sm opacity-80">{m.texto}</p>
-            </li>
-          ))}
-        </ol>
-      </section>
-    </>
   );
 }
 
@@ -654,12 +569,11 @@ function Fechamento() {
 }
 
 export function Experience() {
-  const reduce = usePrefersReducedMotion();
   return (
     <div className="sinal-home relative bg-[#150e33]">
       <SiteHeader />
       <main>
-        {reduce ? <StaticStory /> : <ScrollStory />}
+        <ScrollStory />
         <div className="relative bg-[linear-gradient(180deg,#0d0922_0%,#150e33_100%)]">
           <Fechamento />
         </div>
