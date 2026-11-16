@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Footer } from "@/components/Footer";
 import { AudioNarration } from "@/components/AudioNarration";
-import { HighContrastToggle } from "@/components/HighContrastToggle";
+import { SiteHeader } from "@/components/SiteHeader";
+import { vars } from "@/lib/motion";
 import {
   Users,
   GraduationCap,
@@ -39,64 +40,24 @@ function FamiliaEscolaPage() {
   return (
     <div className="min-h-screen bg-transparent text-foreground">
       {/* Header */}
-      <header className="border-b border-border/80 bg-card/60 backdrop-blur-md sticky top-0 z-30">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4 sm:px-10">
-          <Link
-            to="/"
-            className="font-display text-xl font-extrabold tracking-tight text-[color:var(--roxo)] transition-opacity hover:opacity-75 sm:text-2xl"
-          >
-            Sinal
-            <span className="ml-2 hidden text-xs font-semibold text-muted-foreground sm:inline">
-              Família & Escola
-            </span>
-          </Link>
-
-          <nav className="flex items-center gap-2 sm:gap-4 font-display text-xs font-semibold sm:text-sm">
-            <Link
-              to="/temas"
-              className="rounded-full px-3 py-1.5 transition-colors hover:bg-muted"
-            >
-              Temas
-            </Link>
-            <Link
-              to="/como-funciona"
-              className="rounded-full px-3 py-1.5 transition-colors hover:bg-muted"
-            >
-              Como funciona
-            </Link>
-            <Link
-              to="/jogos"
-              className="rounded-full px-3 py-1.5 transition-colors hover:bg-muted"
-            >
-              Jogos & Missões
-            </Link>
-            <Link
-              to="/emergencia"
-              className="rounded-full bg-[color:var(--rosa)] px-3.5 py-1.5 text-white transition-transform hover:scale-105"
-            >
-              Emergência
-            </Link>
-            <HighContrastToggle />
-          </nav>
-        </div>
-      </header>
+      <SiteHeader tone="light" subtitle="Família & Escola" progress />
 
       <main className="mx-auto max-w-6xl px-6 py-12 sm:px-10">
         {/* Hero */}
-        <div className="rounded-3xl bg-[image:var(--gradiente-sinal)] p-8 sm:p-14 text-[color:var(--lilas)] shadow-[var(--sombra-forte)]">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-white">
+        <div className="hero-stagger relative overflow-hidden rounded-3xl bg-[image:var(--gradiente-sinal)] p-8 sm:p-14 text-[color:var(--lilas)] shadow-[var(--sombra-forte)]">
+          <span style={vars({ "--i": 0 })} className="inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-white">
             <Users className="h-3.5 w-3.5 text-[color:var(--amarelo)]" />
             Diálogo que protege
           </span>
-          <h1 className="mt-4 font-display text-4xl sm:text-6xl font-extrabold leading-tight max-w-3xl">
+          <h1 style={vars({ "--i": 1 })} className="mt-4 font-display text-4xl sm:text-6xl font-extrabold leading-tight max-w-3xl">
             Preparar sem assustar: primeiros socorros em casa e na escola.
           </h1>
-          <p className="mt-4 max-w-2xl text-base sm:text-lg opacity-90 leading-relaxed">
+          <p style={vars({ "--i": 2 })} className="mt-4 max-w-2xl text-base sm:text-lg opacity-90 leading-relaxed">
             Aprender a reconhecer emergências desenvolve autonomia, empatia e cuidado com o
             outro. Veja como integrar a experiência do Sinal na rotina pedagógica e familiar.
           </p>
 
-          <div className="mt-7">
+          <div className="mt-7" style={vars({ "--i": 3 })}>
             <AudioNarration
               title="Se preferir, escute as orientações"
               text={narrationText}
@@ -118,7 +79,7 @@ function FamiliaEscolaPage() {
           </div>
 
           <div className="mt-8 grid gap-6 md:grid-cols-3">
-            <div className="rounded-3xl border border-border bg-card p-7 shadow-xs">
+            <div className="reveal-on-scroll spotlight lift rounded-3xl border border-border bg-card p-7 shadow-xs">
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[color:var(--roxo)]/15 text-[color:var(--roxo)]">
                 <HeartHandshake className="h-6 w-6" />
               </div>
@@ -130,7 +91,7 @@ function FamiliaEscolaPage() {
               </p>
             </div>
 
-            <div className="rounded-3xl border border-border bg-card p-7 shadow-xs">
+            <div className="reveal-on-scroll spotlight lift rounded-3xl border border-border bg-card p-7 shadow-xs">
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[color:var(--azul)]/15 text-[color:var(--azul)]">
                 <GraduationCap className="h-6 w-6" />
               </div>
@@ -142,7 +103,7 @@ function FamiliaEscolaPage() {
               </p>
             </div>
 
-            <div className="rounded-3xl border border-border bg-card p-7 shadow-xs">
+            <div className="reveal-on-scroll spotlight lift rounded-3xl border border-border bg-card p-7 shadow-xs">
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[color:var(--aqua)]/15 text-emerald-700 dark:text-emerald-400">
                 <ShieldCheck className="h-6 w-6" />
               </div>
@@ -157,7 +118,7 @@ function FamiliaEscolaPage() {
         </section>
 
         {/* Guia Prático de Conversa por Idade */}
-        <section className="mt-14 rounded-3xl border border-border bg-muted/30 p-8 sm:p-12">
+        <section className="reveal-on-scroll mt-14 rounded-3xl border border-border bg-muted/30 p-8 sm:p-12">
           <h2 className="font-display text-3xl font-extrabold">
             Sugestões práticas de conversa
           </h2>
@@ -209,7 +170,7 @@ function FamiliaEscolaPage() {
         </section>
 
         {/* Validação Clínica & Contexto Acadêmico */}
-        <section className="mt-14 rounded-3xl border border-border bg-card p-8 sm:p-10 shadow-xs">
+        <section className="reveal-on-scroll spotlight mt-14 rounded-3xl border border-border bg-card p-8 sm:p-10 shadow-xs">
           <div className="flex items-center gap-3">
             <Stethoscope className="h-6 w-6 text-[color:var(--rosa)]" />
             <h2 className="font-display text-2xl font-extrabold">

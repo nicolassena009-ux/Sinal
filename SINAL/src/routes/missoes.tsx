@@ -5,7 +5,7 @@ import { Footer } from "@/components/Footer";
 import { Teddy3D, type TeddyAnimationMode } from "@/components/Teddy3D";
 import { CertificadoModal } from "@/components/CertificadoModal";
 import { AudioNarration } from "@/components/AudioNarration";
-import { HighContrastToggle } from "@/components/HighContrastToggle";
+import { SiteHeader } from "@/components/SiteHeader";
 import { MISSOES_KIDS, MISSOES_TEENS, PRATICA_POR_TEMA, type Missao } from "@/data/missoes";
 import { FASES_CONFIG } from "@/data/fasesData";
 
@@ -218,44 +218,7 @@ function JogosPage() {
   return (
     <div className="min-h-screen bg-transparent text-foreground">
       {/* 1. Header do Site */}
-      <header className="border-b border-border/80 bg-card/60 backdrop-blur-md sticky top-0 z-30">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4 sm:px-10">
-          <Link
-            to="/"
-            className="font-display text-xl font-extrabold tracking-tight text-[color:var(--roxo)] transition-opacity hover:opacity-75 sm:text-2xl"
-          >
-            Sinal
-            <span className="ml-2 hidden text-xs font-semibold text-muted-foreground sm:inline">
-              Revisão por perguntas
-            </span>
-          </Link>
-
-          <nav className="flex items-center gap-2 sm:gap-4 font-display text-xs font-semibold sm:text-sm">
-            <Link to="/jogos" className="rounded-full px-3 py-1.5 transition-colors hover:bg-muted">
-              Jogos
-            </Link>
-            <Link
-              to="/como-funciona"
-              className="rounded-full px-3 py-1.5 transition-colors hover:bg-muted"
-            >
-              Como funciona
-            </Link>
-            <Link
-              to="/familia-escola"
-              className="rounded-full px-3 py-1.5 transition-colors hover:bg-muted hidden md:inline-block"
-            >
-              Família & Escola
-            </Link>
-            <Link
-              to="/emergencia"
-              className="rounded-full bg-[color:var(--rosa)] px-3.5 py-1.5 text-white transition-transform hover:scale-105"
-            >
-              Emergência
-            </Link>
-            <HighContrastToggle />
-          </nav>
-        </div>
-      </header>
+      <SiteHeader tone="light" subtitle="Revisão por perguntas" progress />
 
       <main className="mx-auto max-w-6xl px-6 py-10 sm:px-10">
         {/* 2. Banner Principal com TED Mascot */}

@@ -13,6 +13,7 @@ import {
 
 import { TeddyProvider, TeddyMascote } from "@/components/TeddyMascote";
 import { SiteBackground } from "@/components/SiteBackground";
+import { useSiteInteractions } from "@/lib/useSiteInteractions";
 
 function NotFoundComponent() {
   return (
@@ -26,7 +27,7 @@ function NotFoundComponent() {
         <div className="mt-6">
           <Link
             to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="press inline-flex items-center justify-center rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
             Voltar ao início
           </Link>
@@ -56,7 +57,7 @@ function ErrorComponent({ error, reset }: { error: unknown; reset: () => void })
               router.invalidate();
               reset();
             }}
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="press inline-flex items-center justify-center rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
             Tentar novamente
           </button>
@@ -111,11 +112,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 function RootComponent() {
   const inGames = useRouterState({ select: state => state.location.pathname === "/jogos" });
   const { queryClient } = Route.useRouteContext();
+  useSiteInteractions();
 
   return (
     <QueryClientProvider client={queryClient}>
       <HeadContent />
-      <a href="#conteudo-principal" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:bg-white focus:p-3">Pular para o conteúdo principal</a>
+      <a href="#conteudo-principal" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:rounded-full focus:bg-white focus:px-5 focus:py-3 focus:font-display focus:font-bold focus:text-[color:var(--roxo)] focus:shadow-lg">Pular para o conteúdo principal</a>
       <div id="conteudo-principal">
       <TeddyProvider>
       <SiteBackground />
