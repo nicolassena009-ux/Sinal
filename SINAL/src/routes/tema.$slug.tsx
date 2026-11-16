@@ -3,7 +3,8 @@ import { Footer } from "@/components/Footer";
 import { PraticaInterativa } from "@/components/PraticaInterativa";
 import { DemonstracaoExperiencia } from "@/components/DemonstracaoExperiencia";
 import { AudioNarration } from "@/components/AudioNarration";
-import { HighContrastToggle } from "@/components/HighContrastToggle";
+import { SiteHeader } from "@/components/SiteHeader";
+import { vars } from "@/lib/motion";
 import { temaBySlug, temas } from "@/data/temas";
 import { useEffect } from "react";
 import { useTeddy } from "@/components/TeddyMascote";
@@ -57,7 +58,7 @@ function Bloco({
     variante === "positivo" ? "var(--aqua)" : variante === "alerta" ? "var(--rosa)" : cor;
 
   return (
-    <section className="rounded-3xl bg-card p-7 shadow-[var(--sombra-suave)] sm:p-9">
+    <section className="reveal-on-scroll spotlight lift rounded-3xl bg-card p-7 shadow-[var(--sombra-suave)] sm:p-9" style={vars({ "--spot": `color-mix(in oklab, ${cor} 14%, transparent)` })}>
       <p
         className="font-display text-xs font-semibold uppercase tracking-[0.2em]"
         style={{ color: cor }}
@@ -95,58 +96,24 @@ function TemaPage() {
 
   return (
     <div className="min-h-screen bg-transparent">
+      <SiteHeader progress />
       <header
         className="relative overflow-hidden text-[color:var(--lilas)]"
         style={{
           background: `linear-gradient(135deg, ${tema.color} 0%, var(--roxo) 100%)`,
         }}
       >
-        <div className="mx-auto max-w-6xl px-6 pb-16 pt-8 sm:px-10 sm:pb-20">
-          <nav
-            aria-label="Navegação"
-            className="flex flex-wrap items-center justify-between gap-3 font-display text-sm font-semibold"
-          >
-            <Link to="/" className="transition-opacity hover:opacity-70">
-              ← Sinal
-            </Link>
-            <div className="flex items-center gap-2">
-              <Link
-                to="/temas"
-                className="rounded-full px-3 py-2 transition-colors hover:bg-white/15"
-              >
-                Temas
-              </Link>
-              <Link
-                to="/como-funciona"
-                className="rounded-full px-3 py-2 transition-colors hover:bg-white/15"
-              >
-                Como funciona
-              </Link>
-              <Link
-                to="/jogos"
-                className="rounded-full px-3 py-2 transition-colors hover:bg-white/15"
-              >
-                Jogos & Prática
-              </Link>
-              <Link
-                to="/emergencia"
-                className="rounded-full bg-white/20 px-4 py-2 transition-colors hover:bg-white/30"
-              >
-                Emergência
-              </Link>
-              <HighContrastToggle className="text-white" />
-            </div>
-          </nav>
-
-          <div className="mt-12 grid items-center gap-10 md:grid-cols-[1.2fr_1fr]">
-            <div className="animate-[reveal_0.7s_ease-out_both]">
-              <p className="font-display text-sm font-semibold uppercase tracking-[0.2em] opacity-80">
+        <span aria-hidden="true" className="glow-orb -right-24 -top-20 h-80 w-80 bg-white opacity-20" />
+        <div className="relative mx-auto max-w-6xl px-6 pb-16 pt-20 sm:px-10 sm:pb-20">
+          <div className="mt-8 grid items-center gap-10 md:grid-cols-[1.2fr_1fr]">
+            <div className="hero-stagger">
+              <p className="font-display text-sm font-semibold uppercase tracking-[0.2em] opacity-80" style={vars({ "--i": 0 })}>
                 Tema do Sinal
               </p>
-              <h1 className="mt-2 text-5xl sm:text-6xl">{tema.nome}</h1>
-              <p className="mt-4 max-w-lg text-lg opacity-90">{tema.resumo}</p>
+              <h1 className="mt-2 text-5xl sm:text-6xl" style={vars({ "--i": 1 })}>{tema.nome}</h1>
+              <p className="mt-4 max-w-lg text-lg opacity-90" style={vars({ "--i": 2 })}>{tema.resumo}</p>
 
-              <div className="mt-6 flex flex-wrap items-center gap-3">
+              <div className="mt-6 flex flex-wrap items-center gap-3" style={vars({ "--i": 3 })}>
                 <AudioNarration
                   title={`Ouvir sobre ${tema.nome}`}
                   {...(tema.audioSrc ? { audioSrc: tema.audioSrc } : {})}
@@ -160,11 +127,11 @@ function TemaPage() {
               </div>
 
               {/* Ações: Praticar mini fase no jogos e Visualizar demonstração no final da página */}
-              <div className="mt-4 flex flex-wrap items-center gap-3">
+              <div className="mt-4 flex flex-wrap items-center gap-3" style={vars({ "--i": 4 })}>
                 <Link
                   to="/jogos"
                   search={{ tema: tema.slug }}
-                  className="group inline-flex items-center gap-2 rounded-full bg-[color:var(--amarelo)] px-5 py-2.5 font-display text-xs sm:text-sm font-extrabold text-[color:var(--tinta)] shadow-md transition-all hover:scale-105 active:scale-95 cursor-pointer"
+                  className="btn-shine press group inline-flex items-center gap-2 rounded-full bg-[color:var(--amarelo)] px-5 py-2.5 font-display text-xs sm:text-sm font-extrabold text-[color:var(--tinta)] shadow-md transition-all hover:scale-105 active:scale-95 cursor-pointer"
                   title={`Praticar missões e mini fase 2D de ${tema.nome}`}
                 >
                   <Gamepad2 className="h-4 w-4" />
@@ -197,21 +164,27 @@ function TemaPage() {
                 </a>
               </div>
 
-              <div className="mt-6 flex flex-wrap gap-2 font-display text-xs font-semibold">
-                {["Reconhecer", "Entender", "Agir", "Proteger"].map((etapa) => (
-                  <span key={etapa} className="rounded-full bg-white/15 px-3 py-1.5">
+              <div className="mt-6 flex flex-wrap gap-2 font-display text-xs font-semibold" style={vars({ "--i": 5 })}>
+                {["Reconhecer", "Entender", "Agir", "Proteger"].map((etapa, i) => (
+                  <span key={etapa} className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1.5">
+                    <span className="opacity-60">{i + 1}</span>
                     {etapa}
                   </span>
                 ))}
               </div>
             </div>
-            <img
-              src={tema.cardImage || tema.image}
-              alt={`Ilustração representando ${tema.nome.toLowerCase()}`}
-              width={1024}
-              height={636}
-              className="w-full rounded-3xl shadow-[var(--sombra-forte)] object-cover"
-            />
+            <div className="animate-[hero-in_1.1s_var(--ease-out-expo)_0.35s_both]">
+            <div className="tilt spotlight spotlight-light rounded-3xl">
+              <img
+                src={tema.cardImage || tema.image}
+                alt={`Ilustração representando ${tema.nome.toLowerCase()}`}
+                width={1024}
+                height={636}
+                fetchPriority="high"
+                className="w-full rounded-3xl object-cover shadow-[var(--sombra-forte)] ring-1 ring-white/20"
+              />
+            </div>
+            </div>
           </div>
         </div>
       </header>
@@ -241,7 +214,7 @@ function TemaPage() {
           />
         </div>
 
-        <section className="mt-6 rounded-3xl bg-[color:var(--tinta)] p-7 text-[color:var(--lilas)] sm:p-10">
+        <section className="reveal-on-scroll mt-6 rounded-3xl bg-[color:var(--tinta)] p-7 text-[color:var(--lilas)] sm:p-10">
           <p className="font-display text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--amarelo)]">
             05
           </p>
@@ -261,7 +234,7 @@ function TemaPage() {
               <a
                 key={contato.numero}
                 href={`tel:${contato.numero}`}
-                className="flex min-h-11 items-center gap-3 rounded-2xl bg-white/10 px-5 py-3 transition-colors hover:bg-white/20"
+                className="press group flex min-h-11 items-center gap-3 rounded-2xl bg-white/10 px-5 py-3 transition-colors hover:bg-white/20"
               >
                 <span className="font-display text-3xl font-extrabold text-[color:var(--rosa)]">
                   {contato.numero}
@@ -283,21 +256,21 @@ function TemaPage() {
         {/* Área de demonstração em vídeo da mini experiência do tema */}
         <DemonstracaoExperiencia tema={tema} />
 
-        <section className="mt-16" aria-labelledby="outros-temas">
+        <section className="reveal-on-scroll mt-16" aria-labelledby="outros-temas">
           <h2 id="outros-temas" className="text-2xl">
             Continue explorando
           </h2>
           <ul className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {outros.map((outro) => (
-              <li key={outro.slug}>
+            {outros.map((outro, i) => (
+              <li key={outro.slug} className="reveal-on-scroll" style={vars({ "--reveal-delay": `${i * 70}ms` })}>
                 <Link
                   to="/tema/$slug"
                   params={{ slug: outro.slug }}
-                  className="block h-full rounded-3xl border-2 border-transparent bg-card p-6 shadow-[var(--sombra-suave)] transition-transform hover:-translate-y-1"
+                  className="spotlight tilt lift group block h-full rounded-3xl border-2 border-transparent bg-card p-6 shadow-[var(--sombra-suave)]"
                   style={{ borderColor: `${outro.color}44` }}
                 >
                   <span
-                    className="inline-block h-3 w-10 rounded-full"
+                    className="inline-block h-3 w-10 rounded-full transition-[width] duration-500 group-hover:w-16"
                     style={{ backgroundColor: outro.color }}
                   />
                   <span className="mt-3 block font-display text-lg font-extrabold">

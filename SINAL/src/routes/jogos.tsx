@@ -223,7 +223,7 @@ function JogosPage() {
             >
               Emergência 192
             </Link>
-            <HighContrastToggle />
+            <HighContrastToggle tone="light" />
           </nav>
         </div>
       </header>
