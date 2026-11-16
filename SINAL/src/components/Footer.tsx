@@ -1,9 +1,11 @@
 import { Link } from "@tanstack/react-router";
 import { temas } from "@/data/temas";
+import { Marquee } from "@/components/fx/Marquee";
 
 export function Footer() {
   return (
-    <footer className="mt-24 bg-[color:var(--tinta)] text-[color:var(--lilas)]">
+    <footer className="mt-24 overflow-hidden bg-[color:var(--tinta)] text-[color:var(--lilas)]">
+      <Marquee />
       <div className="mx-auto grid max-w-6xl gap-10 px-6 py-14 sm:grid-cols-3 sm:px-10">
         <div>
           <p className="font-display text-3xl font-extrabold">Sinal</p>

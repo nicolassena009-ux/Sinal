@@ -596,3 +596,26 @@ html { scroll-behavior: smooth; }
 /* Família & Escola: bolhas de conversa entram em sequência ao trocar de aba */
 .conversa-bolha { animation: conversa-in 0.6s var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1)) both; }
 @keyframes conversa-in { from { opacity: 0; transform: translate3d(0, 14px, 0) scale(0.97); } to { opacity: 1; transform: none; } }
+
+/* ---------- Cursor de anel (decorativo, só mouse) ---------- */
+.cursor-ring {
+  position: fixed; left: 0; top: 0; z-index: 9999; pointer-events: none;
+  width: 34px; height: 34px; margin: -17px 0 0 -17px; border-radius: 9999px;
+  border: 1.5px solid rgba(255, 255, 255, 0.9); mix-blend-mode: difference;
+  opacity: 0; transition: width 0.35s var(--ease-out-expo), height 0.35s var(--ease-out-expo), margin 0.35s var(--ease-out-expo), opacity 0.3s, background-color 0.3s, border-radius 0.3s;
+}
+.cursor-ring.is-on { opacity: 1; }
+.cursor-ring.is-hover { width: 64px; height: 64px; margin: -32px 0 0 -32px; background: rgba(255, 255, 255, 1); border-color: transparent; }
+.cursor-ring.is-down { width: 24px; height: 24px; margin: -12px 0 0 -12px; }
+.cursor-ring.is-text { width: 4px; height: 30px; margin: -15px 0 0 -2px; border-radius: 2px; background: #fff; }
+.btn-shine, .magnetic { transition-property: transform, translate, box-shadow, background-color, border-color, color; transition-duration: 0.35s; transition-timing-function: var(--ease-out-expo); }
+@media (hover: none), (pointer: coarse) { .cursor-ring { display: none; } }
+html.contrast .cursor-ring { display: none; }
+
+/* ---------- Faixa de palavras do rodapé ---------- */
+.marquee-word { font-size: clamp(48px, 9vw, 140px); }
+.marquee-word.is-outline { color: transparent !important; -webkit-text-stroke: 1.5px var(--c); }
+
+/* ---------- Títulos entram "de baixo da linha" ao aparecer ---------- */
+.reveal-on-scroll h2 { transition: clip-path 0.9s var(--ease-out-expo) 0.08s, transform 0.9s var(--ease-out-expo) 0.08s; }
+.motion-ready .reveal-on-scroll:not(.is-visible) h2 { clip-path: inset(0 0 100% 0); transform: translate3d(0, 0.45em, 0); }

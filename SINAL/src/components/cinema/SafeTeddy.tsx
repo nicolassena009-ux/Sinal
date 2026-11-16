@@ -1,6 +1,6 @@
 import { Component, useEffect, useState, type ReactNode } from "react";
 import { useProgress } from "@react-three/drei";
-import { Teddy, type TeddyEstado } from "@/components/Teddy";
+import { Teddy, type TeddyProps } from "@/components/Teddy";
 
 const POSTER = "/teddy/teddy-3d-poster.webp";
 
@@ -35,15 +35,8 @@ class Boundary extends Component<
  * - Pôster (render do próprio teddy.glb) aparece enquanto o modelo carrega e some quando ele está pronto.
  * - Sem WebGL, ou se o 3D falhar, o pôster fica no lugar (com leve flutuação).
  */
-export function SafeTeddy({
-  estado,
-  tamanho,
-  seguirCursor = true,
-}: {
-  estado: TeddyEstado;
-  tamanho: number;
-  seguirCursor?: boolean;
-}) {
+export function SafeTeddy(props: TeddyProps & { tamanho: number }) {
+  const { tamanho, onClick } = props;
   const [webgl] = useState(hasWebGL);
   const { active, total, loaded } = useProgress();
   const [ready, setReady] = useState(false);
@@ -72,15 +65,19 @@ export function SafeTeddy({
   );
 
   return (
-    <div className="relative" style={{ width: tamanho, height: Math.round(tamanho * 1.25) }}>
+    <div
+      className="relative"
+      style={{ width: tamanho, height: Math.round(tamanho * 1.25) }}
+      onClick={!webgl ? onClick : undefined}
+    >
       {webgl ? (
         <Boundary fallback={poster(true)}>
           {poster(false)}
           <div
-            className="relative transition-opacity duration-700"
+            className="relative h-full w-full transition-opacity duration-700"
             style={{ opacity: ready ? 1 : 0 }}
           >
-            <Teddy estado={estado} tamanho={tamanho} seguirCursor={seguirCursor} />
+            <Teddy {...props} style={{ ...props.style, width: "100%", height: "100%" }} />
           </div>
         </Boundary>
       ) : (

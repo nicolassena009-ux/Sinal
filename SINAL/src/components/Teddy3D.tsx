@@ -1,4 +1,5 @@
-import { Teddy, type TeddyEstado } from "@/components/Teddy";
+import { type TeddyEstado } from "@/components/Teddy";
+import { SafeTeddy } from "@/components/cinema/SafeTeddy";
 import { useTeddy } from "@/components/TeddyMascote";
 
 export type TeddyAnimationMode = "idle" | "wave" | "celebrate" | "sad";
@@ -32,16 +33,15 @@ export function Teddy3D({
     // seguro caso usado fora de <TeddyProvider>
   }
 
-  const estado: TeddyEstado =
-    teddyCtx?.falando
-      ? "explicando"
-      : propMode === "celebrate"
+  const estado: TeddyEstado = teddyCtx?.falando
+    ? "explicando"
+    : propMode === "celebrate"
       ? "comemorando"
       : propMode === "sad"
-      ? "preocupado"
-      : propMode === "wave"
-      ? "acenando"
-      : "idle";
+        ? "preocupado"
+        : propMode === "wave"
+          ? "acenando"
+          : "idle";
 
   const handleClick = () => {
     if (teddyCtx?.narracaoAtiva) {
@@ -54,7 +54,7 @@ export function Teddy3D({
 
   return (
     <div className={`teddy-inline flex items-center justify-center ${className}`}>
-      <Teddy
+      <SafeTeddy
         estado={estado}
         seguirCursor={allowLook}
         tamanho={tamanho}
