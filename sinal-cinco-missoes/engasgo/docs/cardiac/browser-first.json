@@ -1,0 +1,1478 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Users\\luizi\\Downloads\\site facul\\sinal-cinco-missoes\\engasgo\\node_modules\\playwright\\cli.js",
+      "test",
+      "--config",
+      "playwright.local.config.ts",
+      "--workers=3"
+    ],
+    "configFile": "C:\\Users\\luizi\\Downloads\\site facul\\sinal-cinco-missoes\\engasgo\\playwright.local.config.ts",
+    "rootDir": "C:/Users/luizi/Downloads/site facul/sinal-cinco-missoes/engasgo/tests/browser",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 3
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/luizi/Downloads/site facul/sinal-cinco-missoes/engasgo/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 3
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/luizi/Downloads/site facul/sinal-cinco-missoes/engasgo/tests/browser",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 90000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\luizi\\Downloads\\site facul\\sinal-cinco-missoes\\engasgo\\test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 3
+        },
+        "name": "",
+        "testDir": "C:\\Users\\luizi\\Downloads\\site facul\\sinal-cinco-missoes\\engasgo\\tests\\browser",
+        "snapshotDir": "C:\\Users\\luizi\\Downloads\\site facul\\sinal-cinco-missoes\\engasgo\\tests\\browser",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 90000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5191",
+          "headless": true,
+          "viewport": {
+            "width": 1365,
+            "height": 900
+          },
+          "screenshot": "only-on-failure",
+          "channel": "chrome"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 3,
+    "webServer": {
+      "command": "npm run dev -- --port 5191 --strictPort",
+      "url": "http://127.0.0.1:5191",
+      "reuseExistingServer": true
+    }
+  },
+  "suites": [
+    {
+      "title": "burns-mobile.spec.ts",
+      "file": "burns-mobile.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Queimaduras mobile: toque real, dois ponteiros, animação, recuperação e repetição",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9667,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T10:27:04.573Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1e14f0e3d99e10492834-a979f287b14cb1219465",
+          "file": "burns-mobile.spec.ts",
+          "line": 2,
+          "column": 1
+        },
+        {
+          "title": "Queimaduras: seleção pelo canvas, assets sob demanda e eventos sem teletransporte",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7799,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T10:27:14.634Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1e14f0e3d99e10492834-09cc360ba8dbf073d8c3",
+          "file": "burns-mobile.spec.ts",
+          "line": 9,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "burns-resilience.spec.ts",
+      "file": "burns-resilience.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Queimaduras recupera falha de asset sem deixar uma tela vazia",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 2818,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T10:27:04.533Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f79cf566571842915979-56484bef48f81c615786",
+          "file": "burns-resilience.spec.ts",
+          "line": 2,
+          "column": 1
+        },
+        {
+          "title": "Queimaduras desmonta áudio, canvas e HUD em três montagens React",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1544,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T10:27:07.831Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f79cf566571842915979-04c58c062fc6f442fe40",
+          "file": "burns-resilience.spec.ts",
+          "line": 7,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "burns.spec.ts",
+      "file": "burns.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "queimaduras: percurso integral kids",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 58800,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T10:27:04.577Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "95690cab90368a446979-1fd648a974de935ad3b7",
+          "file": "burns.spec.ts",
+          "line": 6,
+          "column": 45
+        },
+        {
+          "title": "queimaduras: percurso integral teens",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 2,
+                  "status": "failed",
+                  "duration": 60596,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'MISSÃO CONCLUÍDA — QUEIMADURAS' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: 'MISSÃO CONCLUÍDA — QUEIMADURAS' }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'MISSÃO CONCLUÍDA — QUEIMADURAS' })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'MISSÃO CONCLUÍDA — QUEIMADURAS' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: 'MISSÃO CONCLUÍDA — QUEIMADURAS' }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'MISSÃO CONCLUÍDA — QUEIMADURAS' })\u001b[22m\n\n    at C:\\Users\\luizi\\Downloads\\site facul\\sinal-cinco-missoes\\engasgo\\tests\\browser\\burns.spec.ts:16:507",
+                    "location": {
+                      "file": "C:\\Users\\luizi\\Downloads\\site facul\\sinal-cinco-missoes\\engasgo\\tests\\browser\\burns.spec.ts",
+                      "column": 507,
+                      "line": 16
+                    },
+                    "snippet": " \u001b[90m 14 |\u001b[39m  \u001b[36mif\u001b[39m(mode\u001b[33m===\u001b[39m\u001b[32m'mobile'\u001b[39m)expect(\u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mevaluate(()\u001b[33m=>\u001b[39m{\u001b[36mconst\u001b[39m s\u001b[33m=\u001b[39m(window \u001b[36mas\u001b[39m any)\u001b[33m.\u001b[39msinalTest\u001b[33m.\u001b[39mscene\u001b[33m;\u001b[39m\u001b[36mconst\u001b[39m c\u001b[33m=\u001b[39ms\u001b[33m.\u001b[39mcameras\u001b[33m.\u001b[39mmain\u001b[33m;\u001b[39m\u001b[36mconst\u001b[39m p\u001b[33m=\u001b[39mc\u001b[33m.\u001b[39mmatrix\u001b[33m.\u001b[39mtransformPoint(s\u001b[33m.\u001b[39msister\u001b[33m.\u001b[39mx\u001b[33m-\u001b[39mc\u001b[33m.\u001b[39mscrollX\u001b[33m,\u001b[39ms\u001b[33m.\u001b[39msister\u001b[33m.\u001b[39my\u001b[33m-\u001b[39m\u001b[35m55\u001b[39m\u001b[33m-\u001b[39mc\u001b[33m.\u001b[39mscrollY)\u001b[33m;\u001b[39m\u001b[36mconst\u001b[39m r\u001b[33m=\u001b[39ms\u001b[33m.\u001b[39mhud\u001b[33m.\u001b[39mpanel\u001b[33m.\u001b[39mgetBoundingClientRect()\u001b[33m;\u001b[39m\u001b[36mreturn\u001b[39m p\u001b[33m.\u001b[39mx\u001b[33m>\u001b[39mr\u001b[33m.\u001b[39mleft\u001b[33m&&\u001b[39mp\u001b[33m.\u001b[39mx\u001b[33m<\u001b[39m\u001b[33mr\u001b[39m\u001b[33m.\u001b[39mright\u001b[33m&&\u001b[39mp\u001b[33m.\u001b[39my\u001b[33m>\u001b[39mr\u001b[33m.\u001b[39mtop\u001b[33m&&\u001b[39mp\u001b[33m.\u001b[39my\u001b[33m<\u001b[39m\u001b[33mr\u001b[39m\u001b[33m.\u001b[39mbottom\u001b[33m;\u001b[39m}))\u001b[33m.\u001b[39mtoBe(\u001b[36mfalse\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 15 |\u001b[39m  \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mscreenshot({path\u001b[33m:\u001b[39m\u001b[32m`docs/burns/cooling-${mode}.png`\u001b[39m})\u001b[33m;\u001b[39m\u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mkeyboard\u001b[33m.\u001b[39mpress(\u001b[32m'Escape'\u001b[39m)\u001b[33m;\u001b[39m\u001b[36mconst\u001b[39m cooling\u001b[33m=\u001b[39m\u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mevaluate(()\u001b[33m=>\u001b[39m(window \u001b[36mas\u001b[39m any)\u001b[33m.\u001b[39msinalTest\u001b[33m.\u001b[39mscene\u001b[33m.\u001b[39mmission\u001b[33m.\u001b[39msimulatedCoolingSeconds)\u001b[33m;\u001b[39m\u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForTimeout(\u001b[35m400\u001b[39m)\u001b[33m;\u001b[39mexpect(\u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mevaluate(()\u001b[33m=>\u001b[39m(window \u001b[36mas\u001b[39m any)\u001b[33m.\u001b[39msinalTest\u001b[33m.\u001b[39mscene\u001b[33m.\u001b[39mmission\u001b[33m.\u001b[39msimulatedCoolingSeconds))\u001b[33m.\u001b[39mtoBe(cooling)\u001b[33m;\u001b[39m\u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m{name\u001b[33m:\u001b[39m\u001b[32m'Continuar'\u001b[39m\u001b[33m,\u001b[39mexact\u001b[33m:\u001b[39m\u001b[36mtrue\u001b[39m})\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 16 |\u001b[39m  \u001b[36mawait\u001b[39m approach(page\u001b[33m,\u001b[39m\u001b[32m'fridge'\u001b[39m)\u001b[33m;\u001b[39m\u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByText(\u001b[35m/Não use gelo, manteiga/\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\u001b[36mawait\u001b[39m phase(page\u001b[33m,\u001b[39m\u001b[32m'protection'\u001b[39m)\u001b[33m;\u001b[39m\u001b[36mawait\u001b[39m approach(page\u001b[33m,\u001b[39m\u001b[32m'kit'\u001b[39m)\u001b[33m;\u001b[39m\u001b[36mawait\u001b[39m approach(page\u001b[33m,\u001b[39m\u001b[32m'mother'\u001b[39m)\u001b[33m;\u001b[39m\u001b[36mawait\u001b[39m phase(page\u001b[33m,\u001b[39m\u001b[32m'seekHelp'\u001b[39m)\u001b[33m;\u001b[39m\u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForFunction(()\u001b[33m=>\u001b[39m\u001b[33m!\u001b[39m(window \u001b[36mas\u001b[39m any)\u001b[33m.\u001b[39msinalTest\u001b[33m.\u001b[39mscene\u001b[33m.\u001b[39mlocked)\u001b[33m;\u001b[39m\u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mkeyboard\u001b[33m.\u001b[39mpress(\u001b[32m'e'\u001b[39m)\u001b[33m;\u001b[39m\u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m{name\u001b[33m:\u001b[39m\u001b[32m'Acompanhar a mãe à avaliação'\u001b[39m})\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\u001b[36mawait\u001b[39m phase(page\u001b[33m,\u001b[39m\u001b[32m'complete'\u001b[39m)\u001b[33m;\u001b[39m\u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'heading'\u001b[39m\u001b[33m,\u001b[39m{name\u001b[33m:\u001b[39m\u001b[32m'MISSÃO CONCLUÍDA — QUEIMADURAS'\u001b[39m}))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mscreenshot({path\u001b[33m:\u001b[39m\u001b[32m`docs/burns/complete-${mode}.png`\u001b[39m})\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 17 |\u001b[39m  \u001b[36mconst\u001b[39m events\u001b[33m=\u001b[39m\u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mevaluate(()\u001b[33m=>\u001b[39m(window \u001b[36mas\u001b[39m any)\u001b[33m.\u001b[39msinalEvents)\u001b[33m;\u001b[39mexpect(events\u001b[33m.\u001b[39mfilter((e\u001b[33m:\u001b[39many)\u001b[33m=>\u001b[39me\u001b[33m.\u001b[39mtype\u001b[33m===\u001b[39m\u001b[32m'mission-completed'\u001b[39m))\u001b[33m.\u001b[39mtoHaveLength(\u001b[35m1\u001b[39m)\u001b[33m;\u001b[39mexpect(events\u001b[33m.\u001b[39mfind((e\u001b[33m:\u001b[39many)\u001b[33m=>\u001b[39me\u001b[33m.\u001b[39mtype\u001b[33m===\u001b[39m\u001b[32m'mission-completed'\u001b[39m)\u001b[33m.\u001b[39mresult\u001b[33m.\u001b[39mclinicalReview)\u001b[33m.\u001b[39mtoBe(\u001b[32m'pending'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 18 |\u001b[39m  expect(\u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mevaluate(()\u001b[33m=>\u001b[39m(window \u001b[36mas\u001b[39m any)\u001b[33m.\u001b[39msinalTest\u001b[33m.\u001b[39mscene\u001b[33m.\u001b[39mactionLog\u001b[33m.\u001b[39mevery((a\u001b[33m:\u001b[39many)\u001b[33m=>\u001b[39ma\u001b[33m.\u001b[39mexecutor\u001b[33m===\u001b[39m\u001b[32m'mother'\u001b[39m)))\u001b[33m.\u001b[39mtoBe(\u001b[36mtrue\u001b[39m)\u001b[33m;\u001b[39mexpect(errors)\u001b[33m.\u001b[39mtoEqual([])\u001b[33m;\u001b[39m\n \u001b[90m 19 |\u001b[39m  \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m{name\u001b[33m:\u001b[39m\u001b[32m'Jogar novamente'\u001b[39m})\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\u001b[36mawait\u001b[39m phase(page\u001b[33m,\u001b[39m\u001b[32m'explore'\u001b[39m)\u001b[33m;\u001b[39m\u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'canvas'\u001b[39m))\u001b[33m.\u001b[39mtoHaveCount(\u001b[35m1\u001b[39m)\u001b[33m;\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\luizi\\Downloads\\site facul\\sinal-cinco-missoes\\engasgo\\tests\\browser\\burns.spec.ts",
+                        "column": 507,
+                        "line": 16
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'MISSÃO CONCLUÍDA — QUEIMADURAS' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: 'MISSÃO CONCLUÍDA — QUEIMADURAS' }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'MISSÃO CONCLUÍDA — QUEIMADURAS' })\u001b[22m\n\n\n  14 |  if(mode==='mobile')expect(await page.evaluate(()=>{const s=(window as any).sinalTest.scene;const c=s.cameras.main;const p=c.matrix.transformPoint(s.sister.x-c.scrollX,s.sister.y-55-c.scrollY);const r=s.hud.panel.getBoundingClientRect();return p.x>r.left&&p.x<r.right&&p.y>r.top&&p.y<r.bottom;})).toBe(false);\n  15 |  await page.screenshot({path:`docs/burns/cooling-${mode}.png`});await page.keyboard.press('Escape');const cooling=await page.evaluate(()=>(window as any).sinalTest.scene.mission.simulatedCoolingSeconds);await page.waitForTimeout(400);expect(await page.evaluate(()=>(window as any).sinalTest.scene.mission.simulatedCoolingSeconds)).toBe(cooling);await page.getByRole('button',{name:'Continuar',exact:true}).click();\n> 16 |  await approach(page,'fridge');await expect(page.getByText(/Não use gelo, manteiga/)).toBeVisible();await phase(page,'protection');await approach(page,'kit');await approach(page,'mother');await phase(page,'seekHelp');await page.waitForFunction(()=>!(window as any).sinalTest.scene.locked);await page.keyboard.press('e');await page.getByRole('button',{name:'Acompanhar a mãe à avaliação'}).click();await phase(page,'complete');await expect(page.getByRole('heading',{name:'MISSÃO CONCLUÍDA — QUEIMADURAS'})).toBeVisible();await page.screenshot({path:`docs/burns/complete-${mode}.png`});\n     |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           ^\n  17 |  const events=await page.evaluate(()=>(window as any).sinalEvents);expect(events.filter((e:any)=>e.type==='mission-completed')).toHaveLength(1);expect(events.find((e:any)=>e.type==='mission-completed').result.clinicalReview).toBe('pending');\n  18 |  expect(await page.evaluate(()=>(window as any).sinalTest.scene.actionLog.every((a:any)=>a.executor==='mother'))).toBe(true);expect(errors).toEqual([]);\n  19 |  await page.getByRole('button',{name:'Jogar novamente'}).click();await phase(page,'explore');await expect(page.locator('canvas')).toHaveCount(1);\n    at C:\\Users\\luizi\\Downloads\\site facul\\sinal-cinco-missoes\\engasgo\\tests\\browser\\burns.spec.ts:16:507"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T10:28:03.712Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\luizi\\Downloads\\site facul\\sinal-cinco-missoes\\engasgo\\test-results\\burns-queimaduras-percurso-integral-teens\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\luizi\\Downloads\\site facul\\sinal-cinco-missoes\\engasgo\\test-results\\burns-queimaduras-percurso-integral-teens\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\luizi\\Downloads\\site facul\\sinal-cinco-missoes\\engasgo\\tests\\browser\\burns.spec.ts",
+                    "column": 507,
+                    "line": 16
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "95690cab90368a446979-d84293911aaebddd738f",
+          "file": "burns.spec.ts",
+          "line": 6,
+          "column": 45
+        },
+        {
+          "title": "queimaduras: percurso integral mobile",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 58098,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T10:29:05.356Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "95690cab90368a446979-f945b086caebfd785d9d",
+          "file": "burns.spec.ts",
+          "line": 6,
+          "column": 45
+        },
+        {
+          "title": "cozinha: movimento, colisão, saída durante cena e orientação",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 5838,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T10:30:03.880Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "95690cab90368a446979-40136e1592100cecb60f",
+          "file": "burns.spec.ts",
+          "line": 22,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "cardiac.spec.ts",
+      "file": "cardiac.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Ginásio e transferência · choque true",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 25593,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T10:27:09.414Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9b6c2b5eecc1bde7f8b4-7853af49a80bda457217",
+          "file": "cardiac.spec.ts",
+          "line": 2,
+          "column": 37
+        },
+        {
+          "title": "Ginásio e transferência · choque false",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 25269,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T10:27:35.036Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9b6c2b5eecc1bde7f8b4-690bfd48f1fbbbbcbf92",
+          "file": "cardiac.spec.ts",
+          "line": 2,
+          "column": 37
+        }
+      ]
+    },
+    {
+      "title": "five.spec.ts",
+      "file": "five.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "trauma kids: exploração, apoio, autoria, resultado",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10083,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T10:27:22.488Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1e56953880aa223e5ccc-46247940dfe789197ea0",
+          "file": "five.spec.ts",
+          "line": 2,
+          "column": 63
+        },
+        {
+          "title": "trauma teens: exploração, apoio, autoria, resultado",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9924,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T10:27:32.587Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1e56953880aa223e5ccc-1fb441e2c6e626f77c18",
+          "file": "five.spec.ts",
+          "line": 2,
+          "column": 63
+        },
+        {
+          "title": "cancelamento de outro ponteiro não solta joystick",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1378,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T10:27:42.543Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1e56953880aa223e5ccc-a6cd81c46af0f183af0b",
+          "file": "five.spec.ts",
+          "line": 18,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "game.spec.ts",
+      "file": "game.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "menu, movimentação, pausa, redimensionamento, retorno e descarregamento",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1735,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T10:27:43.975Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "8b1bb1493a64c9fc3ab6-92a609b6bee7254f42c9",
+          "file": "game.spec.ts",
+          "line": 5,
+          "column": 1
+        },
+        {
+          "title": "missão completa teens",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 21402,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T10:27:45.726Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "8b1bb1493a64c9fc3ab6-53a68350289a0fe96392",
+          "file": "game.spec.ts",
+          "line": 12,
+          "column": 36
+        },
+        {
+          "title": "missão completa kids",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 21323,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T10:28:07.157Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "8b1bb1493a64c9fc3ab6-d5c55e08e17c5d3f9e06",
+          "file": "game.spec.ts",
+          "line": 12,
+          "column": 36
+        },
+        {
+          "title": "mobile joystick, retorno ao centro e retrato",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1488,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T10:28:28.519Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "8b1bb1493a64c9fc3ab6-e58c4cb5d333824b4541",
+          "file": "game.spec.ts",
+          "line": 23,
+          "column": 1
+        },
+        {
+          "title": "percurso real da entrada até Rafa e gesto com arrasto",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 29900,
+                  "error": {
+                    "message": "Error: page.waitForFunction: TypeError: Cannot read properties of undefined (reading 'state')\n    at eval (eval at predicate (eval at evaluate (:370:30)), <anonymous>:1:23)\n    at predicate (eval at evaluate (:370:30), <anonymous>:7:27)\n    at next (eval at evaluate (:370:30), <anonymous>:29:33)\n    at eval (eval at evaluate (:370:30), <anonymous>:42:13)\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)",
+                    "stack": "Error: page.waitForFunction: TypeError: Cannot read properties of undefined (reading 'state')\n    at eval (eval at predicate (eval at evaluate (:370:30)), <anonymous>:1:23)\n    at predicate (eval at evaluate (:370:30), <anonymous>:7:27)\n    at next (eval at evaluate (:370:30), <anonymous>:29:33)\n    at eval (eval at evaluate (:370:30), <anonymous>:42:13)\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)\n    at eval (eval at predicate (eval at evaluate (:370:30)), <anonymous>:1:23)\n    at predicate (eval at evaluate (:370:30), <anonymous>:7:27)\n    at next (eval at evaluate (:370:30), <anonymous>:29:33)\n    at eval (eval at evaluate (:370:30), <anonymous>:42:13)\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)\n    at phase (C:\\Users\\luizi\\Downloads\\site facul\\sinal-cinco-missoes\\engasgo\\tests\\browser\\game.spec.ts:4:53)\n    at C:\\Users\\luizi\\Downloads\\site facul\\sinal-cinco-missoes\\engasgo\\tests\\browser\\game.spec.ts:34:155",
+                    "location": {
+                      "file": "eval at predicate (eval at evaluate (:370:30)), <anonymous>",
+                      "column": 23,
+                      "line": 1
+                    }
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "eval at predicate (eval at evaluate (:370:30)), <anonymous>",
+                        "column": 23,
+                        "line": 1
+                      },
+                      "message": "Error: page.waitForFunction: TypeError: Cannot read properties of undefined (reading 'state')\n    at eval (eval at predicate (eval at evaluate (:370:30)), <anonymous>:1:23)\n    at predicate (eval at evaluate (:370:30), <anonymous>:7:27)\n    at next (eval at evaluate (:370:30), <anonymous>:29:33)\n    at eval (eval at evaluate (:370:30), <anonymous>:42:13)\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)\n    at eval (eval at predicate (eval at evaluate (:370:30)), <anonymous>:1:23)\n    at predicate (eval at evaluate (:370:30), <anonymous>:7:27)\n    at next (eval at evaluate (:370:30), <anonymous>:29:33)\n    at eval (eval at evaluate (:370:30), <anonymous>:42:13)\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)\n    at phase (C:\\Users\\luizi\\Downloads\\site facul\\sinal-cinco-missoes\\engasgo\\tests\\browser\\game.spec.ts:4:53)\n    at C:\\Users\\luizi\\Downloads\\site facul\\sinal-cinco-missoes\\engasgo\\tests\\browser\\game.spec.ts:34:155"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T10:28:30.024Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\luizi\\Downloads\\site facul\\sinal-cinco-missoes\\engasgo\\test-results\\game-percurso-real-da-entrada-até-Rafa-e-gesto-com-arrasto\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\luizi\\Downloads\\site facul\\sinal-cinco-missoes\\engasgo\\test-results\\game-percurso-real-da-entrada-até-Rafa-e-gesto-com-arrasto\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "eval at predicate (eval at evaluate (:370:30)), <anonymous>",
+                    "column": 23,
+                    "line": 1
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "8b1bb1493a64c9fc3ab6-8021db04963d0ba7b03b",
+          "file": "game.spec.ts",
+          "line": 29,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "mobile-worlds.spec.ts",
+      "file": "mobile-worlds.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "mobile seizure: joystick, pausa e saída",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1627,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T10:28:00.355Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9219869bb87379a7645f-f2e14157f1ac3aa99716",
+          "file": "mobile-worlds.spec.ts",
+          "line": 2,
+          "column": 63
+        },
+        {
+          "title": "mobile cardiac_arrest: joystick, pausa e saída",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1914,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T10:28:01.997Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9219869bb87379a7645f-9351028f384dcdbb926d",
+          "file": "mobile-worlds.spec.ts",
+          "line": 2,
+          "column": 63
+        },
+        {
+          "title": "mobile burns: joystick, pausa e saída",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1761,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T10:28:03.951Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9219869bb87379a7645f-531b4c308f7e49471158",
+          "file": "mobile-worlds.spec.ts",
+          "line": 2,
+          "column": 63
+        },
+        {
+          "title": "mobile trauma: joystick, pausa e saída",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1560,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T10:28:05.756Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9219869bb87379a7645f-03168daa504b1b93f003",
+          "file": "mobile-worlds.spec.ts",
+          "line": 2,
+          "column": 63
+        }
+      ]
+    },
+    {
+      "title": "preparation.spec.ts",
+      "file": "preparation.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "preparação mantém Teddy perto da vítima: kids",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 4447,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T10:28:07.375Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "47ff6f7eed4fa2ee7144-c238f3cce90dd3c39739",
+          "file": "preparation.spec.ts",
+          "line": 2,
+          "column": 36
+        },
+        {
+          "title": "preparação mantém Teddy perto da vítima: teens",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 4299,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T10:28:11.841Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "47ff6f7eed4fa2ee7144-39ca91ce60fe5cc3b253",
+          "file": "preparation.spec.ts",
+          "line": 2,
+          "column": 36
+        },
+        {
+          "title": "rota impossível libera controles e permite nova tentativa",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1284,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T10:28:16.155Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "47ff6f7eed4fa2ee7144-655a5720e00605892ec9",
+          "file": "preparation.spec.ts",
+          "line": 11,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "react.spec.ts",
+      "file": "react.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "React StrictMode: cinco montagens, troca de input e desmontagem",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 2262,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T10:28:17.479Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4aa00ff0e52550b08608-85cefcb2b3035984ff6e",
+          "file": "react.spec.ts",
+          "line": 2,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "scope.spec.ts",
+      "file": "scope.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "interface oferece Engasgo, Queimaduras e Convulsão e preserva Missão 01",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 2026,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T10:28:19.778Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a8da2c8b2eb08fb4aaa2-c3fc05be7c9c3a3ee95a",
+          "file": "scope.spec.ts",
+          "line": 2,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "seizure-touch.spec.ts",
+      "file": "seizure-touch.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Convulsão: joystick multitoque, rotação e descarregamento React",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1452,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T10:28:21.843Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1f93eeaf53b19fbb31b7-de8e0b1cecc13593dca6",
+          "file": "seizure-touch.spec.ts",
+          "line": 2,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "seizure.spec.ts",
+      "file": "seizure.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Convulsão integral kids: cuidados, socorro antecipado, recuperação e progresso",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 34443,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T10:28:23.322Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f495863323b43dafdc4e-af20f10202386a9fce65",
+          "file": "seizure.spec.ts",
+          "line": 4,
+          "column": 45
+        },
+        {
+          "title": "Convulsão integral teens: cuidados, socorro antecipado, recuperação e progresso",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "failed",
+                  "duration": 2213,
+                  "error": {
+                    "message": "Error: page.waitForFunction: TypeError: Cannot read properties of undefined (reading 'scene')\n    at eval (eval at predicate (eval at evaluate (:370:30)), <anonymous>:2:32)\n    at predicate (eval at evaluate (:370:30), <anonymous>:7:27)\n    at next (eval at evaluate (:370:30), <anonymous>:29:33)\n    at eval (eval at evaluate (:370:30), <anonymous>:42:13)\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)",
+                    "stack": "Error: page.waitForFunction: TypeError: Cannot read properties of undefined (reading 'scene')\n    at eval (eval at predicate (eval at evaluate (:370:30)), <anonymous>:2:32)\n    at predicate (eval at evaluate (:370:30), <anonymous>:7:27)\n    at next (eval at evaluate (:370:30), <anonymous>:29:33)\n    at eval (eval at evaluate (:370:30), <anonymous>:42:13)\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)\n    at eval (eval at predicate (eval at evaluate (:370:30)), <anonymous>:2:32)\n    at predicate (eval at evaluate (:370:30), <anonymous>:7:27)\n    at next (eval at evaluate (:370:30), <anonymous>:29:33)\n    at eval (eval at evaluate (:370:30), <anonymous>:42:13)\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)\n    at go (C:\\Users\\luizi\\Downloads\\site facul\\sinal-cinco-missoes\\engasgo\\tests\\browser\\seizure.spec.ts:3:134)\n    at C:\\Users\\luizi\\Downloads\\site facul\\sinal-cinco-missoes\\engasgo\\tests\\browser\\seizure.spec.ts:9:2",
+                    "location": {
+                      "file": "eval at predicate (eval at evaluate (:370:30)), <anonymous>",
+                      "column": 32,
+                      "line": 2
+                    }
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "eval at predicate (eval at evaluate (:370:30)), <anonymous>",
+                        "column": 32,
+                        "line": 2
+                      },
+                      "message": "Error: page.waitForFunction: TypeError: Cannot read properties of undefined (reading 'scene')\n    at eval (eval at predicate (eval at evaluate (:370:30)), <anonymous>:2:32)\n    at predicate (eval at evaluate (:370:30), <anonymous>:7:27)\n    at next (eval at evaluate (:370:30), <anonymous>:29:33)\n    at eval (eval at evaluate (:370:30), <anonymous>:42:13)\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)\n    at eval (eval at predicate (eval at evaluate (:370:30)), <anonymous>:2:32)\n    at predicate (eval at evaluate (:370:30), <anonymous>:7:27)\n    at next (eval at evaluate (:370:30), <anonymous>:29:33)\n    at eval (eval at evaluate (:370:30), <anonymous>:42:13)\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)\n    at go (C:\\Users\\luizi\\Downloads\\site facul\\sinal-cinco-missoes\\engasgo\\tests\\browser\\seizure.spec.ts:3:134)\n    at C:\\Users\\luizi\\Downloads\\site facul\\sinal-cinco-missoes\\engasgo\\tests\\browser\\seizure.spec.ts:9:2"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T10:28:57.776Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\luizi\\Downloads\\site facul\\sinal-cinco-missoes\\engasgo\\test-results\\seizure-Convulsão-integral-6d572-ado-recuperação-e-progresso\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\luizi\\Downloads\\site facul\\sinal-cinco-missoes\\engasgo\\test-results\\seizure-Convulsão-integral-6d572-ado-recuperação-e-progresso\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "eval at predicate (eval at evaluate (:370:30)), <anonymous>",
+                    "column": 32,
+                    "line": 2
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "f495863323b43dafdc4e-77309bf79ad239a20f65",
+          "file": "seizure.spec.ts",
+          "line": 4,
+          "column": 45
+        },
+        {
+          "title": "Convulsão integral mobile: cuidados, socorro antecipado, recuperação e progresso",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 35381,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T10:29:00.664Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f495863323b43dafdc4e-81090442f799c7ec1591",
+          "file": "seizure.spec.ts",
+          "line": 4,
+          "column": 45
+        },
+        {
+          "title": "Convulsão: carteira sólida, limite e falha de rota recuperável",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 7112,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T10:29:36.299Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f495863323b43dafdc4e-904e5954cc0c1e43e4e7",
+          "file": "seizure.spec.ts",
+          "line": 17,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "visual-v2.spec.ts",
+      "file": "visual-v2.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "pixel art carregada, camadas e professora contornando a mesa",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7502,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T10:29:00.619Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2dc00238aaf84f2a3c46-d04dd4b6409e01b78267",
+          "file": "visual-v2.spec.ts",
+          "line": 3,
+          "column": 1
+        },
+        {
+          "title": "novo cenário em celular horizontal e vertical",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2489,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T10:29:08.367Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2dc00238aaf84f2a3c46-554308656b66f17018ec",
+          "file": "visual-v2.spec.ts",
+          "line": 28,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-14T10:27:03.570Z",
+    "duration": 186353.712,
+    "expected": 31,
+    "skipped": 0,
+    "unexpected": 3,
+    "flaky": 0
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "verifiedAt": "2026-11-13T20:22:54.1767201-03:00",
+  "unit": {
+    "success": true,
+    "passed": 55,
+    "failed": 0
+  },
+  "browser": {
+    "startTime": "2026-11-13T23:16:01.257Z",
+    "duration": 343070.102,
+    "expected": 31,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "build": {
+    "warning": "Bundle principal Phaser acima de 500 kB",
+    "status": "passed",
+    "log": "build.log"
+  },
+  "clinicalReview": "pending",
+  "mobile": "Emulação Chrome; aparelho físico não certificado",
+  "tools": {
+    "context7Mcp": "verified",
+    "terminal": "PowerShell local no Codex Desktop",
+    "playwrightMcp": "verified"
+  }
+}

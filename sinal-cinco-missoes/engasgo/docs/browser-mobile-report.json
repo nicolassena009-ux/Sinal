@@ -1,0 +1,256 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Users\\luizi\\Documents\\Codex\\2026-11-12\\files-pasted-by-the-user-sinal\\outputs\\sinal-cinco-missoes\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "mobile-worlds.spec.ts"
+    ],
+    "configFile": "C:\\Users\\luizi\\Documents\\Codex\\2026-11-12\\files-pasted-by-the-user-sinal\\outputs\\sinal-cinco-missoes\\playwright.config.ts",
+    "rootDir": "C:/Users/luizi/Documents/Codex/2026-11-12/files-pasted-by-the-user-sinal/outputs/sinal-cinco-missoes/tests/browser",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/luizi/Documents/Codex/2026-11-12/files-pasted-by-the-user-sinal/outputs/sinal-cinco-missoes/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/luizi/Documents/Codex/2026-11-12/files-pasted-by-the-user-sinal/outputs/sinal-cinco-missoes/tests/browser",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 90000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\luizi\\Documents\\Codex\\2026-11-12\\files-pasted-by-the-user-sinal\\outputs\\sinal-cinco-missoes\\test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\luizi\\Documents\\Codex\\2026-11-12\\files-pasted-by-the-user-sinal\\outputs\\sinal-cinco-missoes\\tests\\browser",
+        "snapshotDir": "C:\\Users\\luizi\\Documents\\Codex\\2026-11-12\\files-pasted-by-the-user-sinal\\outputs\\sinal-cinco-missoes\\tests\\browser",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 90000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5190",
+          "headless": true,
+          "viewport": {
+            "width": 1365,
+            "height": 900
+          },
+          "screenshot": "only-on-failure"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": {
+      "command": "npm run dev -- --port 5190",
+      "url": "http://127.0.0.1:5190",
+      "reuseExistingServer": true
+    }
+  },
+  "suites": [
+    {
+      "title": "mobile-worlds.spec.ts",
+      "file": "mobile-worlds.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "mobile seizure: joystick, pausa e saída",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1391,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T03:52:10.699Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9219869bb87379a7645f-f2e14157f1ac3aa99716",
+          "file": "mobile-worlds.spec.ts",
+          "line": 2,
+          "column": 63
+        },
+        {
+          "title": "mobile cardiac_arrest: joystick, pausa e saída",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1284,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T03:52:12.187Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9219869bb87379a7645f-9351028f384dcdbb926d",
+          "file": "mobile-worlds.spec.ts",
+          "line": 2,
+          "column": 63
+        },
+        {
+          "title": "mobile burns: joystick, pausa e saída",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1272,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T03:52:13.484Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9219869bb87379a7645f-531b4c308f7e49471158",
+          "file": "mobile-worlds.spec.ts",
+          "line": 2,
+          "column": 63
+        },
+        {
+          "title": "mobile trauma: joystick, pausa e saída",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1273,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T03:52:14.766Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9219869bb87379a7645f-03168daa504b1b93f003",
+          "file": "mobile-worlds.spec.ts",
+          "line": 2,
+          "column": 63
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-13T03:52:10.161Z",
+    "duration": 5961.746,
+    "expected": 4,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}
