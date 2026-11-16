@@ -110,7 +110,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 });
 
 function RootComponent() {
-  const inGames = useRouterState({ select: state => state.location.pathname === "/jogos" });
+  // O Teddy flutuante some em /jogos e na home (onde o Teddy 3D já é o protagonista).
+  const hideTeddy = useRouterState({
+    select: (state) => state.location.pathname === "/jogos" || state.location.pathname === "/",
+  });
   const { queryClient } = Route.useRouteContext();
   useSiteInteractions();
 
@@ -125,7 +128,7 @@ function RootComponent() {
       <div className="relative z-10">
         <Outlet />
       </div>
-      <div className="teddy-global print:hidden" hidden={inGames}>
+      <div className="teddy-global print:hidden" hidden={hideTeddy}>
         <TeddyMascote tamanho={140} mensagemInicial={null} />
       </div>
       </TeddyProvider>
